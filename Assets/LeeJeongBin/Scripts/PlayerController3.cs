@@ -10,6 +10,7 @@ public class PlayerController3 : MonoBehaviour
     public float rotationSpeed;
 
     private CharacterController characterController;
+    private Vector3 velocity;
 
     void Start()
     {
@@ -27,6 +28,7 @@ public class PlayerController3 : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
+
         if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
@@ -36,5 +38,14 @@ public class PlayerController3 : MonoBehaviour
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
         }
+
+        if (characterController.isGrounded)
+        {
+            velocity.y = 0f;
+        }
+
+        velocity.y += Physics.gravity.y * Time.deltaTime;
+
+        characterController.Move(velocity * Time.deltaTime);
     }
 }
