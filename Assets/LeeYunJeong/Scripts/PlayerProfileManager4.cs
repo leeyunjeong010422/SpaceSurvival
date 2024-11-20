@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
+public class PlayerProfileManager4 : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] GameObject[] profileCards;
     [SerializeField] Image[] profileImages;
@@ -27,6 +27,11 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         InitializeProfileCards();
     }
 
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        // 새로운 플레이어가 입장할 때마다 프로필 카드 활성화
+        InitializeProfileCards();
+    }
 
     private void InitializeProfileCards()
     {
@@ -51,5 +56,10 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     public void UpdateProfileInfo(int score, int hp)
     {
         //TODO: 점수, HP 관련추가
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        throw new System.NotImplementedException();
     }
 }
