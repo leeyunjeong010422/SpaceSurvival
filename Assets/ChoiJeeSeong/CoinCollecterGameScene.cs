@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CoinCollecterGameScene : MonoBehaviourPunCallbacks
 {
+    [SerializeField] MiniGameScore scoreManager;
+
     private void Start()
     {
         // 이미 방에 들어가 있고
@@ -20,12 +22,14 @@ public class CoinCollecterGameScene : MonoBehaviourPunCallbacks
             ReadyNetworkScene();
         }
 
-        ReadyPlayerCharacters();
+        ReadyPlayerClient();
     }
 
-    private void ReadyPlayerCharacters()
+    private void ReadyPlayerClient()
     {
         PhotonNetwork.Instantiate("Character2", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
+        
+        scoreManager.ReadyScoreTable();
     }
 
     private void ReadyNetworkScene()

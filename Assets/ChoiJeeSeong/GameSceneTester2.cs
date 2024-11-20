@@ -8,7 +8,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
 {
     [SerializeField] string testRoomName = "TestRoom";
     [SerializeField] int maxPlayers = 8;
-    [SerializeField] GameObject sceneManager;
+    [SerializeField] CoinCollecterGameScene sceneManager;
 
     [Header("참여 인원 정보")]
     [SerializeField] List<string> nickNames;
@@ -18,12 +18,16 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
         // 로비를 통해 들어와서 이미 연결되어 있을 경우 사용하지 않는다
         if (PhotonNetwork.IsConnected)
         {
+            Debug.Log("로비를 통해 접근해서 GameSceneTester 제거");
+            sceneManager.enabled = true;
             Destroy(this);
         }
         else
         {
-            // 테스터를 사용할 경우 씬 관리자 대기
-            sceneManager.SetActive(false);
+            if (sceneManager.enabled)
+            {
+                Debug.LogWarning("테스터를 사용할 경우 sceneManager.enabled를 false로 해주세요");
+            }
             nickNames.Clear();
         }
     }
@@ -34,6 +38,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    #region PunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinOrCreateRoom(testRoomName,
@@ -53,7 +58,10 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("테스트룸 참가");
-        nickNames.Add(PhotonNetwork.LocalPlayer.NickName);
+        foreach (Player roomPlayer in PhotonNetwork.PlayerList)
+        {
+            nickNames.Add(roomPlayer.NickName);
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -61,10 +69,18 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
         Debug.Log($"테스트룸에 {newPlayer.NickName} 진입");
         nickNames.Add(newPlayer.NickName);
     }
+    #endregion PunCallbacks
 
     [ContextMenu("Test Start")]
     private void TestStart()
     {
-        sceneManager.SetActive(true);
+        photonView.RPC(nameof(TestStartRPC), RpcTarget.All);
     }
+
+    [PunRPC]
+    private void TestStartRPC()
+    {
+        sceneManager.enabled = true;
+    }
+
 }
