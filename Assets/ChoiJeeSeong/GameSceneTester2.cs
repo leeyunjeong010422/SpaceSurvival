@@ -8,7 +8,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
 {
     [SerializeField] string testRoomName = "TestRoom";
     [SerializeField] int maxPlayers = 8;
-    [SerializeField] CoinCollecterGameScene sceneManager;
+    [SerializeField] MiniGameSceneBase sceneManager;
 
     [Header("참여 인원 정보")]
     [SerializeField] List<string> nickNames;
