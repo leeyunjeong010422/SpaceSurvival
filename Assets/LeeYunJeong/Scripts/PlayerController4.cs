@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class PlayerController4 : MonoBehaviour
+public class PlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
     [SerializeField] Transform muzzlePoint;
@@ -11,6 +9,9 @@ public class PlayerController4 : MonoBehaviour
 
     private void Update()
     {
+        if (!photonView.IsMine)
+            return;
+
         Move();
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -32,8 +33,23 @@ public class PlayerController4 : MonoBehaviour
         transform.position += worldMoveDir * speed * Time.deltaTime;
     }
 
+    [PunRPC]
     private void Fire()
     {
-        GameObject bullet = Instantiate(bulletPrefab, muzzlePoint.position, muzzlePoint.rotation);
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, muzzlePoint.position, muzzlePoint.rotation);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else
+        {
+            transform.position = (Vector3)stream.ReceiveNext();
+            transform.rotation = (Quaternion)stream.ReceiveNext();
+        }
     }
 }
