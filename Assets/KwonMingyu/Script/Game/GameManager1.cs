@@ -12,7 +12,7 @@ public class GameManager1 : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (changedProps.ContainsKey(CustomProperty1.LOAD))
+        if (changedProps.ContainsKey(CustomProperty.LOAD))
         {
             if (CheckAllLoad())
                 GameStart();

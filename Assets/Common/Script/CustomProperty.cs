@@ -1,7 +1,7 @@
 using Photon.Realtime;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
-public static class CustomProperty1
+public static class CustomProperty
 {
     private static PhotonHashtable customProperty = new PhotonHashtable();
 
