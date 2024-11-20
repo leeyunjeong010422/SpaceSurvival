@@ -16,7 +16,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     {
         PhotonNetwork.Instantiate("Character2", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
         
-        scoreManager.ReadyScoreTable();
+        scoreManager.InitScoreTable();
     }
 
 }

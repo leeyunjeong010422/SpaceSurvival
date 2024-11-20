@@ -3,9 +3,12 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MiniGameScore : MonoBehaviourPun
 {
+    public UnityEvent<Player, int> OnScoreChanged;
+
     /// <summary>
     /// 플레이어의 ActorNumber를 키 값으로 점수를 저장
     /// </summary>
@@ -14,7 +17,7 @@ public class MiniGameScore : MonoBehaviourPun
     /// <summary>
     /// 점수 테이블 초기화. PhotonNetwork에서 Room 참여 상태여야 한다
     /// </summary>
-    public void ReadyScoreTable()
+    public void InitScoreTable()
     {
         if (false == PhotonNetwork.InRoom)
         {
@@ -43,7 +46,7 @@ public class MiniGameScore : MonoBehaviourPun
     private void AddScoreRPC(int actorNumber, int value)
     {
         scoreTable[actorNumber] += value;
-        Debug.Log($"{actorNumber}점수: {scoreTable[actorNumber]}");
+        OnScoreChanged?.Invoke(PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), scoreTable[actorNumber]);
     }
 
     [ContextMenu("(테스트)Add Score 3")]

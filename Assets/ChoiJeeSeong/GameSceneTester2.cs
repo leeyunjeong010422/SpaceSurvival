@@ -6,15 +6,19 @@ using UnityEngine;
 
 public class GameSceneTester2 : MonoBehaviourPunCallbacks
 {
-    [SerializeField] string testRoomName = "TestRoom";
     [SerializeField] int maxPlayers = 8;
     [SerializeField] MiniGameSceneBase sceneManager;
 
     [Header("참여 인원 정보")]
     [SerializeField] List<string> nickNames;
 
+    private string testRoomName;
+
     private void Awake()
     {
+        // 서로 다른 씬을 테스트하는 상황에서 충돌이 나지 않도록 방 이름 구분
+        testRoomName = $"TestRoom {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}";
+
         // 로비를 통해 들어와서 이미 연결되어 있을 경우 사용하지 않는다
         if (PhotonNetwork.IsConnected)
         {
@@ -72,7 +76,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
     #endregion PunCallbacks
 
     [ContextMenu("Test Start")]
-    private void TestStart()
+    public void TestStart()
     {
         photonView.RPC(nameof(TestStartRPC), RpcTarget.All);
     }
