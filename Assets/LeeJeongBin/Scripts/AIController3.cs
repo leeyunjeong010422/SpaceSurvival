@@ -11,55 +11,36 @@ public class AIController3 : MonoBehaviour
     public float maxPauseTime;
 
     private Vector3 targetPosition;
-    private bool isMoving = false;
+    private NavMeshAgent navMeshAgent;
 
     void Start()
     {
-        StartCoroutine(AIBehaviorLoop());
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = moveSpeed;
+        StartCoroutine(AILoop());
     }
 
-    private IEnumerator AIBehaviorLoop()
+    private IEnumerator AILoop()
     {
         while (true)
         {
-            isMoving = false;
+            navMeshAgent.isStopped = true;
             float pauseTime = Random.Range(minPauseTime, maxPauseTime);
             yield return new WaitForSeconds(pauseTime);
 
-            isMoving = true;
             SetRandomTargetPosition();
+            navMeshAgent.isStopped = false;
+            navMeshAgent.SetDestination(targetPosition);
+
             float moveDuration = Random.Range(2f, 5f);
-            yield return MoveToTarget(moveDuration);
+            yield return new WaitForSeconds(moveDuration);
         }
     }
 
     private void SetRandomTargetPosition()
     {
-        float randomX = Random.Range(-10f, 10f);
-        float randomZ = Random.Range(-10f, 10f);
+        float randomX = Random.Range(-50f, 50f);
+        float randomZ = Random.Range(-50f, 50f);
         targetPosition = new Vector3(randomX, transform.position.y, randomZ);
-    }
-
-    private IEnumerator MoveToTarget(float duration)
-    {
-        float elapsedTime = 0f;
-        Vector3 startPosition = transform.position;
-
-        while (elapsedTime < duration)
-        {
-            if (!isMoving) break;
-
-            elapsedTime += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
-
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            if (direction != Vector3.zero)
-            {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-            }
-
-            yield return null;
-        }
     }
 }
