@@ -20,7 +20,6 @@ public class ScoreSampleScene : MiniGameSceneBase
     {
         base.Start();
 
-        Debug.Log("MiniGameScore 클래스 사용 샘플입니다");
     }
 
     protected override void ReadyNetworkScene()
@@ -39,5 +38,10 @@ public class ScoreSampleScene : MiniGameSceneBase
         scoreManager.OnScoreChanged.AddListener(scorePanel.UpdateScoreUI);
 
         sampleButtonPanel.WhenTestStarted();
+    }
+
+    protected override void GameStart()
+    {
+        Debug.Log("MiniGameScore 클래스 사용 샘플 테스트 시작");
     }
 }

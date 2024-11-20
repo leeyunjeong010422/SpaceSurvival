@@ -7,6 +7,10 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 {
     [SerializeField] MiniGameScore scoreManager;
 
+    protected override void GameStart()
+    {
+    }
+
     protected override void ReadyNetworkScene()
     {
 

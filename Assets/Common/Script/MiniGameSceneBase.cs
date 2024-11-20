@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,9 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         }
 
         ReadyPlayerClient();
+
+        // 로딩 완료 통지
+        PhotonNetwork.LocalPlayer.SetLoad(true);
     }
 
     /// <summary>
@@ -40,4 +44,24 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     /// </summary>
     protected abstract void ReadyPlayerClient();
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey(CustomProperty.LOAD))
+        {
+            if (CheckAllLoad())
+                GameStart();
+        }
+    }
+
+    private bool CheckAllLoad()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+            if (!player.GetLoad()) return false;
+        return true;
+    }
+
+    /// <summary>
+    /// 각 클라이언트에서 게임 시작 시점에 할 작업(예: 게임 타이머 시작)
+    /// </summary>
+    protected abstract void GameStart();
 }

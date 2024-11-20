@@ -3,37 +3,43 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public static class CustomProperty
 {
-    private static PhotonHashtable customProperty = new PhotonHashtable();
+    private class CustomPlayerProperty<T> where T : struct
+    {
+        public CustomPlayerProperty(string key, T defaultvValue)
+        {
+            this.key = key;
+            this.defaultValue = defaultvValue;
+            this.table = new PhotonHashtable() { { key, defaultvValue } };
+        }
+
+        private readonly string key;
+        private readonly T defaultValue;
+        private readonly PhotonHashtable table;
+
+        public void Set(Player player, T value)
+        {
+            table[key] = value;
+            player.SetCustomProperties(table);
+        }
+
+        public T Get(Player player)
+        {
+            if (player.CustomProperties.TryGetValue(key, out object value))
+                return (T)value;
+            else
+                return defaultValue;
+        }
+    }
 
     public const string READY = "Ready";
-    public static void SetReady(this Player Player, bool ready)
-    {
-        customProperty.Clear();
-        customProperty.Add(READY, ready);
-        Player.SetCustomProperties(customProperty);
-    }
-    public static bool GetReady(this Player Player)
-    {
-        PhotonHashtable hashTable = Player.CustomProperties;
-
-        if (!hashTable.ContainsKey(READY)) return false;
-
-        return (bool)hashTable[READY];
-    }
-
     public const string LOAD = "Load";
-    public static void SetLoad(this Player Player, bool load)
-    {
-        customProperty.Clear();
-        customProperty.Add(LOAD, load);
-        Player.SetCustomProperties(customProperty);
-    }
-    public static bool GetLoad(this Player load)
-    {
-        PhotonHashtable hashTable = load.CustomProperties;
 
-        if (!hashTable.ContainsKey(LOAD)) return false;
+    private static readonly CustomPlayerProperty<bool> s_ready = new CustomPlayerProperty<bool>(READY, false);
+    private static readonly CustomPlayerProperty<bool> s_load = new CustomPlayerProperty<bool>(LOAD, false);
 
-        return (bool)hashTable[LOAD];
-    }
+    public static void SetReady(this Player Player, bool ready) => s_ready.Set(Player, ready);
+    public static bool GetReady(this Player Player) => s_ready.Get(Player);
+
+    public static void SetLoad(this Player Player, bool load) => s_load.Set(Player, load);
+    public static bool GetLoad(this Player Player) => s_load.Get(Player);
 }
