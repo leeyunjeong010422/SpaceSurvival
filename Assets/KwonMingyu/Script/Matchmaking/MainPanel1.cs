@@ -13,7 +13,7 @@ public class MainPanel1 : MonoBehaviour
     {
         createRoomPanel.SetActive(true);
         roomNameInputField.text = $"Room {Random.Range(1000, 10000)}";
-        maxPlayerInputField.text = "8";
+        maxPlayerInputField.text = "4";
     }
 
     public void CreateRoomConfirm()
