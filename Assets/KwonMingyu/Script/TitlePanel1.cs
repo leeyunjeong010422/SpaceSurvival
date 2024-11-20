@@ -1,17 +1,16 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitlePanel1 : MonoBehaviourPunCallbacks
 {
     public static TitlePanel1 Instance;
-    public enum Panel { Login, Menu, Lobby, Room }
+    public enum Panel { Login, Menu, Lobby }
 
     [SerializeField] LoginPanel1 loginPanel;
     [SerializeField] MainPanel1 menuPanel;
-    //[SerializeField] RoomPanel1 roomPanel;
     [SerializeField] LobbyPanel1 lobbyPanel;
 
     private void Start()
@@ -20,10 +19,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
 
         // 로비씬으로 이동시 상태에 따라서 이동
-        if (PhotonNetwork.InRoom)
-            SetActivePanel(Panel.Room);
-        else
-            SetActivePanel(PhotonNetwork.IsConnected ? Panel.Menu : Panel.Login);
+        SetActivePanel(PhotonNetwork.IsConnected ? Panel.Menu : Panel.Login);
     }
 
     // 서버에 접속 했을때 호출
@@ -41,7 +37,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     // Room 생성시 호출, 생성 후 생성된 방으로 이동함
     public override void OnCreatedRoom()
     {
-
+        SceneManager.LoadScene(1);
     }
 
     // Room 생성 실패시 호출
@@ -53,7 +49,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     // Room 입장시 호출
     public override void OnJoinedRoom()
     {
-        SetActivePanel(Panel.Room);
+
     }
 
     // 다른 플레이어가 Room에 입장할 때 호출
@@ -109,7 +105,6 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     {
         loginPanel.gameObject.SetActive(panel == Panel.Login);
         menuPanel.gameObject.SetActive(panel == Panel.Menu);
-        //roomPanel.gameObject.SetActive(panel == Panel.Room);
         lobbyPanel.gameObject.SetActive(panel == Panel.Lobby);
     }
 }

@@ -257,8 +257,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomEntry, Assembly-CSharp
+      - m_Target: {fileID: 1265431816358985834}
+        m_TargetAssemblyTypeName: RoomEntry1, Assembly-CSharp
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
