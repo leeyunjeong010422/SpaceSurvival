@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/KwonMingyu/Scenes/Title Scene.unity
+    guid: 5d8765dbfb5efd946a351455b9ae4a88
+  - enabled: 1
+    path: Assets/KwonMingyu/Scenes/Room Scene.unity
+    guid: 98444a0e55861b749a327eb1a58e944d
   m_configObjects: {}
