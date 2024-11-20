@@ -33,9 +33,10 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         transform.position += worldMoveDir * speed * Time.deltaTime;
     }
 
+    [PunRPC]
     private void Fire()
     {
-        GameObject bullet = Instantiate(bulletPrefab, muzzlePoint.position, muzzlePoint.rotation);
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, muzzlePoint.position, muzzlePoint.rotation);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
