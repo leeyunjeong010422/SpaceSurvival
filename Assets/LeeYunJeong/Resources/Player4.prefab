@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: -3058735194059098406}
   m_Layer: 0
   m_Name: Player4
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -292,6 +292,7 @@ MonoBehaviour:
   speed: 5
   muzzlePoint: {fileID: 6308605654053143108}
   bulletPrefab: {fileID: 2158683932208818975, guid: fd7d32388a00faa4d9c1cb4b4253bfda, type: 3}
+  maxHealth: 100
 --- !u!114 &6308605653842834442
 MonoBehaviour:
   m_ObjectHideFlags: 0

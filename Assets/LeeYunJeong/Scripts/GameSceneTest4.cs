@@ -15,7 +15,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 8;
+        options.MaxPlayers = 4;
         options.IsVisible = false; // 비공개방으로 설정
 
         PhotonNetwork.JoinOrCreateRoom(testRoomName, options, null);
