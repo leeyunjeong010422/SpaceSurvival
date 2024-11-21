@@ -27,7 +27,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override async void OnConnectedToMaster()
     {
         // 닉네임을 파이어베이스의 name 값으로 지정
-        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData(UserDatas.name)).ToString();
+        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData(UserDatas1.name)).ToString();
         SetActivePanel(Panel.Menu);
     }
 

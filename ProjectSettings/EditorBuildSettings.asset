@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/KwonMingyu/Scenes/Title Scene.unity
     guid: 5d8765dbfb5efd946a351455b9ae4a88
   - enabled: 1
-    path: Assets/KwonMingyu/Script/Game/Game Scene.unity
-    guid: c42d0b942a966d5419a86dc1a6a6b164
+    path: Assets/ChoiJeeSeong/CoinCollecter.unity
+    guid: abe048e776d01854fafde84be8e0fffa
   m_configObjects: {}

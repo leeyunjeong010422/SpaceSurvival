@@ -1,8 +1,6 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +14,18 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     {
         // 룸 넘버가 할당되지 않았다면 리턴
         if (targetPlayer.GetPlayerNumber() == -1) return;
+        // 플레이어 카드 업데이트
+        UpdatePlayerCards();
+    }
 
+    // 플레이어가 나가면 카드 업데이트
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdatePlayerCards();
+    }
+
+    private void UpdatePlayerCards()
+    {
         // 방 최대 인원수 만큼 카드를 활성화 후 리셋
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
@@ -30,13 +39,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             playerCards[player.GetPlayerNumber()].CardInfoCanger(player);
         }
 
+        // 모든 플레이어가 Ready && 마스터 클라이언트 라면 시작버튼 활성화
         startButton.interactable = CheckAllReady() && PhotonNetwork.LocalPlayer.IsMasterClient;
-    }
-
-    // 나간 플레이어의 카드에 정보를 리셋
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        playerCards[otherPlayer.GetPlayerNumber()].CardInfoReset();
     }
 
     private bool CheckAllReady()
@@ -44,5 +48,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.PlayerList)
             if (!player.GetReady()) return false;
         return true;
+    }
+    public void GameStart(int scene)
+    {
+        PhotonNetwork.LoadLevel(scene);
     }
 }
