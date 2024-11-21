@@ -55,14 +55,19 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         if (moveDir != Vector3.zero)
         {
             Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
-            transform.position += worldMoveDir * speed * Time.deltaTime;
+            rb.velocity = new Vector3(worldMoveDir.x * speed, rb.velocity.y, worldMoveDir.z * speed);
+        }
+        else
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
     }
 
     private void Jump()
     {
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false; // 점프 상태로 전환
+        isGrounded = false;
     }
 
     private void OnCollisionEnter(Collision collision)
