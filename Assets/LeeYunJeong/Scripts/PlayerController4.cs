@@ -5,8 +5,6 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
     [SerializeField] float jumpForce;
-    [SerializeField] Transform muzzlePoint;
-    [SerializeField] GameObject bulletPrefab;
     [SerializeField] int maxHealth = 100;
 
     private bool isGrounded = false;
@@ -17,6 +15,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private Camera mainCamera;
 
+    [SerializeField] Animator animator;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -25,6 +25,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         score = 0;
 
         mainCamera = Camera.main;
+
+        animator = GetComponent<Animator>();
 
         if (photonView.IsMine)
         {
@@ -60,10 +62,12 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
             rb.velocity = new Vector3(worldMoveDir.x * speed, rb.velocity.y, worldMoveDir.z * speed);
+            animator.SetFloat("Speed", 3);
         }
         else
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            animator.SetFloat("Speed", 0);
         }
     }
 

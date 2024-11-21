@@ -24,7 +24,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Vector3 spawnPosition = new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10)); // 임의의 생성 위치
+        Vector3 spawnPosition = new Vector3(Random.Range(-10, 10), 0.5f, Random.Range(-10, 10)); // 임의의 생성 위치
         PhotonNetwork.Instantiate("Player4", spawnPosition, Quaternion.identity);
 
     }
