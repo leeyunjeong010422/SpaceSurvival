@@ -12,6 +12,7 @@ public class CharacterMovement2 : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
     }
 
+
     /// <summary>
     /// 중력을 고려하지 않고 플레이어가 이동하려는 거리를 입력
     /// </summary>
