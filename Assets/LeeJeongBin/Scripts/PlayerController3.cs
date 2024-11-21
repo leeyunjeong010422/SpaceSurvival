@@ -5,9 +5,10 @@ using Photon.Pun;
 
 public class PlayerController3 : MonoBehaviourPun
 {
-    [Header("이동 설정")]
+    [Header("플레이어 이동 설정")]
     [SerializeField] float moveSpeed;
     [SerializeField] float rotationSpeed;
+    [SerializeField] float deceleration;
     [SerializeField] CharacterController characterController;
     [SerializeField] Vector3 velocity;
 
@@ -50,7 +51,23 @@ public class PlayerController3 : MonoBehaviourPun
         }
         else
         {
-            velocity = Vector3.zero;
+            if (velocity.magnitude > 0.1f)
+            {
+                velocity = velocity.normalized * Mathf.Max(0f, velocity.magnitude - deceleration * Time.deltaTime);
+            }
+            else
+            {
+                velocity = Vector3.zero;
+            }
+        }
+
+        if (characterController.isGrounded)
+        {
+            velocity.y = -0.5f;
+        }
+        else
+        {
+            velocity.y += Physics.gravity.y * Time.deltaTime;
         }
 
         characterController.Move(velocity * Time.deltaTime);

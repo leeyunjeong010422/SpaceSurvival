@@ -233,7 +233,7 @@ MonoBehaviour:
   minPauseTime: 1
   maxPauseTime: 3
   targetPosition: {x: 0, y: 0, z: 0}
-  navMeshAgent: {fileID: 0}
+  navMeshAgent: {fileID: 4061366045757661754}
 --- !u!195 &4061366045757661754
 NavMeshAgent:
   m_ObjectHideFlags: 0

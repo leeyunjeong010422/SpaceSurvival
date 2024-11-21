@@ -117,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 10
+  deceleration: 20
   characterController: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
 --- !u!143 &9149330615815131378
