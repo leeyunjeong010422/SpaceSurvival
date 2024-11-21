@@ -6,12 +6,12 @@ using Photon.Pun;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum UserDatas
+public enum UserDatas1
 {
     name, level, color, hat
 }
 
-public class UserData
+public class UserData1
 {
     public string name;
     public long level;
@@ -71,7 +71,7 @@ public class BackendManager1 : MonoBehaviour
     /// 유저 DB에서 정보를 가져오는 함수
     /// 지금은 포톤 닉네임 설정에 사용된다.
     /// </summary>
-    public async Task<object> GetPlayerData(UserDatas data)
+    public async Task<object> GetPlayerData(UserDatas1 data)
     {
         object temp = null;
         await userUidDataRef.GetValueAsync().ContinueWithOnMainThread(task =>
@@ -84,7 +84,7 @@ public class BackendManager1 : MonoBehaviour
 
             if (task.Result.Value == null)
             {
-                UserData userData = new UserData();
+                UserData1 userData = new UserData1();
                 userData.name = $"Player {Random.Range(1000, 9999)}";
                 userData.level = 1;
                 userData.color = Random.Range(0, 8);
@@ -94,16 +94,16 @@ public class BackendManager1 : MonoBehaviour
                 userUidDataRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(x => x);
                 switch (data)
                 {
-                    case UserDatas.name:
+                    case UserDatas1.name:
                         temp = userData.name;
                         break;
-                    case UserDatas.level:
+                    case UserDatas1.level:
                         temp = userData.level;
                         break;
-                    case UserDatas.color:
+                    case UserDatas1.color:
                         temp = userData.color;
                         break;
-                    case UserDatas.hat:
+                    case UserDatas1.hat:
                         temp = userData.hat;
                         break;
                 }
