@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController4 : MonoBehaviourPun, IPunObservable
@@ -94,6 +95,10 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     {
         RaycastHit hit;
 
+        // 애니메이션 레이어 1 활성화
+        animator.SetLayerWeight(1, 1f);
+        animator.SetTrigger("Fire");
+
         // 카메라의 중앙 조준점을 기준으로 레이캐스트 발사
         Vector3 aimDirection = mainCamera.transform.forward; // 카메라가 바라보는 방향
         if (Physics.Raycast(mainCamera.transform.position, aimDirection, out hit))
@@ -105,6 +110,15 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
                 hitPlayer.photonView.RPC("TakeDamage", RpcTarget.All, 50, photonView.ViewID); // 공격자는 현재 플레이어
             }
         }
+
+        // 2초 후에 레이어를 비활성화하는 메서드 호출
+        Invoke("DisableFireLayer", 1f);
+    }
+
+    // 1초 후에 애니메이션 레이어를 비활성화하는 메서드
+    private void DisableFireLayer()
+    {
+        animator.SetLayerWeight(1, 0f);
     }
 
 
