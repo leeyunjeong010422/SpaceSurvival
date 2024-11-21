@@ -2,6 +2,7 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using Photon.Pun;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -115,5 +116,23 @@ public class BackendManager1 : MonoBehaviour
             }
         });
         return temp;
+    }
+    // DB name, 포톤 닉네임 변경
+    public void SetPlayerName(string name)
+    {
+        userUidDataRef.Child("name").SetValueAsync(name).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("이름 변경 취소됨");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogWarning($"이름 변경 실패함 : {task.Exception.Message}");
+                return;
+            }
+        });
+        PhotonNetwork.LocalPlayer.NickName = name;
     }
 }
