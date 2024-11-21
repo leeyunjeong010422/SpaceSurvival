@@ -19,14 +19,9 @@ public class VerifyPanel1 : MonoBehaviour
 
         user.SendEmailVerificationAsync().ContinueWithOnMainThread(task =>
         {
-            if (task.IsCanceled)
+            if (task.IsCanceled || task.IsFaulted)
             {
-                Debug.LogError("인증메일 전송 취소됨.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("인증메일 전송 실패: " + task.Exception);
+                Debug.LogError("인증메일 전송 취소/실패 됨.");
                 return;
             }
 

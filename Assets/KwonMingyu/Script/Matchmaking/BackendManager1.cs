@@ -67,20 +67,18 @@ public class BackendManager1 : MonoBehaviour
             }
         });
     }
-    // 유저 데이터를 가져오는 비동기 함수
+    /// <summary>
+    /// 유저 DB에서 정보를 가져오는 함수
+    /// 지금은 포톤 닉네임 설정에 사용된다.
+    /// </summary>
     public async Task<object> GetPlayerData(UserDatas data)
     {
         object temp = null;
         await userUidDataRef.GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            if (task.IsCanceled)
+            if (task.IsCanceled || task.IsFaulted)
             {
-                Debug.LogWarning("값 가져오기 취소됨");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogWarning($"값 가져오기 실패함 : {task.Exception.Message}");
+                Debug.LogWarning("값 가져오기 취소/실패 됨");
                 return;
             }
 
@@ -117,19 +115,16 @@ public class BackendManager1 : MonoBehaviour
         });
         return temp;
     }
-    // DB name, 포톤 닉네임 변경
+    /// <summary>
+    /// 유저 DB name, Photon NickName 변경 함수.
+    /// </summary>
     public void SetPlayerName(string name)
     {
         userUidDataRef.Child("name").SetValueAsync(name).ContinueWithOnMainThread(task =>
         {
-            if (task.IsCanceled)
+            if (task.IsCanceled || task.IsFaulted)
             {
-                Debug.LogWarning("이름 변경 취소됨");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogWarning($"이름 변경 실패함 : {task.Exception.Message}");
+                Debug.LogWarning("이름 변경 취소/실패 됨");
                 return;
             }
         });

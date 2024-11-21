@@ -21,18 +21,14 @@ public class SighUpPanel1 : MonoBehaviour
         string email = emailInputField.text;
         string password = passwordInputField.text;
         string confirm = passwordConfirmInputField.text;
+
         if (email.IsNullOrEmpty() || password != confirm) return;
 
         BackendManager1.Auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
-            if (task.IsCanceled)
+            if (task.IsCanceled || task.IsFaulted)
             {
-                Debug.LogError("계정 생성 취소.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("계정 생성 실패: " + task.Exception);
+                Debug.LogError("계정 생성 취소/실패.");
                 return;
             }
 
