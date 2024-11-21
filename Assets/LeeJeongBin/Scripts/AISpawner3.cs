@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class AISpawner3 : MonoBehaviour
+public class AISpawner3 : MonoBehaviourPunCallbacks
 {
-    [Header("Spawner Settings")]
-    public GameObject AIPrefab;
+    [Header("AI 스폰 설정")]
+    [SerializeField] GameObject AIPrefab;
     [Range(1, 50)]
     public int AICount;
     public float spawnAreaSize;
 
-    private HashSet<Vector3> validPosition = new HashSet<Vector3>(); // 중복 생성을 피하기 위함
+    private HashSet<Vector3> validPosition = new HashSet<Vector3>();
 
     void Start()
     {
-        SpawnAI(AICount);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SpawnAI(AICount);
+        }
     }
 
     void SpawnAI(int count)
@@ -27,21 +31,16 @@ public class AISpawner3 : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
-            GameObject newAI = Instantiate(AIPrefab, spawnPosition, Quaternion.identity);
-
-            AIController3 aiController = newAI.GetComponent<AIController3>();
-            aiController.moveSpeed = 5f;
-            aiController.minPauseTime = 1f;
-            aiController.maxPauseTime = 3f;
+            PhotonNetwork.Instantiate(AIPrefab.name, spawnPosition, Quaternion.identity);
         }
     }
 
     Vector3 GetRandomSpawnPosition()
     {
         Vector3 randomPosition = Vector3.zero;
-        bool validPosition = false; // 위치가 유효한지
+        bool validPosition = false;
         int attempts = 0;
-        
+
         while (!validPosition && attempts < 5)
         {
             float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
@@ -58,5 +57,13 @@ public class AISpawner3 : MonoBehaviour
         }
 
         return validPosition ? randomPosition : Vector3.zero;
+    }
+
+    public override void OnJoinedRoom()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("AI가 생성되었습니다.");
+        }
     }
 }

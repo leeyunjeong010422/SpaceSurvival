@@ -39,6 +39,7 @@ MonoBehaviour:
   - AddScoreRPC
   - TestStartRPC
   - Fire
+  - SyncPosition
   - UpdateScoreOnKillRPC
   - TakeDamage
   - AddScore

@@ -3,31 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController3 : MonoBehaviour
+public class PlayerController3 : MonoBehaviourPun
 {
-    [Header("Movement Settings")]
-    public float moveSpeed;
-    public float rotationSpeed;
+    [Header("플레이어 이동 설정")]
+    [SerializeField] float moveSpeed;
+    [SerializeField] float rotationSpeed;
+    [SerializeField] float deceleration;
+    [SerializeField] CharacterController characterController;
+    [SerializeField] Vector3 velocity;
 
-    private CharacterController characterController;
-    private Vector3 velocity;
+    private PhotonTransformView photonTransformView;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        photonTransformView = GetComponent<PhotonTransformView>();
     }
 
     void Update()
     {
-        HandleMovement();
+        if (photonView.IsMine)
+        {
+            HandleMovement();
+        }
+        else
+        {
+            velocity = Vector3.zero;
+        }
     }
 
     private void HandleMovement()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         if (direction.magnitude >= 0.1f)
         {
@@ -36,15 +46,29 @@ public class PlayerController3 : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+            velocity.x = moveDirection.x * moveSpeed;
+            velocity.z = moveDirection.z * moveSpeed;
+        }
+        else
+        {
+            if (velocity.magnitude > 0.1f)
+            {
+                velocity = velocity.normalized * Mathf.Max(0f, velocity.magnitude - deceleration * Time.deltaTime);
+            }
+            else
+            {
+                velocity = Vector3.zero;
+            }
         }
 
         if (characterController.isGrounded)
         {
-            velocity.y = 0f;
+            velocity.y = -0.5f;
         }
-
-        velocity.y += Physics.gravity.y * Time.deltaTime;
+        else
+        {
+            velocity.y += Physics.gravity.y * Time.deltaTime;
+        }
 
         characterController.Move(velocity * Time.deltaTime);
     }

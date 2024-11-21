@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 public class AIController3 : MonoBehaviour
 {
-    [Header("Movement Settings")]
+    [Header("AI 이동 설정")]
     public float moveSpeed;
     public float minPauseTime;
     public float maxPauseTime;
 
-    private Vector3 targetPosition;
-    private NavMeshAgent navMeshAgent;
+    [SerializeField] Vector3 targetPosition;
+    [SerializeField] NavMeshAgent navMeshAgent;
 
     void Start()
     {
@@ -31,6 +31,13 @@ public class AIController3 : MonoBehaviour
             SetRandomTargetPosition();
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(targetPosition);
+
+            while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+            {
+                yield return null;
+            }
+
+            navMeshAgent.isStopped = true;
 
             float moveDuration = Random.Range(2f, 5f);
             yield return new WaitForSeconds(moveDuration);
