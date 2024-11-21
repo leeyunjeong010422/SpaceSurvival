@@ -4,15 +4,21 @@ using UnityEngine;
 public class PlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
+    [SerializeField] float jumpForce;
     [SerializeField] Transform muzzlePoint;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] int maxHealth = 100;
+
+    private bool isGrounded = false;
+    private Rigidbody rb;
 
     private int currentHealth;
     private int score = 0;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
         currentHealth = maxHealth;
         score = 0;
 
@@ -31,9 +37,14 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         Move();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Fire1"))
         {
             Fire();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
+        {
+            Jump();
         }
     }
 
@@ -45,6 +56,21 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
             transform.position += worldMoveDir * speed * Time.deltaTime;
+        }
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isGrounded = false; // 점프 상태로 전환
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 바닥에 닿았는지 확인
+        if (collision.contacts[0].normal.y > 0.7f)
+        {
+            isGrounded = true;
         }
     }
 
