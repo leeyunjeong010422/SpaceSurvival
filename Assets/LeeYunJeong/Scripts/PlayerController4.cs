@@ -15,12 +15,16 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     private int currentHealth;
     private int score = 0;
 
+    private Camera mainCamera;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         currentHealth = maxHealth;
         score = 0;
+
+        mainCamera = Camera.main;
 
         if (photonView.IsMine)
         {
@@ -72,7 +76,9 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private void OnCollisionEnter(Collision collision)
     {
-        // 바닥에 닿았는지 확인
+        //충돌한 면이 바닥인 경우 (normal.y > 0.7f로 바닥 확인)
+        //Collision타입은 충돌 지점들의 정보를 담는 ContactPoint 타입의 데이터를 contacs라는 배열의 형태로 제공
+        //여러 충돌지점중에서 첫번째 충돌지점의 정보를 가져옴
         if (collision.contacts[0].normal.y > 0.7f)
         {
             isGrounded = true;
@@ -82,10 +88,21 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void Fire()
     {
-        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, muzzlePoint.position, muzzlePoint.rotation);
-        Bullet4 bulletScript = bullet.GetComponent<Bullet4>();
-        bulletScript.SetAttacker(photonView.Owner); // 공격자 설정
+        RaycastHit hit;
+
+        // 카메라의 중앙 조준점을 기준으로 레이캐스트 발사
+        Vector3 aimDirection = mainCamera.transform.forward; // 카메라가 바라보는 방향
+        if (Physics.Raycast(mainCamera.transform.position, aimDirection, out hit))
+        {
+            PlayerController4 hitPlayer = hit.collider.GetComponent<PlayerController4>();
+            if (hitPlayer != null && hitPlayer.photonView.IsMine == false)
+            {
+                // 50 데미지를 줌
+                hitPlayer.photonView.RPC("TakeDamage", RpcTarget.All, 50, photonView.ViewID); // 공격자는 현재 플레이어
+            }
+        }
     }
+
 
     // 프로필 정보 업데이트
     private void UpdateProfileInfo()
