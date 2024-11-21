@@ -53,9 +53,14 @@ public class PlayerCameraController4 : MonoBehaviourPun
     {
         if (mainCamera != null)
         {
-            Vector3 lookAtOffset = Vector3.right * 1f; // 플레이어를 바라보는 지점을 약간 오른쪽으로 이동
-            mainCamera.transform.position = player.position + Quaternion.Euler(cameraPitch, player.eulerAngles.y, 0) * cameraOffset;
-            mainCamera.transform.LookAt(player.position + Vector3.up * 1.5f + lookAtOffset); // 플레이어 약간 위쪽을 바라보도록 설정
+            // 카메라 위치를 플레이어의 뒤쪽에 두고 조준점은 왼쪽으로 설정
+            Vector3 cameraPosition = player.position + Quaternion.Euler(cameraPitch, player.eulerAngles.y, 0) * cameraOffset;
+
+            // 조준점은 플레이어의 오른쪽으로 이동 (조준점이 항상 플레이어의 오른쪽 위치하도록 함)
+            Vector3 aimPoint = player.position + Vector3.up * 1.5f - player.right * -1.5f;
+
+            mainCamera.transform.position = cameraPosition;
+            mainCamera.transform.LookAt(aimPoint);
         }
     }
 }
