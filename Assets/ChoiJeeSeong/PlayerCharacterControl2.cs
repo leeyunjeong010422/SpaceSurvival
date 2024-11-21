@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterMovement2))]
 public class PlayerCharacterControl2 : MonoBehaviourPun
 {
+    [SerializeField] Animator animator;
+    private int hashSpeed;
+
     [SerializeField] float speed;
 
     private CharacterMovement2 movement;
@@ -23,6 +26,8 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
         moveInput = input.actions["Move"];
         fireInput = input.actions["Fire"];
+
+        hashSpeed = Animator.StringToHash("Speed");
     }
 
     private void Start()
@@ -61,7 +66,15 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
         Vector3 moveDirection = inputAxisX * inputVector.x + inputAxisY * inputVector.y;
         movement.Move(Time.deltaTime * speed * moveDirection);
 
-        // 카메라 정면 방향 바라보기
-        movement.LookDirection(cameraLookXZ);
+        //// 카메라 정면 방향 바라보기
+        //movement.LookDirection(cameraLookXZ);
+
+        // 이동 방향 바라보기
+        if (moveDirection != Vector3.zero)
+        {
+            movement.LookDirection(moveDirection);
+        }
+
+        animator.SetFloat(hashSpeed, speed * moveDirection.magnitude);
     }
 }
