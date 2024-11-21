@@ -36,7 +36,7 @@ public class TestGame : MonoBehaviourPunCallbacks
         {
             Vector3 spawnPosition = GetRandomSpawnPosition(spawnAreaSize);
             PhotonNetwork.Instantiate("AI", spawnPosition, Quaternion.identity);
-            Debug.Log("AI #" + i + " 가 인스턴스화되었습니다.");
+            Debug.Log("AI #" + i + " 가 생성 되었습니다.");
         }
     }
 
