@@ -27,11 +27,14 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
     private void Start()
     {
+        // 카메라가 캐릭터를 추적하도록 설정
+        // LocalPlayer의 캐릭터가 아니라면 Enable이 불가능해서 Start에 진입하지 못한다
         Camera.main.GetComponent<CameraController2>().Target = this.transform;
     }
 
     private void OnEnable()
     {
+        // LocalPlayer의 캐릭터가 아니라면 컨트롤 비활성화
         if (false == photonView.IsMine)
         {
             this.enabled = false;
@@ -43,7 +46,6 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
     private void Update()
     {
         // 이동 입력 처리
-
         Vector3 inputAxisX = Camera.main.transform.right; // 좌우 입력에 대응하는 월드 방향
         Vector3 inputAxisY = Camera.main.transform.forward; // 전후 입력에 대응하는 월드 방향
 
