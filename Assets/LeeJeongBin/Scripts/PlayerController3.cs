@@ -5,10 +5,9 @@ using Photon.Pun;
 
 public class PlayerController3 : MonoBehaviourPun
 {
-    [Header("플레이어 이동 설정")]
+    [Header("이동 설정")]
     [SerializeField] float moveSpeed;
     [SerializeField] float rotationSpeed;
-    [SerializeField] float deceleration;
     [SerializeField] CharacterController characterController;
     [SerializeField] Vector3 velocity;
 
@@ -17,7 +16,6 @@ public class PlayerController3 : MonoBehaviourPun
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-
         photonTransformView = GetComponent<PhotonTransformView>();
     }
 
@@ -27,10 +25,9 @@ public class PlayerController3 : MonoBehaviourPun
         {
             HandleMovement();
         }
-
-        if (photonTransformView != null)
+        else
         {
-            photonTransformView.SetSynchronizedValues(velocity.x, velocity.y, velocity.z);
+            velocity = Vector3.zero;
         }
     }
 
@@ -48,23 +45,12 @@ public class PlayerController3 : MonoBehaviourPun
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
             velocity.x = moveDirection.x * moveSpeed;
             velocity.z = moveDirection.z * moveSpeed;
         }
         else
         {
-            velocity.x = Mathf.MoveTowards(velocity.x, 0, deceleration * Time.deltaTime);
-            velocity.z = Mathf.MoveTowards(velocity.z, 0, deceleration * Time.deltaTime);
-        }
-
-        if (characterController.isGrounded)
-        {
-            velocity.y = -0.5f;
-        }
-        else
-        {
-            velocity.y += Physics.gravity.y * Time.deltaTime;
+            velocity = Vector3.zero;
         }
 
         characterController.Move(velocity * Time.deltaTime);
