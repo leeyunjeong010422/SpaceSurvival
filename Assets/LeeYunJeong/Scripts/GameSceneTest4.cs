@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameSceneTest4 : MonoBehaviourPunCallbacks
 {
-    [SerializeField] string testRoomName = "TestRoom";
+    private string testRoomName;
 
     private void Start()
     {
+        testRoomName = $"TestRoom {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}";
         PhotonNetwork.LocalPlayer.NickName = $"Player {Random.Range(1000, 10000)}";
         PhotonNetwork.ConnectUsingSettings(); // Photon 서버 연결
     }
@@ -15,7 +16,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 8;
+        options.MaxPlayers = 4;
         options.IsVisible = false; // 비공개방으로 설정
 
         PhotonNetwork.JoinOrCreateRoom(testRoomName, options, null);

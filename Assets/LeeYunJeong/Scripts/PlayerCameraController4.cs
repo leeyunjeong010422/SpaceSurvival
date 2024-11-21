@@ -3,40 +3,37 @@ using UnityEngine;
 
 public class PlayerCameraController4 : MonoBehaviourPun
 {
-    [SerializeField] private Camera playerCamera;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 5, -7); // 카메라 기본 위치 (플레이어 뒤쪽 약간 위쪽)
     private float cameraPitch = 0f; // 카메라 위아래 회전 각도
 
     private Transform player;
+    private Camera mainCamera;
 
     private void Start()
     {
         player = transform;
 
-        if (playerCamera == null)
-        {
-            playerCamera = Camera.main;
-        }
+        mainCamera = Camera.main;
 
         if (!photonView.IsMine)
         {
-            playerCamera.gameObject.SetActive(false);
+            return; // 다른 플레이어의 경우 카메라를 동기화하지 않음
         }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        if (photonView.IsMine)
+        if (!photonView.IsMine || mainCamera == null)
         {
-            RotateView();
-            UpdateCameraPosition();
+            return;
         }
+
+        RotateView();
+        UpdateCameraPosition();
     }
 
     private void RotateView()
@@ -54,10 +51,16 @@ public class PlayerCameraController4 : MonoBehaviourPun
 
     private void UpdateCameraPosition()
     {
-        if (playerCamera != null)
+        if (mainCamera != null)
         {
-            playerCamera.transform.position = player.position + Quaternion.Euler(cameraPitch, player.eulerAngles.y, 0) * cameraOffset;
-            playerCamera.transform.LookAt(player.position + Vector3.up * 1.5f); // 플레이어 약간 위쪽을 바라보도록 설정
+            // 카메라 위치를 플레이어의 뒤쪽에 두고 조준점은 왼쪽으로 설정
+            Vector3 cameraPosition = player.position + Quaternion.Euler(cameraPitch, player.eulerAngles.y, 0) * cameraOffset;
+
+            // 조준점은 플레이어의 오른쪽으로 이동 (조준점이 항상 플레이어의 오른쪽 위치하도록 함)
+            Vector3 aimPoint = player.position + Vector3.up * 1.5f - player.right * -1.5f;
+
+            mainCamera.transform.position = cameraPosition;
+            mainCamera.transform.LookAt(aimPoint);
         }
     }
 }
