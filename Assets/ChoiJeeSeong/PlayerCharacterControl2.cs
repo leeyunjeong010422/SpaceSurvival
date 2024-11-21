@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterMovement2))]
 public class PlayerCharacterControl2 : MonoBehaviourPun
 {
     [SerializeField] Animator animator;
@@ -12,14 +11,18 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
     [SerializeField] float speed;
 
-    private CharacterMovement2 movement;
+    private ILocomotion2 movement;
 
     private InputAction moveInput;
     private InputAction fireInput;
 
     private void Awake()
     {
-        movement = GetComponent<CharacterMovement2>();
+        movement = GetComponent<ILocomotion2>();
+        if (movement == null)
+        {
+            Debug.LogError("플레이어 캐릭터에 이동 기능 컴포넌트 누락");
+        }
 
         // 1클라이언트 1플레이어 전제
         PlayerInput input = PlayerInput.GetPlayerByIndex(0);
@@ -64,7 +67,7 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
         Vector2 inputVector = moveInput.ReadValue<Vector2>();
         Vector3 moveDirection = inputAxisX * inputVector.x + inputAxisY * inputVector.y;
-        movement.Move(Time.deltaTime * speed * moveDirection);
+        movement.SetVelocity(speed * moveDirection);
 
         //// 카메라 정면 방향 바라보기
         //movement.LookDirection(cameraLookXZ);
