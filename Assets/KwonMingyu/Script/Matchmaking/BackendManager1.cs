@@ -5,6 +5,19 @@ using Firebase.Extensions;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public enum UserDatas
+{
+    name, level, color, hat
+}
+
+public class UserData
+{
+    public string name;
+    public long level;
+    public int color;
+    public int hat;
+}
+
 public class BackendManager1 : MonoBehaviour
 {
     public static BackendManager1 Instance { get; private set; }
@@ -41,19 +54,19 @@ public class BackendManager1 : MonoBehaviour
                 app = FirebaseApp.DefaultInstance;
                 auth = FirebaseAuth.DefaultInstance;
                 database = FirebaseDatabase.DefaultInstance;
-                Debug.Log("Firebase dependencies check success");
+                Debug.Log("파이어베이스 연결 성공");
                 userUidDataRef = Database.RootReference.Child("UserData").Child(Auth.CurrentUser.UserId);
             }
             else
             {
-                Debug.LogError($"Could not resolve all Firebase dependencies: {task.Result}");
+                Debug.LogError($"파이어베이스 연결 실패: {task.Result}");
                 app = null;
                 auth = null;
                 database = null;
             }
         });
     }
-    // 유저 데이터를 가져오는 함수
+    // 유저 데이터를 가져오는 비동기 함수
     public async Task<object> GetPlayerData(UserDatas data)
     {
         object temp = null;
@@ -103,16 +116,4 @@ public class BackendManager1 : MonoBehaviour
         });
         return temp;
     }
-}
-public enum UserDatas
-{
-    name, level, color, hat
-}
-
-public class UserData
-{
-    public string name;
-    public long level;
-    public int color;
-    public int hat;
 }
