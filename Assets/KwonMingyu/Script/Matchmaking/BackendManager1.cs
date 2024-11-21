@@ -1,10 +1,9 @@
+using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using Firebase;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Firebase.Extensions;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class BackendManager1 : MonoBehaviour
 {
@@ -18,6 +17,8 @@ public class BackendManager1 : MonoBehaviour
 
     private FirebaseDatabase database;
     public static FirebaseDatabase Database => Instance.database;
+
+    private DatabaseReference userUidDataRef;
 
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class BackendManager1 : MonoBehaviour
                 auth = FirebaseAuth.DefaultInstance;
                 database = FirebaseDatabase.DefaultInstance;
                 Debug.Log("Firebase dependencies check success");
+                userUidDataRef = Database.RootReference.Child("UserData").Child(Auth.CurrentUser.UserId);
             }
             else
             {
@@ -51,4 +53,66 @@ public class BackendManager1 : MonoBehaviour
             }
         });
     }
+    // 유저 데이터를 가져오는 함수
+    public async Task<object> GetPlayerData(UserDatas data)
+    {
+        object temp = null;
+        await userUidDataRef.GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("값 가져오기 취소됨");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogWarning($"값 가져오기 실패함 : {task.Exception.Message}");
+                return;
+            }
+
+            if (task.Result.Value == null)
+            {
+                UserData userData = new UserData();
+                userData.name = $"Player {Random.Range(1000, 9999)}";
+                userData.level = 1;
+                userData.color = Random.Range(0, 8);
+                userData.hat = 0;
+
+                string json = JsonUtility.ToJson(userData);
+                userUidDataRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(x => x);
+                switch (data)
+                {
+                    case UserDatas.name:
+                        temp = userData.name;
+                        break;
+                    case UserDatas.level:
+                        temp = userData.level;
+                        break;
+                    case UserDatas.color:
+                        temp = userData.color;
+                        break;
+                    case UserDatas.hat:
+                        temp = userData.hat;
+                        break;
+                }
+            }
+            else
+            {
+                temp = task.Result.Child(data.ToString()).Value;
+            }
+        });
+        return temp;
+    }
+}
+public enum UserDatas
+{
+    name, level, color, hat
+}
+
+public class UserData
+{
+    public string name;
+    public long level;
+    public int color;
+    public int hat;
 }

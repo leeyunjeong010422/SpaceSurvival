@@ -14,6 +14,7 @@ public class SighUpPanel1 : MonoBehaviour
     [SerializeField] TMP_InputField passwordConfirmInputField;
 
     [SerializeField] Button sighUpButton;
+    [SerializeField] VerifyPanel1 verifyPanel;
 
     public void SighUp()
     {
@@ -39,7 +40,7 @@ public class SighUpPanel1 : MonoBehaviour
             AuthResult result = task.Result;
             Debug.Log($"Firebase user created successfully: {result.User.DisplayName} ({result.User.UserId})");
             gameObject.SetActive(false);
-
+            verifyPanel.gameObject.SetActive(true);
         });
 
     }
