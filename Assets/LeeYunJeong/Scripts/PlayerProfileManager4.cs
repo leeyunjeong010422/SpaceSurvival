@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject[] profileCards;
+    [SerializeField] TMP_Text[] nickNameTexts;
     [SerializeField] Image[] profileImages;
     [SerializeField] TMP_Text[] scoreTexts;
     [SerializeField] TMP_Text[] hpTexts;
@@ -48,24 +49,26 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         for (int i = 0; i < 4; i++)
         {
             profileCards[i].SetActive(i < playerCount);
-        }
 
-        // 본인 프로필 카드 강조 및 프로필 정보 업데이트
-        for (int i = 0; i < playerCount; i++)
-        {
-            if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.PlayerList[i].ActorNumber)
+            if (i < playerCount)
             {
-                profileCards[i].GetComponent<Image>().color = myProfileColor; // 본인 프로필 카드 색상 변경
-                PlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as PlayerController4;
-                if (playerController != null)
+                // 각 플레이어의 닉네임 가져오기
+                nickNameTexts[i].text = PhotonNetwork.PlayerList[i].NickName;
+
+                if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.PlayerList[i].ActorNumber)
                 {
-                    // 내 점수와 HP를 업데이트
-                    UpdateProfileInfo(i, playerController.GetScore(), playerController.GetHealth());
+                    profileCards[i].GetComponent<Image>().color = myProfileColor; // 본인 프로필 카드 색상 변경
+                    PlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as PlayerController4;
+                    if (playerController != null)
+                    {
+                        // 내 점수와 HP를 업데이트
+                        UpdateProfileInfo(i, playerController.GetScore(), playerController.GetHealth());
+                    }
                 }
-            }
-            else
-            {
-                hpTexts[i].text = " "; // 다른 사람의 HP는 표시하지 않음
+                else
+                {
+                    hpTexts[i].text = " "; // 다른 사람의 HP는 표시하지 않음
+                }
             }
         }
     }
