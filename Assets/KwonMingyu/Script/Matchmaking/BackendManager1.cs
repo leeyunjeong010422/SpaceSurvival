@@ -128,6 +128,7 @@ public class BackendManager1 : MonoBehaviour
                 return;
             }
         });
+        Debug.Log($"닉네임 변경 성공{PhotonNetwork.LocalPlayer.NickName} => {name}");
         PhotonNetwork.LocalPlayer.NickName = name;
     }
 }
