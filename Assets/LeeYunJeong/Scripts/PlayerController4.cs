@@ -1,5 +1,3 @@
-
-
 using Photon.Pun;
 using UnityEngine;
 
@@ -79,7 +77,22 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         if (currentHealth <= 0)
         {
-            IncreaseScore(attackerViewID); // 공격자에게 점수 추가
+            PhotonView attackerPhotonView = PhotonView.Find(attackerViewID);
+            if (attackerPhotonView != null)
+            {
+                string killerName = attackerPhotonView.Owner.NickName; // 공격자의 닉네임
+                string victimName = photonView.Owner.NickName; // 피해자의 닉네임
+
+                // 킬 로그를 네트워크에 동기화
+                KillLogManager killLogManager = FindObjectOfType<KillLogManager>();
+                if (killLogManager != null)
+                {
+                    killLogManager.AddKillLogNetwork(killerName, victimName);
+                }
+
+                IncreaseScore(attackerViewID); // 공격자에게 점수 추가
+            }
+
             Die();
         }
 

@@ -75,6 +75,6 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     {
         // 해당 플레이어의 점수와 HP 업데이트
         scoreTexts[playerIndex].text = $"{score}";
-        hpTexts[playerIndex].text = (playerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1) ? $"HP: {hp}" : ""; // 본인만 HP 표시
+        hpTexts[playerIndex].text = (playerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1) ? $"HP: {hp}" : "other people HP"; // 본인만 HP 표시
     }
 }
