@@ -21,16 +21,16 @@ public class VerifyPanel1 : MonoBehaviour
         {
             if (task.IsCanceled)
             {
-                Debug.LogError("SendEmailVerificationAsync was canceled.");
+                Debug.LogError("인증메일 전송 취소됨.");
                 return;
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("SendEmailVerificationAsync encountered an error: " + task.Exception);
+                Debug.LogError("인증메일 전송 실패: " + task.Exception);
                 return;
             }
 
-            Debug.Log("Email sent successfully.");
+            Debug.Log("인증메일 전송 성공.");
             coroutine = StartCoroutine(CheckVerifyRoutine());
         });
 
@@ -48,8 +48,9 @@ public class VerifyPanel1 : MonoBehaviour
             });
             yield return wait;
         }
+
+        Debug.Log("이메일 인증 성공 메인메뉴로.");
         gameObject.SetActive(false);
-        PhotonNetwork.ConnectUsingSettings();
     }
     private void OnDisable()
     {
