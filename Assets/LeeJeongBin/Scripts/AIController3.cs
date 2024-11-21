@@ -32,6 +32,13 @@ public class AIController3 : MonoBehaviour
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(targetPosition);
 
+            while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+            {
+                yield return null;
+            }
+
+            navMeshAgent.isStopped = true;
+
             float moveDuration = Random.Range(2f, 5f);
             yield return new WaitForSeconds(moveDuration);
         }
