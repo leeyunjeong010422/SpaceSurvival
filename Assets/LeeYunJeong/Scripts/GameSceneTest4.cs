@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameSceneTest4 : MonoBehaviourPunCallbacks
 {
-    [SerializeField] string testRoomName = "TestRoom";
+    private string testRoomName;
 
     private void Start()
     {
+        testRoomName = $"TestRoom {UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}";
         PhotonNetwork.LocalPlayer.NickName = $"Player {Random.Range(1000, 10000)}";
         PhotonNetwork.ConnectUsingSettings(); // Photon 서버 연결
     }
