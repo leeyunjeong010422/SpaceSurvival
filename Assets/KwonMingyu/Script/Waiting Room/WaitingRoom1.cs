@@ -45,4 +45,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             if (!player.GetReady()) return false;
         return true;
     }
+    public void GameStart(int scene)
+    {
+        PhotonNetwork.LoadLevel(scene);
+    }
 }
