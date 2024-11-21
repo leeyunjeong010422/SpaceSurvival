@@ -68,7 +68,6 @@ public class AISpawner3 : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient)
         {
             // AI 생성과 관련된 작업을 마스터 클라이언트가 처리하도록 하므로
-            // AI가 생성된 후, 각 클라이언트는 PhotonNetwork.Instantiate로 생성된 AI를 자동으로 확인하게 됩니다.
             Debug.Log("AI가 생성되었습니다.");
         }
     }
