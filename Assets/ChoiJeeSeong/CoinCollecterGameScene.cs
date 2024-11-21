@@ -10,18 +10,26 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     [SerializeField] PlayerInfoPanel2 playerInfoUI;
     [SerializeField] TMP_Text countdownText;
 
+    /*
+    애셋 선정 전 단계에서는 [SerializeField]로 맵에 배치된 코인을 참조해 초기화한다
+    사용할 맵이 확정된 후 코인 생성 방식을 다시 결정
+     */
+    [SerializeField] Coin2[] coins;
+    private int remainCoins;
+
     private PlayerCharacterControl2 localPlayerCharacter;
     private Coroutine gamePlayRoutine;
 
     protected override void ReadyNetworkScene()
     {
         // 마스터 클라이언트만 할 작업
-        // 맵에 코인 깔기
+        // 코인 무작위 생성?
     }
 
     protected override void ReadyPlayerClient()
     {
         // 로컬 플레이어의 캐릭터 생성
+        // TODO: 맵에 따라 스폰 지점 결정
         GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
         localPlayerCharacter = instance.GetComponent<PlayerCharacterControl2>();
 
@@ -31,16 +39,24 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         playerInfoUI.InitRoomPlayerInfo();
         scoreManager.InitScoreTable();
         scoreManager.OnScoreChanged.AddListener(playerInfoUI.SetScore);
+
+        // 코인 초기화
+        remainCoins = coins.Length;
+        for (int i = 0; i < coins.Length; i++)
+        {
+            coins[i].Id = i;
+            coins[i].OnLocalPlayerTriggered.AddListener(TryGetCoin);
+        }
     }
 
     protected override void GameStart()
     {
         // 모든 플레이어의 로딩이 완료된 시점
         // 게임 타이머 시작
-        gamePlayRoutine = StartCoroutine(GamePlayRoutine());
+        gamePlayRoutine = StartCoroutine(CountDownAndStart());
     }
 
-    private IEnumerator GamePlayRoutine()
+    private IEnumerator CountDownAndStart()
     {
         YieldInstruction waitCountDown = new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(true);
@@ -53,5 +69,43 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 
         // 카운트다운 종료 후 입력 활성화
         localPlayerCharacter.enabled = true;
+    }
+
+    private void TryGetCoin(int coinId)
+    {
+        // 호출 순서가 일치해야 하므로 ViaServer를 사용
+        photonView.RPC(nameof(TryGetCoinRPC), RpcTarget.AllViaServer, coinId);
+    }
+
+    [PunRPC]
+    private void TryGetCoinRPC(int coinId, PhotonMessageInfo info)
+    {
+        // 네트워크 딜레이 예외처리
+        if (false == coins[coinId].isActiveAndEnabled)
+        {
+            Debug.Log("이미 다른 플레이어가 습득한 코인");
+            return;
+        }
+
+        // 자신이 전송한 RPC일 경우 점수 획득
+        if (info.Sender.IsLocal)
+        {
+            scoreManager.AddScore(10);
+        }
+
+        coins[coinId].gameObject.SetActive(false);
+        remainCoins--;
+
+        Debug.Log($"남은 코인: {remainCoins}개");
+
+        if (remainCoins <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("모든 코인이 수집됨");
     }
 }
