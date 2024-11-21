@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class Bullet4 : MonoBehaviourPun
@@ -31,11 +32,18 @@ public class Bullet4 : MonoBehaviourPun
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController4 playerController = collision.gameObject.GetComponent<PlayerController4>();
+            Rigidbody playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+
+            if (playerRigidbody != null)
+            {
+                playerRigidbody.velocity = Vector3.zero;
+            }
+
             if (playerController != null && attackerView != null)
             {
                 Debug.Log("TakeDamage 호출됨");
                 PhotonView targetPhotonView = playerController.photonView;
-                targetPhotonView.RPC("TakeDamage", RpcTarget.All, 10, attackerView.ViewID); // 공격자의 ViewID 사용
+                targetPhotonView.RPC("TakeDamage", RpcTarget.All, 50, attackerView.ViewID); // 공격자의 ViewID 사용
             }
             Destroy(gameObject); // 충돌 후 총알 파괴
         }
