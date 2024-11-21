@@ -12,6 +12,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     [SerializeField] LoginPanel1 loginPanel;
     [SerializeField] MainPanel1 menuPanel;
     [SerializeField] LobbyPanel1 lobbyPanel;
+    [SerializeField] WaitingRoom1 waitingRoom;
 
     private void Start()
     {
@@ -23,8 +24,10 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     }
 
     // 서버에 접속 했을때 호출
-    public override void OnConnectedToMaster()
+    public override async void OnConnectedToMaster()
     {
+        // 닉네임을 파이어베이스의 name 값으로 지정
+        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData(UserDatas.name)).ToString();
         SetActivePanel(Panel.Menu);
     }
 
@@ -48,7 +51,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     // Room 입장시 호출
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
         SetActivePanel(Panel.Room);
     }
 
@@ -106,6 +109,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
         loginPanel.gameObject.SetActive(panel == Panel.Login);
         menuPanel.gameObject.SetActive(panel == Panel.Menu);
         lobbyPanel.gameObject.SetActive(panel == Panel.Lobby);
+        waitingRoom.gameObject.SetActive(panel == Panel.Room);
     }
     public void GameStart()
     {

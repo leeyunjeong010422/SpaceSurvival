@@ -1,8 +1,5 @@
-using Firebase.Auth;
 using Firebase.Extensions;
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -20,21 +17,22 @@ public class LoginPanel1 : MonoBehaviour
         {
             if (task.IsCanceled)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                Debug.LogError("로그인 취소됨.");
                 return;
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                Debug.LogError("로그인 실패: " + task.Exception);
                 return;
             }
-            Debug.Log("로그인 성공");
             if (BackendManager1.Auth.CurrentUser.IsEmailVerified)
             {
+                Debug.Log("로그인 성공 마스터 서버로 연결");
                 PhotonNetwork.ConnectUsingSettings();
             }
             else
             {
+                Debug.Log("로그인 성공 인증 화면으로 이동");
                 verifyPanel.gameObject.SetActive(true);
             }
         });

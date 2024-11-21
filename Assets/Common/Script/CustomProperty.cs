@@ -1,4 +1,5 @@
 using Photon.Realtime;
+using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public static class CustomProperty
@@ -33,13 +34,26 @@ public static class CustomProperty
 
     public const string READY = "Ready";
     public const string LOAD = "Load";
+    public const string COLOR_R = "ColorR";
+    public const string COLOR_G = "ColorG";
+    public const string COLOR_B = "ColorB";
 
     private static readonly CustomPlayerProperty<bool> s_ready = new CustomPlayerProperty<bool>(READY, false);
     private static readonly CustomPlayerProperty<bool> s_load = new CustomPlayerProperty<bool>(LOAD, false);
+    private static readonly CustomPlayerProperty<float> s_colorR = new CustomPlayerProperty<float>(COLOR_R, 1f);
+    private static readonly CustomPlayerProperty<float> s_colorG = new CustomPlayerProperty<float>(COLOR_G, 1f);
+    private static readonly CustomPlayerProperty<float> s_colorB = new CustomPlayerProperty<float>(COLOR_B, 1f);
 
     public static void SetReady(this Player Player, bool ready) => s_ready.Set(Player, ready);
     public static bool GetReady(this Player Player) => s_ready.Get(Player);
 
     public static void SetLoad(this Player Player, bool load) => s_load.Set(Player, load);
     public static bool GetLoad(this Player Player) => s_load.Get(Player);
+
+    public static void SetColorR(this Player Player, float red) => s_colorR.Set(Player, red);
+    public static float GetColorR(this Player Player) => s_colorR.Get(Player);
+    public static void SetColorG(this Player Player, float green) => s_colorG.Set(Player, green);
+    public static float GetColorG(this Player Player) => s_colorG.Get(Player);
+    public static void SetColorB(this Player Player, float blue) => s_colorB.Set(Player, blue);
+    public static float GetColorB(this Player Player) => s_colorB.Get(Player);
 }
