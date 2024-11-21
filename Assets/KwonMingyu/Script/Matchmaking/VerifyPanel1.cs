@@ -49,7 +49,6 @@ public class VerifyPanel1 : MonoBehaviour
             yield return wait;
         }
         gameObject.SetActive(false);
-        PhotonNetwork.ConnectUsingSettings();
     }
     private void OnDisable()
     {
