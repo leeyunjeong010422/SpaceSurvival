@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class GameSceneTester2 : MonoBehaviourPunCallbacks
 {
-    [SerializeField] int maxPlayers = 8;
+    [SerializeField] int maxPlayers = 4;
     [SerializeField] MiniGameSceneBase sceneManager;
 
     [Header("참여 인원 정보")]

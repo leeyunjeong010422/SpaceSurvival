@@ -1,10 +1,23 @@
+using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using Firebase;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Firebase.Extensions;
+using Photon.Pun;
+using System.Threading.Tasks;
+using UnityEngine;
+
+public enum UserDatas1
+{
+    name, level, color, hat
+}
+
+public class UserData1
+{
+    public string name;
+    public long level;
+    public int color;
+    public int hat;
+}
 
 public class BackendManager1 : MonoBehaviour
 {
@@ -18,6 +31,8 @@ public class BackendManager1 : MonoBehaviour
 
     private FirebaseDatabase database;
     public static FirebaseDatabase Database => Instance.database;
+
+    private DatabaseReference userUidDataRef;
 
     private void Awake()
     {
@@ -40,15 +55,80 @@ public class BackendManager1 : MonoBehaviour
                 app = FirebaseApp.DefaultInstance;
                 auth = FirebaseAuth.DefaultInstance;
                 database = FirebaseDatabase.DefaultInstance;
-                Debug.Log("Firebase dependencies check success");
+                Debug.Log("파이어베이스 연결 성공");
+                userUidDataRef = Database.RootReference.Child("UserData").Child(Auth.CurrentUser.UserId);
             }
             else
             {
-                Debug.LogError($"Could not resolve all Firebase dependencies: {task.Result}");
+                Debug.LogError($"파이어베이스 연결 실패: {task.Result}");
                 app = null;
                 auth = null;
                 database = null;
             }
         });
+    }
+    /// <summary>
+    /// 유저 DB에서 정보를 가져오는 함수
+    /// 지금은 포톤 닉네임 설정에 사용된다.
+    /// </summary>
+    public async Task<object> GetPlayerData(UserDatas1 data)
+    {
+        object temp = null;
+        await userUidDataRef.GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                Debug.LogWarning("값 가져오기 취소/실패 됨");
+                return;
+            }
+
+            if (task.Result.Value == null)
+            {
+                UserData1 userData = new UserData1();
+                userData.name = $"Player {Random.Range(1000, 9999)}";
+                userData.level = 1;
+                userData.color = Random.Range(0, 8);
+                userData.hat = 0;
+
+                string json = JsonUtility.ToJson(userData);
+                userUidDataRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(x => x);
+                switch (data)
+                {
+                    case UserDatas1.name:
+                        temp = userData.name;
+                        break;
+                    case UserDatas1.level:
+                        temp = userData.level;
+                        break;
+                    case UserDatas1.color:
+                        temp = userData.color;
+                        break;
+                    case UserDatas1.hat:
+                        temp = userData.hat;
+                        break;
+                }
+            }
+            else
+            {
+                temp = task.Result.Child(data.ToString()).Value;
+            }
+        });
+        return temp;
+    }
+    /// <summary>
+    /// 유저 DB name, Photon NickName 변경 함수.
+    /// </summary>
+    public void SetPlayerName(string name)
+    {
+        userUidDataRef.Child("name").SetValueAsync(name).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                Debug.LogWarning("이름 변경 취소/실패 됨");
+                return;
+            }
+        });
+        Debug.Log($"닉네임 변경 성공{PhotonNetwork.LocalPlayer.NickName} => {name}");
+        PhotonNetwork.LocalPlayer.NickName = name;
     }
 }
