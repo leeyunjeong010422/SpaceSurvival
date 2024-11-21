@@ -5,7 +5,7 @@ public class PlayerCameraController4 : MonoBehaviourPun
 {
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 100f;
-    [SerializeField] private Vector3 cameraOffset = new Vector3(0, 5, -7); // 카메라 기본 위치 (플레이어 뒤쪽 약간 위쪽)
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0.96f, 1.5f, -0.96f); // 카메라 기본 위치 (플레이어 뒤쪽 약간 위쪽)
     private float cameraPitch = 0f; // 카메라 위아래 회전 각도
 
     private Transform player;
@@ -46,7 +46,7 @@ public class PlayerCameraController4 : MonoBehaviourPun
 
         // 수직 회전 (카메라 위아래 회전 제한)
         cameraPitch -= mouseY;
-        cameraPitch = Mathf.Clamp(cameraPitch, -20f, 10f); // 카메라 위아래 각도 제한
+        cameraPitch = Mathf.Clamp(cameraPitch, 0f, 0f); // 카메라 위아래 각도 제한
     }
 
     private void UpdateCameraPosition()
@@ -57,7 +57,7 @@ public class PlayerCameraController4 : MonoBehaviourPun
             Vector3 cameraPosition = player.position + Quaternion.Euler(cameraPitch, player.eulerAngles.y, 0) * cameraOffset;
 
             // 조준점은 플레이어의 오른쪽으로 이동 (조준점이 항상 플레이어의 오른쪽 위치하도록 함)
-            Vector3 aimPoint = player.position + Vector3.up * 1.5f - player.right * -1.5f;
+            Vector3 aimPoint = player.position + Vector3.up * 1.5f - player.right * -0.8f;
 
             mainCamera.transform.position = cameraPosition;
             mainCamera.transform.LookAt(aimPoint);
