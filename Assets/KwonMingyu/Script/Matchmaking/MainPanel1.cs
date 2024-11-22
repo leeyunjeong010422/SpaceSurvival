@@ -7,13 +7,28 @@ public class MainPanel1 : MonoBehaviour
 {
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
-    [SerializeField] TMP_InputField maxPlayerInputField;
-
+    [SerializeField] TMP_Text maxPlayerText;
+    [SerializeField] TMP_Text nickNameText;
+    [SerializeField] TMP_Text levelText;
+    private int maxPlayer;
+    
+    private void OnEnable()
+    {
+        PlayerInfoSetting();
+    }
     public void CreateRoomMenu()
     {
         createRoomPanel.SetActive(true);
         roomNameInputField.text = $"Room {Random.Range(1000, 10000)}";
-        maxPlayerInputField.text = "4";
+        maxPlayerText.text = "4";
+        maxPlayer = 4;
+    }
+    public void MaxPlayerCanger(bool up)
+    {
+        if (up) maxPlayer++;
+        else maxPlayer--;
+        maxPlayer = Mathf.Clamp(maxPlayer, 2, 4);
+        maxPlayerText.text = maxPlayer.ToString();
     }
 
     public void CreateRoomConfirm()
@@ -21,14 +36,12 @@ public class MainPanel1 : MonoBehaviour
         string roomName = roomNameInputField.text;
         if (roomName == "") return;
 
-        int maxPlayer = int.Parse(maxPlayerInputField.text);
-        maxPlayer = Mathf.Clamp(maxPlayer, 2, 4);
-
         RoomOptions roomOptions = new();
         roomOptions.MaxPlayers = maxPlayer;
 
         createRoomPanel.SetActive(false);
         PhotonNetwork.CreateRoom(roomName, roomOptions);
+        PopUp1.Instance.PopUpOpen(true, "방을 생성하고 있어요");
     }
     public void RandomMatching()
     {
@@ -37,6 +50,12 @@ public class MainPanel1 : MonoBehaviour
     public void JoinLobby()
     {
         PhotonNetwork.JoinLobby();
+    }
+    private async void PlayerInfoSetting()
+    {
+        UserData1 userData = (await BackendManager1.Instance.GetPlayerData());
+        nickNameText.text = userData.name;
+        levelText.text = "LV " + userData.level;
     }
     public void Quit()
     {
