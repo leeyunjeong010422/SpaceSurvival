@@ -38,7 +38,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         // 스코어 시스템 및 UI 초기화
         playerInfoUI.InitRoomPlayerInfo();
         scoreManager.InitScoreTable();
-        scoreManager.OnScoreChanged.AddListener(playerInfoUI.SetScore);
+        scoreManager.OnScoreChanged.AddListener(playerInfoUI.SetInt);
 
         // 코인 초기화
         remainCoins = coins.Length;
