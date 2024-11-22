@@ -126,10 +126,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         countdownText.gameObject.SetActive(true);
 
         yield return new WaitForSecondsRealtime(3f);
-        
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel(0);
-        }
+
+        LoadNextStage();
     }
 }
