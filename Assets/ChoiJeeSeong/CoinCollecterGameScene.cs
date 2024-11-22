@@ -15,7 +15,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     애셋 선정 전 단계에서는 [SerializeField]로 맵에 배치된 코인을 참조해 초기화한다
     사용할 맵이 확정된 후 코인 생성 방식을 다시 결정
      */
-    [SerializeField] Coin2[] coins;
+    [SerializeField] LocalPlayerTrigger2[] coins;
     private int remainCoins;
 
     private PlayerCharacterControl2 localPlayerCharacter;
@@ -39,7 +39,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         // 스코어 시스템 및 UI 초기화
         playerInfoUI.InitRoomPlayerInfo();
         scoreManager.InitScoreTable();
-        scoreManager.OnScoreChanged.AddListener(playerInfoUI.SetScore);
+        scoreManager.OnScoreChanged.AddListener(playerInfoUI.SetInt);
 
         // 코인 초기화
         remainCoins = coins.Length;
