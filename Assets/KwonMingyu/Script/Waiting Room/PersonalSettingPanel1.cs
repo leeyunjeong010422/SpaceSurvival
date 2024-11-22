@@ -13,6 +13,8 @@ public class PersonalSettingPanel1 : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             settingWindow.SetActive(!settingWindow.activeSelf);
+            // 임시
+            Cursor.lockState = CursorLockMode.None;
         }
     }
     public void ChangeNickName()

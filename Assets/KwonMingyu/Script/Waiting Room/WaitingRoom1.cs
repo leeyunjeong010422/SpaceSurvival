@@ -24,7 +24,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         UpdatePlayerCards();
     }
 
-    private void UpdatePlayerCards()
+    public void UpdatePlayerCards()
     {
         // 방 최대 인원수 만큼 카드를 활성화 후 리셋
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)

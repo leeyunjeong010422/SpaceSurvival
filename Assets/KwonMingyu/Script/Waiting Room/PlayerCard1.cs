@@ -21,9 +21,6 @@ public class PlayerCard1 : MonoBehaviour
     {
         playerName.text = player.NickName + (player.IsMasterClient ? "Host" : "");
         readyButton.interactable = player == PhotonNetwork.LocalPlayer;
-
-        // 임시
-        Cursor.lockState = CursorLockMode.None;
     }
 
     // 플레이어 카드 초기화 함수

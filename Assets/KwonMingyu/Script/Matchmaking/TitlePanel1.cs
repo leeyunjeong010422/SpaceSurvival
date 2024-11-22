@@ -19,6 +19,13 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
         // 호스트의 씬을 따라가기
         PhotonNetwork.AutomaticallySyncScene = true;
 
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
+            waitingRoom.UpdatePlayerCards();
+            SetActivePanel(Panel.Room);
+            return;
+        }
         // 로비씬으로 이동시 상태에 따라서 이동
         SetActivePanel(PhotonNetwork.IsConnected ? Panel.Menu : Panel.Login);
     }
@@ -27,7 +34,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override async void OnConnectedToMaster()
     {
         // 닉네임을 파이어베이스의 name 값으로 지정
-        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData(UserDatas1.name)).ToString();
+        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData()).name;
         SetActivePanel(Panel.Menu);
     }
 
