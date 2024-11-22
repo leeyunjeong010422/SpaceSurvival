@@ -10,6 +10,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private float gameTimer; // 게임 시간
     [SerializeField] private TMP_Text timerText;
     private bool gameStarted = false;
+    public bool isGameEnded = false;
     private GameObject endGamePanel;
 
     private void Start()
@@ -115,6 +116,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     {
         Debug.Log("게임 끝");
         gameStarted = false;
+        isGameEnded = true;
         endGamePanel?.SetActive(true);
         DisplayRankings();
     }

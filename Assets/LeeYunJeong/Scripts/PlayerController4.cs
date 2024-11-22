@@ -167,7 +167,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     public void TakeDamage(int damage, int attackerViewID)
     {
         // 맞고 있는 자신만 처리
-        if (!photonView.IsMine)
+        if (!photonView.IsMine || IsGameEnded())
             return;
 
         currentHealth -= damage;
@@ -255,6 +255,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void AddScore(int points) // 점수 추가 동기화
     {
+        if (IsGameEnded()) return;
+
         score += points; // 점수 증가
         UpdateProfileInfo();
 
@@ -306,5 +308,11 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
             currentHealth = (int)stream.ReceiveNext();
             score = (int)stream.ReceiveNext();
         }
+    }
+
+    private bool IsGameEnded()
+    {
+        GameSceneTest4 gameScene = FindObjectOfType<GameSceneTest4>();
+        return gameScene != null && gameScene.isGameEnded;
     }
 }
