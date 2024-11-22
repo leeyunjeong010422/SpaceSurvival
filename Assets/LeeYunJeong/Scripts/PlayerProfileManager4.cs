@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,16 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     [SerializeField] Image[] profileImages;
     [SerializeField] TMP_Text[] scoreTexts;
     [SerializeField] TMP_Text[] hpTexts;
-    [SerializeField] Color myProfileColor = Color.red; // 내 프로필 카드 색상 (인스펙터에서 변경 가능)
+    [SerializeField] Color myProfileColor = default; // 내 프로필 카드 색상
+
+    private void Awake()
+    {
+        // Hex 색상을 Color로 변환
+        if (ColorUtility.TryParseHtmlString("#FF3636", out var color))
+        {
+            myProfileColor = color;
+        }
+    }
 
     private void Start()
     {
@@ -34,9 +44,15 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         // 플레이어가 입장할 때마다 프로필 카드 활성화
+        InitializeProfileCards();
+    }
+
+    // 플레이어가 나가면 카드 업데이트
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
         InitializeProfileCards();
     }
 
@@ -65,10 +81,6 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
                         UpdateProfileInfo(i, playerController.GetScore(), playerController.GetHealth());
                     }
                 }
-                else
-                {
-                    hpTexts[i].text = " "; // 다른 사람의 HP는 표시하지 않음
-                }
             }
         }
     }
@@ -78,6 +90,6 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     {
         // 해당 플레이어의 점수와 HP 업데이트
         scoreTexts[playerIndex].text = $"{score}";
-        hpTexts[playerIndex].text = (playerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1) ? $"HP: {hp}" : "other people HP"; // 본인만 HP 표시
+        hpTexts[playerIndex].text = (playerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1) ? $"HP: {hp}" : " "; // 본인만 HP 표시
     }
 }

@@ -16,6 +16,14 @@ public class KillLogManager : MonoBehaviourPun
     [PunRPC]
     public void AddKillLog(string killer, string victim)
     {
+        if (victim == PhotonNetwork.LocalPlayer.NickName)
+        {
+            victim = $"<color=red>{victim}</color>";
+        }
+        else if (killer == PhotonNetwork.LocalPlayer.NickName)
+        {
+            killer = $"<color=red>{killer}</color>";
+        }
         string logMessage = $"Kill: {killer} -> {victim}";
 
         // 로그를 큐에 추가
