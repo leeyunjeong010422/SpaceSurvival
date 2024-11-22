@@ -1,7 +1,5 @@
 using Firebase.Auth;
 using Firebase.Extensions;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +10,9 @@ public class SighUpPanel1 : MonoBehaviour
     [SerializeField] TMP_InputField emailInputField;
     [SerializeField] TMP_InputField passwordInputField;
     [SerializeField] TMP_InputField passwordConfirmInputField;
-
-    [SerializeField] Button sighUpButton;
     [SerializeField] VerifyPanel1 verifyPanel;
 
-    public void SighUp()
+    public void SignUp()
     {
         string email = emailInputField.text;
         string password = passwordInputField.text;
