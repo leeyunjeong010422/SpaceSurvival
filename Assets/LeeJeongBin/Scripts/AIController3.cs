@@ -5,10 +5,10 @@ using UnityEngine.AI;
 
 public class AIController3 : MonoBehaviour
 {
-    [Header("AI 이동 설정")]
     public float moveSpeed;
     public float minPauseTime;
     public float maxPauseTime;
+    public float rotationSpeed;
 
     [SerializeField] Vector3 targetPosition;
     [SerializeField] NavMeshAgent navMeshAgent;
@@ -17,6 +17,8 @@ public class AIController3 : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = moveSpeed;
+        navMeshAgent.autoBraking = false;
+        navMeshAgent.updateRotation = false;
         StartCoroutine(AILoop());
     }
 
@@ -34,6 +36,7 @@ public class AIController3 : MonoBehaviour
 
             while (navMeshAgent.pathPending || navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
             {
+                RotateTowardsTarget();
                 yield return null;
             }
 
@@ -49,5 +52,12 @@ public class AIController3 : MonoBehaviour
         float randomX = Random.Range(-50f, 50f);
         float randomZ = Random.Range(-50f, 50f);
         targetPosition = new Vector3(randomX, transform.position.y, randomZ);
+    }
+
+    private void RotateTowardsTarget()
+    {
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }

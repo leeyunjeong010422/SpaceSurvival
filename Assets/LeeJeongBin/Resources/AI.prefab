@@ -230,8 +230,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  minPauseTime: 1
+  minPauseTime: 0
   maxPauseTime: 3
+  rotationSpeed: 150
   targetPosition: {x: 0, y: 0, z: 0}
   navMeshAgent: {fileID: 4061366045757661754}
 --- !u!195 &4061366045757661754
