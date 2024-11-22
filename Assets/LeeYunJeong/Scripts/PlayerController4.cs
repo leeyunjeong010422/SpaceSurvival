@@ -78,6 +78,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private void Move()
     {
+        if (isDead) return;
+
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         if (moveDir != Vector3.zero)
