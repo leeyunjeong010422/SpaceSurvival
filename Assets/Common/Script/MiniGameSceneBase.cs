@@ -64,4 +64,33 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     /// 각 클라이언트에서 게임 시작 시점에 할 작업(예: 게임 타이머 시작)
     /// </summary>
     protected abstract void GameStart();
+
+    /// <summary>
+    /// 승점이 목표에 도달한 플레이어가 있다면 축하 씬으로, 없다면 다음 미니게임으로 진입<br/>
+    /// 마스터 클라이언트가 아니라면 무시
+    /// </summary>
+    public void LoadNextStage()
+    {
+        if (false == PhotonNetwork.IsMasterClient)
+            return;
+
+        foreach (Player roomPlayer in PhotonNetwork.PlayerList)
+        {
+            roomPlayer.SetLoad(false);
+        }
+
+            int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
+        foreach (Player roomPlayer in PhotonNetwork.PlayerList)
+        {
+            if (goal <= roomPlayer.GetWinningPoint())
+            {
+                Debug.LogWarning($"세트 승리 씬 진입 필요");
+                // PhotonNetwork.LoadLevel(0);
+                return;
+            }
+        }
+
+        Debug.LogWarning($"아직 세트 승자 없음, 무작위 미니게임 진입 필요");
+        // PhotonNetwork.LoadLevel(0);
+    }
 }
