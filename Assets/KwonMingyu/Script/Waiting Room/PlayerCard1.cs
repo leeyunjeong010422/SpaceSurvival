@@ -21,6 +21,7 @@ public class PlayerCard1 : MonoBehaviour
     {
         playerName.text = player.NickName + (player.IsMasterClient ? "Host" : "");
         readyButton.interactable = player == PhotonNetwork.LocalPlayer;
+        readyButton.GetComponentInChildren<TMP_Text>().color = player.GetReady() ? Color.red : Color.black;
     }
 
     // 플레이어 카드 초기화 함수

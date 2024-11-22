@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerCard1[] playerCards;
     [SerializeField] Button startButton;
+    [SerializeField] TMP_Text selectGameName;
+    private int miniGameSceneNumber;
+    private string[] miniGameNames = { "랜덤", "동전줍기", "라스트맨스탱딩", "TPS게임" };
 
     // 플레이어의 정보가 업데이트 될 때 (플레이어의 Room number가 지정될 때)
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -49,8 +53,18 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             if (!player.GetReady()) return false;
         return true;
     }
-    public void GameStart(int scene)
+    public void GameStart()
     {
-        PhotonNetwork.LoadLevel(scene);
+        if (miniGameSceneNumber == 0)
+        {
+            miniGameSceneNumber = Random.Range(1, 4);
+        }
+        PhotonNetwork.LoadLevel(miniGameSceneNumber);
+    }
+    public void MiniGameChange(bool up)
+    {
+        miniGameSceneNumber += up ? 1 : -1;
+        miniGameSceneNumber = Mathf.Clamp(miniGameSceneNumber, 0, 3);
+        selectGameName.text = miniGameNames[miniGameSceneNumber];
     }
 }
