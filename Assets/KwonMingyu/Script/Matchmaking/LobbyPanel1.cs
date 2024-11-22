@@ -10,8 +10,15 @@ public class LobbyPanel1 : MonoBehaviour
     [SerializeField] RoomEntry1 roomEntryPrefab;
 
     private Dictionary<string, RoomEntry1> roomDictionary = new Dictionary<string, RoomEntry1>();
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            LeaveLobby();
+        }
+    }
 
-    public void LeaveLobby()
+    private void LeaveLobby()
     {
         PhotonNetwork.LeaveLobby();
     }
