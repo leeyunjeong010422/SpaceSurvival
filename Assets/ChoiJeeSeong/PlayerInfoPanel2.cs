@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerInfoPanel2 : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerInfoPanel2 : MonoBehaviour
 
     private Dictionary<Player, PlayerInfoCell2> cells = null;
 
-    public void InitRoomPlayerInfo()
+    public void InitRoomPlayerInfo(string defaultInfoText = "0")
     {
         if (cells != null)
         {
@@ -27,17 +28,25 @@ public class PlayerInfoPanel2 : MonoBehaviour
         {
             // 플레이어마다 셀 생성 및 초기화
             PlayerInfoCell2 instance = Instantiate(cellUIPrefab, this.transform);
-            instance.NicknameText = roomPlayer.NickName;
-            instance.ScoreText = "0";
+            instance.InitPlayerInfo(roomPlayer);
+            instance.InfoText = defaultInfoText;
             cells.Add(roomPlayer, instance);
         }
     }
 
-    public void SetScore(Player player, int score)
+    public void SetInt(Player player, int score)
     {
         if (cells.ContainsKey(player))
         {
-            cells[player].ScoreText = score.ToString();
+            cells[player].InfoText = score.ToString();
+        }
+    }
+
+    public void SetText(Player player, string text)
+    {
+        if (cells.ContainsKey(player))
+        {
+            cells[player].InfoText = text;
         }
     }
 }

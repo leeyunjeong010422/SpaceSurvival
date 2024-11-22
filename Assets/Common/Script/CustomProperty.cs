@@ -56,4 +56,17 @@ public static class CustomProperty
     public static float GetColorG(this Player Player) => s_colorG.Get(Player);
     public static void SetColorB(this Player Player, float blue) => s_colorB.Set(Player, blue);
     public static float GetColorB(this Player Player) => s_colorB.Get(Player);
+    public static void SetColor(this Player Player, Color color)
+    {
+        s_colorR.Set(Player, color.r);
+        s_colorR.Set(Player, color.g);
+        s_colorR.Set(Player, color.b);
+    }
+    public static Color GetColor(this Player Player)
+    {
+        return new Color(
+            s_colorR.Get(Player),
+            s_colorG.Get(Player),
+            s_colorB.Get(Player));
+    }
 }
