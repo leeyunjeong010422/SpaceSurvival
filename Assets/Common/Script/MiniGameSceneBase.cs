@@ -74,7 +74,12 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         if (false == PhotonNetwork.IsMasterClient)
             return;
 
-        int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
+        foreach (Player roomPlayer in PhotonNetwork.PlayerList)
+        {
+            roomPlayer.SetLoad(false);
+        }
+
+            int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
         foreach (Player roomPlayer in PhotonNetwork.PlayerList)
         {
             if (goal <= roomPlayer.GetWinningPoint())
