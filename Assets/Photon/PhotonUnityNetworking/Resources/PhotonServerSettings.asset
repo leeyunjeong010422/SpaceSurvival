@@ -47,6 +47,9 @@ MonoBehaviour:
   - UpdateScore
   - AddKillLog
   - TryGetCoinRPC
+  - SyncAnimation
+  - SyncTrigger
+  - SetLayerWeight
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
