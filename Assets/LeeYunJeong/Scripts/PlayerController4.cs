@@ -8,6 +8,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     [SerializeField] float speed;
     [SerializeField] float jumpForce;
     [SerializeField] int maxHealth = 100;
+    private bool isDead = false;
 
     private bool isGrounded = false;
     private Rigidbody rb;
@@ -117,6 +118,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void Fire()
     {
+        if (isDead) return; // 죽었을 때는 공격 불가
+
         RaycastHit hit;
 
         // 애니메이션 레이어 1 활성화
@@ -210,6 +213,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private void Die()
     {
+        isDead = true;
         animator.SetTrigger("Die4");
         photonView.RPC("SyncTrigger", RpcTarget.Others, "Die4");
 
@@ -241,6 +245,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         UpdateProfileInfo();
 
         //리스폰 되었을 때 애니메이션 초기화 (다시 기본 애니메이션으로 바꿈)
+        isDead = false;
         animator.SetFloat("Speed", 0);
         animator.ResetTrigger("Die4");
         animator.SetTrigger("Idle4");
