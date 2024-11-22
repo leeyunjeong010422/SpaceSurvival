@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 165173023}
   - component: {fileID: 165173022}
   - component: {fileID: 165173021}
+  - component: {fileID: 165173024}
   m_Layer: 0
   m_Name: IcySlidingGameScene
   m_TagString: Untagged
@@ -218,6 +219,7 @@ MonoBehaviour:
   playerInfoUI: {fileID: 1466573944}
   countdownText: {fileID: 755713756}
   icePlatform: {fileID: 120185941}
+  failTrigger: {fileID: 2134311117}
   maxPlayTime: 20
 --- !u!114 &165173023
 MonoBehaviour:
@@ -241,6 +243,19 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &165173024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165173019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28dd60f6abf16d4094cf0f642a043e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 0
 --- !u!1 &520685631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1090,6 +1105,7 @@ GameObject:
   - component: {fileID: 2134311116}
   - component: {fileID: 2134311115}
   - component: {fileID: 2134311114}
+  - component: {fileID: 2134311117}
   m_Layer: 0
   m_Name: GameOverZone
   m_TagString: Untagged
@@ -1134,3 +1150,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2134311117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134311113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c4d7d9c0449fc24aa637da6cb8b1fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnLocalPlayerTriggered:
+    m_PersistentCalls:
+      m_Calls: []

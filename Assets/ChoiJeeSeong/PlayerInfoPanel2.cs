@@ -11,7 +11,7 @@ public class PlayerInfoPanel2 : MonoBehaviour
 
     private Dictionary<Player, PlayerInfoCell2> cells = null;
 
-    public void InitRoomPlayerInfo()
+    public void InitRoomPlayerInfo(string defaultInfoText = "0")
     {
         if (cells != null)
         {
@@ -29,7 +29,7 @@ public class PlayerInfoPanel2 : MonoBehaviour
             // 플레이어마다 셀 생성 및 초기화
             PlayerInfoCell2 instance = Instantiate(cellUIPrefab, this.transform);
             instance.InitPlayerInfo(roomPlayer);
-            instance.InfoText = "0";
+            instance.InfoText = defaultInfoText;
             cells.Add(roomPlayer, instance);
         }
     }
