@@ -58,6 +58,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     // Room 입장시 호출
     public override void OnJoinedRoom()
     {
+        PopUp1.Instance.PopUpClose();
         PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
         SetActivePanel(Panel.Room);
     }
