@@ -125,21 +125,30 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     {
         Debug.Log("랭크 표시");
         PlayerController4[] players = FindObjectsOfType<PlayerController4>();
-        var playerScores = new List<(string playerName, int score)>();
+        var playerScores = new List<(string playerName, int score, bool isLocalPlayer)> ();
 
         foreach (var player in players)
         {
-            playerScores.Add((player.photonView.Owner.NickName, player.GetScore()));
+            bool isLocal = player.photonView.IsMine; // 내 플레이어 여부 확인
+            playerScores.Add((player.photonView.Owner.NickName, player.GetScore(), isLocal));
         }
 
         // 점수 내림차순 정렬
         playerScores.Sort((x, y) => y.score.CompareTo(x.score));
 
-        // UI 업데이트
         var rankingText = endGamePanel.GetComponentsInChildren<TMP_Text>();
         for (int i = 0; i < playerScores.Count; i++)
         {
-            rankingText[i].text = $"{i + 1}. <b>NickName</b>: {playerScores[i].playerName} / <b>Score</b>: {playerScores[i].score}";
+            string playerName = playerScores[i].playerName;
+            int score = playerScores[i].score;
+            bool isLocalPlayer = playerScores[i].isLocalPlayer;
+
+            rankingText[i].text = $"{i + 1}. <b>NickName</b>: {playerName} / <b>Score</b>: {score}";
+
+            if (isLocalPlayer)
+            {
+                rankingText[i].color = Color.red;
+            }
         }
     }
 }
