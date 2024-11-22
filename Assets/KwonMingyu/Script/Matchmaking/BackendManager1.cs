@@ -8,15 +8,13 @@ using UnityEngine;
 
 public enum UserDatas1
 {
-    name, level, color, hat
+    name, level
 }
 
 public class UserData1
 {
     public string name;
     public long level;
-    public int color;
-    public int hat;
 }
 
 public class BackendManager1 : MonoBehaviour
@@ -71,49 +69,33 @@ public class BackendManager1 : MonoBehaviour
     /// 유저 DB에서 정보를 가져오는 함수
     /// 지금은 포톤 닉네임 설정에 사용된다.
     /// </summary>
-    public async Task<object> GetPlayerData(UserDatas1 data)
+    public async Task<UserData1> GetPlayerData()
     {
-        object temp = null;
+        UserData1 userData = new();
         await userUidDataRef.GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled || task.IsFaulted)
             {
                 Debug.LogWarning("값 가져오기 취소/실패 됨");
+                userData = null;
                 return;
             }
 
             if (task.Result.Value == null)
             {
-                UserData1 userData = new UserData1();
                 userData.name = $"Player {Random.Range(1000, 9999)}";
                 userData.level = 1;
-                userData.color = Random.Range(0, 8);
-                userData.hat = 0;
 
                 string json = JsonUtility.ToJson(userData);
                 userUidDataRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(x => x);
-                switch (data)
-                {
-                    case UserDatas1.name:
-                        temp = userData.name;
-                        break;
-                    case UserDatas1.level:
-                        temp = userData.level;
-                        break;
-                    case UserDatas1.color:
-                        temp = userData.color;
-                        break;
-                    case UserDatas1.hat:
-                        temp = userData.hat;
-                        break;
-                }
             }
             else
             {
-                temp = task.Result.Child(data.ToString()).Value;
+                userData.name = task.Result.Child("name").Value.ToString();
+                userData.level = (long)task.Result.Child("level").Value;
             }
         });
-        return temp;
+        return userData;
     }
     /// <summary>
     /// 유저 DB name, Photon NickName 변경 함수.
