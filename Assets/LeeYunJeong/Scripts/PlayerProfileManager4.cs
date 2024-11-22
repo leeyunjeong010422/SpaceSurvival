@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,9 +35,15 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         // 플레이어가 입장할 때마다 프로필 카드 활성화
+        InitializeProfileCards();
+    }
+
+    // 플레이어가 나가면 카드 업데이트
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
         InitializeProfileCards();
     }
 
