@@ -5,10 +5,10 @@ using Photon.Pun;
 
 public class PlayerController3 : MonoBehaviourPun
 {
-    [Header("플레이어 이동 설정")]
     [SerializeField] float moveSpeed;
     [SerializeField] float rotationSpeed;
     [SerializeField] float deceleration;
+    [SerializeField] Camera playerCamera;
     [SerializeField] CharacterController characterController;
     [SerializeField] Vector3 velocity;
 
@@ -37,28 +37,26 @@ public class PlayerController3 : MonoBehaviourPun
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        Vector3 forward = playerCamera.transform.forward;
+        Vector3 right = playerCamera.transform.right;
 
-        if (direction.magnitude >= 0.1f)
+        forward.y = 0f;
+        right.y = 0f;
+
+        Vector3 moveDirection = (forward * vertical + right * horizontal).normalized;
+
+        if (moveDirection.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref rotationSpeed, 0.1f);
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+            float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, rotationSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             velocity.x = moveDirection.x * moveSpeed;
             velocity.z = moveDirection.z * moveSpeed;
         }
         else
         {
-            if (velocity.magnitude > 0.1f)
-            {
-                velocity = velocity.normalized * Mathf.Max(0f, velocity.magnitude - deceleration * Time.deltaTime);
-            }
-            else
-            {
-                velocity = Vector3.zero;
-            }
+            velocity = Vector3.zero;
         }
 
         if (characterController.isGrounded)
