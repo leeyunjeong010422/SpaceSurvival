@@ -12,7 +12,7 @@ public class MiniGameScore : MonoBehaviourPun
     /// <summary>
     /// 플레이어의 ActorNumber를 키 값으로 점수를 저장
     /// </summary>
-    private Dictionary<int, int> scoreTable;
+    public Dictionary<int, int> ScoreTable { get; private set; }
 
     /// <summary>
     /// 점수 테이블 초기화. PhotonNetwork에서 Room 참여 상태여야 한다
@@ -25,10 +25,10 @@ public class MiniGameScore : MonoBehaviourPun
             return;
         }
 
-        scoreTable = new Dictionary<int, int>(PhotonNetwork.CountOfPlayersInRooms << 1);
+        ScoreTable = new Dictionary<int, int>(PhotonNetwork.CountOfPlayersInRooms << 1);
         foreach(Player player in PhotonNetwork.PlayerList)
         {
-            scoreTable.Add(player.ActorNumber, 0);
+            ScoreTable.Add(player.ActorNumber, 0);
         }
     }
 
@@ -45,8 +45,8 @@ public class MiniGameScore : MonoBehaviourPun
     [PunRPC]
     private void AddScoreRPC(int actorNumber, int value)
     {
-        scoreTable[actorNumber] += value;
-        OnScoreChanged?.Invoke(PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), scoreTable[actorNumber]);
+        ScoreTable[actorNumber] += value;
+        OnScoreChanged?.Invoke(PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), ScoreTable[actorNumber]);
     }
 
     [ContextMenu("(테스트)Add Score 3")]

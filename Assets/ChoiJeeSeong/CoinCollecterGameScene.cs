@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -100,12 +101,35 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 
         if (remainCoins <= 0)
         {
-            GameOver();
+            StopCoroutine(gamePlayRoutine);
+            gamePlayRoutine = StartCoroutine(GameOverRoutine());
         }
     }
 
-    private void GameOver()
+    private IEnumerator GameOverRoutine()
     {
         Debug.Log("모든 코인이 수집됨");
+        localPlayerCharacter.enabled = false; // 플레이어 컨트롤 비활성화
+
+        int winnerScore = scoreManager.ScoreTable.Max(x => x.Value);
+
+        if (winnerScore == scoreManager.ScoreTable[PhotonNetwork.LocalPlayer.ActorNumber])
+        {
+            // 최고점 혹은 최고점과 동점이라면 승리
+            countdownText.text = "승리";
+            PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
+        }
+        else
+        {
+            countdownText.text = "패배";
+        }
+        countdownText.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(3f);
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel(0);
+        }
     }
 }
