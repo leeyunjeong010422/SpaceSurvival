@@ -6,11 +6,11 @@ using UnityEngine;
 public class PlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
-    [SerializeField] float jumpForce;
+    //[SerializeField] float jumpForce;
     [SerializeField] int maxHealth = 100;
     private bool isDead = false;
 
-    private bool isGrounded = false;
+    //private bool isGrounded = false;
     private Rigidbody rb;
 
     private int currentHealth;
@@ -70,10 +70,10 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
             Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
-        {
-            Jump();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
+        //{
+        //    Jump();
+        //}
     }
 
     private void Move()
@@ -97,25 +97,25 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
     }
 
-    private void Jump()
-    {
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+    //private void Jump()
+    //{
+    //    rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+    //    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    //    isGrounded = false;
 
-        photonView.RPC("SyncTrigger", RpcTarget.Others, "Jump");
-    }
+    //    photonView.RPC("SyncTrigger", RpcTarget.Others, "Jump");
+    //}
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        //충돌한 면이 바닥인 경우 (normal.y > 0.7f로 바닥 확인)
-        //Collision타입은 충돌 지점들의 정보를 담는 ContactPoint 타입의 데이터를 contacs라는 배열의 형태로 제공
-        //여러 충돌지점중에서 첫번째 충돌지점의 정보를 가져옴
-        if (collision.contacts[0].normal.y > 0.7f)
-        {
-            isGrounded = true;
-        }
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    //충돌한 면이 바닥인 경우 (normal.y > 0.7f로 바닥 확인)
+    //    //Collision타입은 충돌 지점들의 정보를 담는 ContactPoint 타입의 데이터를 contacs라는 배열의 형태로 제공
+    //    //여러 충돌지점중에서 첫번째 충돌지점의 정보를 가져옴
+    //    if (collision.contacts[0].normal.y > 0.7f)
+    //    {
+    //        isGrounded = true;
+    //    }
+    //}
 
     [PunRPC]
     private void Fire()
