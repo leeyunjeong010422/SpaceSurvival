@@ -1013,7 +1013,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpForce: 5
   maxHealth: 100
   animator: {fileID: 540861571624103991}
   countdownCanvas: {fileID: 0}
