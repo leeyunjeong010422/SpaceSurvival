@@ -227,6 +227,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private IEnumerator RespawnRoutine()
     {
+        if (IsGameEnded()) yield break;
+
         countdownCanvas.SetActive(true);
 
         //죽은 플레이어에게 리스폰까지 몇초 남았는지 화면에 표시
