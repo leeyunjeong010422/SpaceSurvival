@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class TitlePanel1 : MonoBehaviourPunCallbacks
 {
-    public static TitlePanel1 Instance;
     public enum Panel { Login, Menu, Lobby, Room }
 
     [SerializeField] LoginPanel1 loginPanel;
@@ -59,7 +58,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PopUp1.Instance.PopUpClose();
-        PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
+        PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity);
         SetActivePanel(Panel.Room);
     }
 
@@ -84,7 +83,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     // 랜덤 Room 입장을 실패할 때 호출
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-
+        PopUp1.Instance.PopUpOpen(false, "방을 찾지 못했어요");
     }
 
     // 로비에 입장할 때 호출

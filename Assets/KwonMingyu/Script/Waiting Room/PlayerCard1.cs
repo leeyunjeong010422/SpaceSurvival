@@ -9,6 +9,8 @@ public class PlayerCard1 : MonoBehaviour
     [SerializeField] Image playerImage;
     [SerializeField] TMP_Text playerName;
     [SerializeField] Button readyButton;
+    [SerializeField] TMP_Text readyText;
+    [SerializeField] Outline outline;
 
     private void Start()
     {
@@ -21,7 +23,20 @@ public class PlayerCard1 : MonoBehaviour
     {
         playerName.text = player.NickName + (player.IsMasterClient ? "Host" : "");
         readyButton.interactable = player == PhotonNetwork.LocalPlayer;
-        readyButton.GetComponentInChildren<TMP_Text>().color = player.GetReady() ? Color.red : Color.black;
+        if (player.GetReady())
+        {
+            readyText.text = "준비됨";
+            readyText.color = Color.red;
+        }
+        else
+        {
+            readyText.text = "준비안됨";
+            readyText.color = Color.black;
+        }
+    }
+    public void CardOutLineSet(Color color)
+    {
+        outline.effectColor = color;
     }
 
     // 플레이어 카드 초기화 함수
@@ -29,6 +44,9 @@ public class PlayerCard1 : MonoBehaviour
     {
         playerName.text = "Empty";
         readyButton.interactable = false;
+        readyText.text = "준비안됨";
+        readyText.color = Color.black;
+        outline.effectColor = Color.black;
     }
 
     // 카드 버튼에 달릴 함수
