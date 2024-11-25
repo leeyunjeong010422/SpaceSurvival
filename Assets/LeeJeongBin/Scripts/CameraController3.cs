@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CameraController3 : MonoBehaviour
 {
@@ -8,20 +9,34 @@ public class CameraController3 : MonoBehaviour
     [SerializeField] float sensitivityY;
     [SerializeField] float minYAngle;
     [SerializeField] float maxYAngle;
-
-    [SerializeField] Transform playerBody;
+    [SerializeField] Transform player;
+    [SerializeField] Camera playerCamera;
 
     private float rotationX = 0f;
+    private PhotonView photonView;
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        photonView = GetComponent<PhotonView>();
+
+        if (photonView.IsMine)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            playerCamera.gameObject.SetActive(true);
+        }
+        else
+        {
+            playerCamera.gameObject.SetActive(false);
+        }
     }
 
     void Update()
     {
-        HandleCameraRotation();
+        if (photonView.IsMine)
+        {
+            HandleCameraRotation();
+        }
     }
 
     private void HandleCameraRotation()
@@ -33,7 +48,6 @@ public class CameraController3 : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, minYAngle, maxYAngle);
 
         transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-
-        playerBody.Rotate(Vector3.up * mouseX * sensitivityX);
+        player.Rotate(Vector3.up * mouseX * sensitivityX);
     }
 }

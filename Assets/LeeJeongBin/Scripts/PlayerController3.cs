@@ -14,6 +14,10 @@ public class PlayerController3 : MonoBehaviourPun
 
     private PhotonTransformView photonTransformView;
 
+    [SerializeField] int checkPointsReached;
+
+    private static List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -69,5 +73,41 @@ public class PlayerController3 : MonoBehaviourPun
         }
 
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    public void OnTriggerCheckPoint(CheckPoint3 checkPoint)
+    {
+        if (visitedCheckPoint.Contains(checkPoint))
+        {
+            return;
+        }
+
+        checkPointsReached++;
+        visitedCheckPoint.Add(checkPoint);
+
+        Debug.Log($"플레이어 {photonView.Owner.NickName} 체크포인트 {checkPointsReached}/{checkPoint.TotalCheckPoints} 통과");
+
+        if (checkPointsReached >= checkPoint.TotalCheckPoints)
+        {
+            Debug.Log($"플레이어 {photonView.Owner.NickName}가 모든 체크포인트를 통과했습니다");
+            GameOver3.Instance.PlayerWin(photonView.Owner.NickName);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("CheckPoint"))
+        {
+            CheckPoint3 checkPoint = other.GetComponent<CheckPoint3>();
+            if (checkPoint != null)
+            {
+                OnTriggerCheckPoint(checkPoint);
+            }
+        }
+    }
+
+    public static void ResetCheckPoints()
+    {
+        visitedCheckPoint.Clear();
     }
 }
