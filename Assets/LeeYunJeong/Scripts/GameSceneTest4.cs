@@ -30,7 +30,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Vector3 spawnPosition = new Vector3(Random.Range(-50, 50), 0.5f, Random.Range(-50, 50));
+        Vector3 spawnPosition = new Vector3(Random.Range(-30, 30), 0.5f, Random.Range(-30, 30));
         PhotonNetwork.Instantiate("Player4", spawnPosition, Quaternion.identity);
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
