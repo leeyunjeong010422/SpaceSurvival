@@ -27,6 +27,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     [SerializeField] GameObject bulletHole;
 
+    private GameObject takeDamagePanel;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -60,6 +62,9 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             countdownCanvas.SetActive(false);
         };
+
+        takeDamagePanel = GameObject.Find("Canvas/TakeDamagePanel");
+        takeDamagePanel?.SetActive(false);
     }
 
     private void Update()
@@ -209,6 +214,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         if (isDead) return;
 
+        takeDamagePanel?.SetActive(true);
+
         currentHealth -= damage;
 
         if (currentHealth <= 0)
@@ -233,6 +240,12 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         }
 
         UpdateProfileInfo();
+        Invoke("TakeDamagePanelDelete", 0.3f);
+    }
+
+    private void TakeDamagePanelDelete()
+    {
+        takeDamagePanel?.SetActive(false);
     }
 
     // 공격자가 플레이어를 죽였을 때 점수를 추가하는 함수
