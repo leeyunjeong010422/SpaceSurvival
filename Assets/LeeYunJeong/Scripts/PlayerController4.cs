@@ -173,6 +173,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         if (!photonView.IsMine || IsGameEnded())
             return;
 
+        if (isDead) return;
+
         currentHealth -= damage;
 
         if (currentHealth <= 0)
