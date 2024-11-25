@@ -67,7 +67,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         Move();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !Input.GetKey(KeyCode.LeftControl))
         {
             Fire();
         }
