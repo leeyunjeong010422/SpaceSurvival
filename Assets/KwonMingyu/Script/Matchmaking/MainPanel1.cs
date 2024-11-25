@@ -10,6 +10,7 @@ public class MainPanel1 : MonoBehaviour
     [SerializeField] TMP_Text maxPlayerText;
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] TMP_Text levelText;
+    [SerializeField] TMP_InputField nickChangeField;
     private int maxPlayer;
     
     private void OnEnable()
@@ -56,6 +57,17 @@ public class MainPanel1 : MonoBehaviour
         UserData1 userData = (await BackendManager1.Instance.GetPlayerData());
         nickNameText.text = userData.name;
         levelText.text = "LV " + userData.level;
+    }
+    public async void ChangeNickName()
+    {
+        if (await BackendManager1.Instance.SetPlayerName(nickChangeField.text))
+        {
+            PlayerInfoSetting();
+            PopUp1.Instance.PopUpOpen(false, "닉네임 변경에 성공했어요");
+            nickChangeField.transform.parent.gameObject.SetActive(false);
+            return;
+        }
+        PopUp1.Instance.PopUpOpen(false, "닉네임 변경에 실패했어요");
     }
     public void Quit()
     {

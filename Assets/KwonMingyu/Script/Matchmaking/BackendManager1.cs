@@ -100,17 +100,20 @@ public class BackendManager1 : MonoBehaviour
     /// <summary>
     /// 유저 DB name, Photon NickName 변경 함수.
     /// </summary>
-    public void SetPlayerName(string name)
+    public async Task<bool> SetPlayerName(string name)
     {
-        userUidDataRef.Child("name").SetValueAsync(name).ContinueWithOnMainThread(task =>
+        bool success = true;
+        await userUidDataRef.Child("name").SetValueAsync(name).ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled || task.IsFaulted)
             {
                 Debug.LogWarning("이름 변경 취소/실패 됨");
-                return;
+                success = false;
             }
         });
+        if (!success) return false;
         Debug.Log($"닉네임 변경 성공{PhotonNetwork.LocalPlayer.NickName} => {name}");
         PhotonNetwork.LocalPlayer.NickName = name;
+        return true;
     }
 }
