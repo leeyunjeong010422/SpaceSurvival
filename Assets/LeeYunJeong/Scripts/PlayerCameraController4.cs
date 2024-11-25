@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerCameraController4 : MonoBehaviourPun
@@ -63,4 +64,33 @@ public class PlayerCameraController4 : MonoBehaviourPun
             mainCamera.transform.LookAt(aimPoint);
         }
     }
+
+    /// <summary>
+    /// 플레이어가 피격당했을 때 카메라 흔들림
+    /// </summary>
+    /// <param name="duration">지속시간</param>
+    /// <param name="magnitude">강도</param>
+    /// <returns></returns>
+    /// //https://ks-factory.tistory.com/312 참고
+    public IEnumerator CameraShake(float duration, float magnitude)
+    {
+        Vector3 originalPosition = mainCamera.transform.localPosition;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float offsetX = Random.Range(-1f, 1f) * magnitude;
+            float offsetY = Random.Range(-1f, 1f) * magnitude;
+
+            mainCamera.transform.localPosition = originalPosition + new Vector3(offsetX, offsetY, 0);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        mainCamera.transform.localPosition = originalPosition;
+    }
+
 }

@@ -18,6 +18,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     private int currentHealth;
     private int score = 0;
 
+    private PlayerCameraController4 cameraController;
     private Camera mainCamera;
 
     [SerializeField] Animator animator;
@@ -36,6 +37,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         currentHealth = maxHealth;
         score = 0;
 
+        cameraController = FindObjectOfType<PlayerCameraController4>();
         mainCamera = Camera.main;
 
         animator = GetComponent<Animator>();
@@ -217,6 +219,11 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         takeDamagePanel?.SetActive(true);
 
         currentHealth -= damage;
+
+        if (cameraController != null)
+        {
+            StartCoroutine(cameraController.CameraShake(0.2f, 0.1f)); // 지속시간 0.2초, 흔들림 강도 0.1
+        }
 
         if (currentHealth <= 0)
         {
