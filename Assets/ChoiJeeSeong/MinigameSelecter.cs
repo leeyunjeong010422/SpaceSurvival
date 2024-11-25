@@ -4,8 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/Minigame Selecter")]
-public class MinigameSelecter : ScriptableObject
+public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
 {
     public enum Minigame
     {
@@ -67,6 +66,9 @@ public class MinigameSelecter : ScriptableObject
 
     private void Awake()
     {
+        if (false == Application.isPlaying)
+            return;
+
         sceneDataDic = new Dictionary<Minigame, Scene>(sceneDatas.Length << 1);
 
         // 씬 이름 검사, 중복 검사 및 인덱스 가져오기
@@ -75,7 +77,7 @@ public class MinigameSelecter : ScriptableObject
             Scene scene = SceneManager.GetSceneByName(sceneDatas[i].sceneName);
             if (false == scene.IsValid())
             {
-                Debug.LogWarning($"씬 이름({sceneDatas[i].sceneName})이 잘못되었음");
+                Debug.LogWarning($"씬 이름({sceneDatas[i].sceneName})이 잘못되었거나 Build 대상으로 등록되지 않음");
                 return;
             }
 
