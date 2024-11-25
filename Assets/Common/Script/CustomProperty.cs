@@ -66,6 +66,8 @@ public static class CustomProperty
     public const string COLOR_G = "ColorG";
     public const string COLOR_B = "ColorB";
     public const string WINNIN_POINT = "WnPt";
+    public const string COLOR_NUBER = "ColorNum";
+    public static Color[] colors = { Color.red, Color.yellow, Color.green, Color.blue, Color.cyan, Color.black, Color.white, Color.gray };
 
     private static readonly CustomPlayerProperty<bool> s_ready = new CustomPlayerProperty<bool>(READY, false);
     private static readonly CustomPlayerProperty<bool> s_load = new CustomPlayerProperty<bool>(LOAD, false);
@@ -73,6 +75,7 @@ public static class CustomProperty
     private static readonly CustomPlayerProperty<float> s_colorG = new CustomPlayerProperty<float>(COLOR_G, 1f);
     private static readonly CustomPlayerProperty<float> s_colorB = new CustomPlayerProperty<float>(COLOR_B, 1f);
     private static readonly CustomPlayerProperty<int> s_winningPoint = new CustomPlayerProperty<int>(WINNIN_POINT, 0);
+    private static readonly CustomPlayerProperty<int> S_colorNumber = new CustomPlayerProperty<int>(COLOR_NUBER, -1);
 
 
     public static void SetReady(this Player Player, bool ready) => s_ready.Set(Player, ready);
@@ -90,8 +93,8 @@ public static class CustomProperty
     public static void SetColor(this Player Player, Color color)
     {
         s_colorR.Set(Player, color.r);
-        s_colorR.Set(Player, color.g);
-        s_colorR.Set(Player, color.b);
+        s_colorG.Set(Player, color.g);
+        s_colorB.Set(Player, color.b);
     }
     public static Color GetColor(this Player Player)
     {
@@ -103,6 +106,13 @@ public static class CustomProperty
 
     public static void SetWinningPoint(this Player Player, int point) => s_winningPoint.Set(Player, point);
     public static int GetWinningPoint(this Player Player) => s_winningPoint.Get(Player);
+    public static void SetColorNumber(this Player Player, int number) => S_colorNumber.Set(Player, number);
+    public static int GetColorNumber(this Player Player) => S_colorNumber.Get(Player);
+    public static Color GetNuberColor(this Player Player) => colors[S_colorNumber.Get(Player)];
+
+
+
+
 
     public const string GOAL_POINT = "GlPt";
 
