@@ -30,7 +30,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
+        Vector3 spawnPosition = new Vector3(Random.Range(-50, 50), 0.5f, Random.Range(-50, 50));
         PhotonNetwork.Instantiate("Player4", spawnPosition, Quaternion.identity);
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
@@ -110,7 +110,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private void StartGameTimer()
     {
         Debug.Log("타이머 시작한다");
-        gameTimer = 30f;
+        gameTimer = 100f;
     }
 
     private void EndGame()
@@ -154,11 +154,13 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     }
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {
-        Vector3 randomDirection = center + Random.insideUnitSphere * range;
-        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, range, NavMesh.AllAreas))
+        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
+
+        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
         {
             return hit.position;
         }
-        return center; // 기본 위치 반환
+
+        return Vector3.zero;
     }
 }
