@@ -237,7 +237,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             if (countdownText != null)
             {
-                countdownText.text = $"{i} seconds to respawn";
+                countdownText.text = $"리스폰까지 {i}초 남았습니다...";
             }
             yield return new WaitForSeconds(1f);
         }
