@@ -2,26 +2,33 @@ using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
-    [SerializeField] float jumpForce;
+    //[SerializeField] float jumpForce;
     [SerializeField] int maxHealth = 100;
     private bool isDead = false;
+    private bool isMoving = false;
 
-    private bool isGrounded = false;
+    //private bool isGrounded = false;
     private Rigidbody rb;
 
     private int currentHealth;
     private int score = 0;
 
+    private PlayerCameraController4 cameraController;
     private Camera mainCamera;
 
     [SerializeField] Animator animator;
 
     [SerializeField] GameObject countdownCanvas;
     [SerializeField] TMP_Text countdownText;
+
+    [SerializeField] GameObject bulletHole;
+
+    private GameObject takeDamagePanel;
 
     private void Start()
     {
@@ -30,6 +37,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         currentHealth = maxHealth;
         score = 0;
 
+        cameraController = FindObjectOfType<PlayerCameraController4>();
         mainCamera = Camera.main;
 
         animator = GetComponent<Animator>();
@@ -56,6 +64,9 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             countdownCanvas.SetActive(false);
         };
+
+        takeDamagePanel = GameObject.Find("Canvas/TakeDamagePanel");
+        takeDamagePanel?.SetActive(false);
     }
 
     private void Update()
@@ -65,15 +76,20 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         Move();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !Input.GetKey(KeyCode.LeftControl))
         {
             Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
+        if (Input.GetKey(KeyCode.LeftShift) && isMoving)
         {
-            Jump();
+            Run();
         }
+
+        //if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
+        //{
+        //    Jump();
+        //}
     }
 
     private void Move()
@@ -84,12 +100,14 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         if (moveDir != Vector3.zero)
         {
+            isMoving = true;
             Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
             rb.velocity = new Vector3(worldMoveDir.x * speed, rb.velocity.y, worldMoveDir.z * speed);
             animator.SetFloat("Speed", 3);
         }
         else
         {
+            isMoving = false;
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
             animator.SetFloat("Speed", 0);
         }
@@ -97,25 +115,33 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
     }
 
-    private void Jump()
+    private void Run()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+        if (isDead) return;
 
-        photonView.RPC("SyncTrigger", RpcTarget.Others, "Jump");
+        animator.SetFloat("Speed", 6);
+        photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        //충돌한 면이 바닥인 경우 (normal.y > 0.7f로 바닥 확인)
-        //Collision타입은 충돌 지점들의 정보를 담는 ContactPoint 타입의 데이터를 contacs라는 배열의 형태로 제공
-        //여러 충돌지점중에서 첫번째 충돌지점의 정보를 가져옴
-        if (collision.contacts[0].normal.y > 0.7f)
-        {
-            isGrounded = true;
-        }
-    }
+    //private void Jump()
+    //{
+    //    rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+    //    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    //    isGrounded = false;
+
+    //    photonView.RPC("SyncTrigger", RpcTarget.Others, "Jump");
+    //}
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    //충돌한 면이 바닥인 경우 (normal.y > 0.7f로 바닥 확인)
+    //    //Collision타입은 충돌 지점들의 정보를 담는 ContactPoint 타입의 데이터를 contacs라는 배열의 형태로 제공
+    //    //여러 충돌지점중에서 첫번째 충돌지점의 정보를 가져옴
+    //    if (collision.contacts[0].normal.y > 0.7f)
+    //    {
+    //        isGrounded = true;
+    //    }
+    //}
 
     [PunRPC]
     private void Fire()
@@ -141,10 +167,26 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
                 // 50 데미지를 줌
                 hitPlayer.photonView.RPC("TakeDamage", RpcTarget.All, 50, photonView.ViewID); // 공격자는 현재 플레이어
             }
+
+            if (!hit.collider.CompareTag("Player"))
+            {
+                CreateBulletHole(hit);
+            }
         }
 
-        // 2초 후에 레이어를 비활성화하는 메서드 호출
+        // 1초 후에 레이어를 비활성화하는 메서드 호출
         Invoke("DisableFireLayer", 1f);
+    }
+
+    private void CreateBulletHole(RaycastHit hit)
+    {
+        // 충돌한 위치와 방향을 계산하여 총알 자국을 배치
+        Vector3 bulletHolePosition = hit.point + hit.normal * 0.01f; // 표면에 약간 떠있게 배치
+        Quaternion bulletHoleRotation = Quaternion.LookRotation(hit.normal); // 표면과 일치하도록 회전
+
+        GameObject createdBulletHole = PhotonNetwork.Instantiate(bulletHole.name, bulletHolePosition, bulletHoleRotation);
+
+        Destroy(createdBulletHole, 0.5f);
     }
 
     // 1초 후에 애니메이션 레이어를 비활성화하는 메서드
@@ -172,7 +214,16 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         if (!photonView.IsMine || IsGameEnded())
             return;
 
+        if (isDead) return;
+
+        takeDamagePanel?.SetActive(true);
+
         currentHealth -= damage;
+
+        if (cameraController != null)
+        {
+            StartCoroutine(cameraController.CameraShake(0.2f, 0.1f)); // 지속시간 0.2초, 흔들림 강도 0.1
+        }
 
         if (currentHealth <= 0)
         {
@@ -196,6 +247,12 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         }
 
         UpdateProfileInfo();
+        Invoke("TakeDamagePanelDelete", 0.3f);
+    }
+
+    private void TakeDamagePanelDelete()
+    {
+        takeDamagePanel?.SetActive(false);
     }
 
     // 공격자가 플레이어를 죽였을 때 점수를 추가하는 함수
@@ -227,6 +284,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private IEnumerator RespawnRoutine()
     {
+        if (IsGameEnded()) yield break;
+
         countdownCanvas.SetActive(true);
 
         //죽은 플레이어에게 리스폰까지 몇초 남았는지 화면에 표시
@@ -234,14 +293,16 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         {
             if (countdownText != null)
             {
-                countdownText.text = $"{i} seconds to respawn";
+                countdownText.text = $"리스폰까지 {i}초 남았습니다...";
             }
             yield return new WaitForSeconds(1f);
         }
 
         countdownCanvas.SetActive(false);
 
-        transform.position = new Vector3(Random.Range(-10, 10), 1, Random.Range(-10, 10));
+        // NavMesh 위에서 랜덤 위치를 찾아 이동
+        Vector3 respawnPosition = new Vector3(Random.Range(-50, 50), 0.5f, Random.Range(-50, 50));
+        transform.position = respawnPosition;
 
         currentHealth = maxHealth;
         UpdateProfileInfo();
@@ -252,6 +313,18 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         animator.ResetTrigger("Die4");
         animator.SetTrigger("Idle4");
         photonView.RPC("SyncTrigger", RpcTarget.Others, "Idle4");
+    }
+
+    private Vector3 RandomPositionNavMesh(Vector3 center, float range)
+    {
+        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
+
+        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+
+        return Vector3.zero;
     }
 
     [PunRPC]
