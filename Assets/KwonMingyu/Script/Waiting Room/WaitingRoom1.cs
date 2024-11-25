@@ -49,6 +49,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         // 모든 플레이어가 Ready && 마스터 클라이언트 라면 시작버튼 활성화
         startButton.interactable = CheckAllReady() && PhotonNetwork.LocalPlayer.IsMasterClient;
+        startButton.gameObject.SetActive(PhotonNetwork.CurrentRoom.Players.Count > 1);
     }
     private void PlayerColorSet()
     {

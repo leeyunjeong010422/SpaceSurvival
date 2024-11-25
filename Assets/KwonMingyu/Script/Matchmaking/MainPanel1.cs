@@ -13,10 +13,12 @@ public class MainPanel1 : MonoBehaviour
     [SerializeField] TMP_InputField nickChangeField;
     private int maxPlayer;
     
+    // 메인 화면으로 이동할 때 우상단의 플레이어 정보를 입력
     private void OnEnable()
     {
         PlayerInfoSetting();
     }
+    // 메인 화면에서 방 생성 버튼을 눌렀을 때
     public void CreateRoomMenu()
     {
         createRoomPanel.SetActive(true);
@@ -24,6 +26,7 @@ public class MainPanel1 : MonoBehaviour
         maxPlayerText.text = "4";
         maxPlayer = 4;
     }
+    // 버튼으로 최대 인원수를 변경하기 위한 함수
     public void MaxPlayerCanger(bool up)
     {
         if (up) maxPlayer++;
@@ -52,12 +55,14 @@ public class MainPanel1 : MonoBehaviour
     {
         PhotonNetwork.JoinLobby();
     }
+    // 플레이어 정보 세팅을 위한 함수
     private async void PlayerInfoSetting()
     {
         UserData1 userData = (await BackendManager1.Instance.GetPlayerData());
         nickNameText.text = userData.name;
         levelText.text = "LV " + userData.level;
     }
+    // 닉네임 변경을 위한 함수
     public async void ChangeNickName()
     {
         if (await BackendManager1.Instance.SetPlayerName(nickChangeField.text))
