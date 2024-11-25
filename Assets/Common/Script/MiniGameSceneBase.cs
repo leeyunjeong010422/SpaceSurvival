@@ -30,6 +30,9 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
         // 로딩 완료 통지
         PhotonNetwork.LocalPlayer.SetLoad(true);
+
+        // Ready를 기본값으로 변경
+        PhotonNetwork.LocalPlayer.SetReady(false);
     }
 
     /// <summary>
@@ -79,7 +82,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             roomPlayer.SetLoad(false);
         }
 
-            int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
+        int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
         foreach (Player roomPlayer in PhotonNetwork.PlayerList)
         {
             if (goal <= roomPlayer.GetWinningPoint())
@@ -90,7 +93,6 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             }
         }
 
-        Debug.LogWarning($"아직 세트 승자 없음, 무작위 미니게임 진입 필요");
-        // PhotonNetwork.LoadLevel(0);
+        PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
     }
 }
