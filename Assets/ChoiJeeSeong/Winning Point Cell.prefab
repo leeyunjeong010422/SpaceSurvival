@@ -218,6 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6428604911023913642}
   - component: {fileID: 8560729446661565746}
+  - component: {fileID: 8807829704006764889}
   m_Layer: 5
   m_Name: Winning Point Cell
   m_TagString: Untagged
@@ -256,6 +257,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5305144684203501215}
   m_CullTransparentMesh: 1
+--- !u!114 &8807829704006764889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5305144684203501215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50bc17a99a6f8e42a6006a2b59c53e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nicknameText: {fileID: 1235543775577251934}
+  fillImage: {fileID: 6339056353250225337}
+  readyImage: {fileID: 2812584146496688577}
 --- !u!1001 &6224237083760034037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -358,3 +374,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224964676505123828, guid: 6276da193c2499946a79969cc52c076f, type: 3}
   m_PrefabInstance: {fileID: 6224237083760034037}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6339056353250225337 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114899568914410572, guid: 6276da193c2499946a79969cc52c076f, type: 3}
+  m_PrefabInstance: {fileID: 6224237083760034037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
