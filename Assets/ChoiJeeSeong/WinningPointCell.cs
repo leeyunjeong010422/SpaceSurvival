@@ -24,7 +24,7 @@ public class WinningPointCell : MonoBehaviourPunCallbacks
         this.target = target;
         nicknameText.text = target.NickName;
         readyImage.color = fillImage.color = target.GetColor();
-        fillImage.fillAmount = target.GetWinningPoint() / PhotonNetwork.CurrentRoom.GetGoalPoint();
+        fillImage.fillAmount = (float)target.GetWinningPoint() / (float)PhotonNetwork.CurrentRoom.GetGoalPoint();
         readyImage.gameObject.SetActive(target.GetReady());
     }
 

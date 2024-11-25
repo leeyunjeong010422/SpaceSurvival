@@ -61,12 +61,12 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     public void ResetRandomList()
     {
         minigames = new List<Minigame>(sceneDataDic.Keys);
-
+        
         // 미니게임 목록을 무작위 정렬
         minigames.OrderBy(_ => Random.value);
     }
 
-    private void Awake()
+    private void OnEnable()
     {
         if (false == Application.isPlaying)
             return;
@@ -95,8 +95,8 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
         ResetRandomList();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        Debug.Log("MinigameSceneData SO 파괴");
+        Debug.Log("MinigameSceneData SO disabled");
     }
 }
