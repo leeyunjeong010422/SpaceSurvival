@@ -245,7 +245,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         countdownCanvas.SetActive(false);
 
         // NavMesh 위에서 랜덤 위치를 찾아 이동
-        Vector3 respawnPosition = new Vector3(Random.Range(-50, 50), 0.5f, Random.Range(-50, 50));
+        Vector3 respawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
         transform.position = respawnPosition;
 
         currentHealth = maxHealth;
@@ -261,14 +261,12 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {
-        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
-
-        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
+        Vector3 randomDirection = center + Random.insideUnitSphere * range;
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, range, NavMesh.AllAreas))
         {
             return hit.position;
         }
-
-        return Vector3.zero;
+        return center; // 기본 위치 반환
     }
 
     [PunRPC]
