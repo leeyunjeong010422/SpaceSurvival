@@ -10,6 +10,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     //[SerializeField] float jumpForce;
     [SerializeField] int maxHealth = 100;
     private bool isDead = false;
+    private bool isMoving = false;
 
     //private bool isGrounded = false;
     private Rigidbody rb;
@@ -71,6 +72,11 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
             Fire();
         }
 
+        if (Input.GetKey(KeyCode.LeftShift) && isMoving)
+        {
+            Run();
+        }
+
         //if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // 점프는 바닥에 있을 때만
         //{
         //    Jump();
@@ -85,16 +91,26 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
 
         if (moveDir != Vector3.zero)
         {
+            isMoving = true;
             Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
             rb.velocity = new Vector3(worldMoveDir.x * speed, rb.velocity.y, worldMoveDir.z * speed);
             animator.SetFloat("Speed", 3);
         }
         else
         {
+            isMoving = false;
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
             animator.SetFloat("Speed", 0);
         }
 
+        photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
+    }
+
+    private void Run()
+    {
+        if (isDead) return;
+
+        animator.SetFloat("Speed", 6);
         photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
     }
 
