@@ -1017,6 +1017,7 @@ MonoBehaviour:
   animator: {fileID: 540861571624103991}
   countdownCanvas: {fileID: 0}
   countdownText: {fileID: 0}
+  bulletHole: {fileID: 6772057976343687900, guid: a5f6a22f802a2c8438779d1208284140, type: 3}
 --- !u!114 &6308605653842834442
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,6 +25,8 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject countdownCanvas;
     [SerializeField] TMP_Text countdownText;
 
+    [SerializeField] GameObject bulletHole;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -158,10 +160,26 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
                 // 50 데미지를 줌
                 hitPlayer.photonView.RPC("TakeDamage", RpcTarget.All, 50, photonView.ViewID); // 공격자는 현재 플레이어
             }
+
+            if (!hit.collider.CompareTag("Player"))
+            {
+                CreateBulletHole(hit);
+            }
         }
 
-        // 2초 후에 레이어를 비활성화하는 메서드 호출
+        // 1초 후에 레이어를 비활성화하는 메서드 호출
         Invoke("DisableFireLayer", 1f);
+    }
+
+    private void CreateBulletHole(RaycastHit hit)
+    {
+        // 충돌한 위치와 방향을 계산하여 총알 자국을 배치
+        Vector3 bulletHolePosition = hit.point + hit.normal * 0.01f; // 표면에 약간 떠있게 배치
+        Quaternion bulletHoleRotation = Quaternion.LookRotation(hit.normal); // 표면과 일치하도록 회전
+
+        GameObject createdBulletHole = PhotonNetwork.Instantiate(bulletHole.name, bulletHolePosition, bulletHoleRotation);
+
+        Destroy(createdBulletHole, 0.5f);
     }
 
     // 1초 후에 애니메이션 레이어를 비활성화하는 메서드
