@@ -53,6 +53,8 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
         return pop;
     }
 
+    public int PopRandomSceneIndex() => sceneDataDic[PopRandom()].buildIndex;
+
     /// <summary>
     /// 무작위로 정렬된 미니게임 목록을 초기화한다
     /// </summary>
