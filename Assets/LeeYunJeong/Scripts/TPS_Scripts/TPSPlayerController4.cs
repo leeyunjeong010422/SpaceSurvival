@@ -387,7 +387,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
     private bool IsGameEnded()
     {
-        GameSceneTest4 gameScene = FindObjectOfType<GameSceneTest4>();
+        TPSGameSceneTest4 gameScene = FindObjectOfType<TPSGameSceneTest4>();
         return gameScene != null && gameScene.isGameEnded;
     }
 }

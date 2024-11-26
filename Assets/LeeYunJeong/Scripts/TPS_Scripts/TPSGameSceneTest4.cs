@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GameSceneTest4 : MonoBehaviourPunCallbacks
+public class TPSGameSceneTest4 : MonoBehaviourPunCallbacks
 {
     private float gameTimer; // 게임 시간
     [SerializeField] private TMP_Text timerText;
@@ -31,7 +31,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Vector3 spawnPosition = new Vector3(Random.Range(-30, 30), 0.5f, Random.Range(-30, 30));
-        PhotonNetwork.Instantiate("Player4", spawnPosition, Quaternion.identity);
+        PhotonNetwork.Instantiate("TPS_Player4", spawnPosition, Quaternion.identity);
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
         endGamePanel?.SetActive(false);
