@@ -4,6 +4,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
 {
     public enum Minigame
@@ -19,6 +23,7 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     {
         public Minigame minigame;
         public string sceneName;
+        public int buildIndex;
     }
 
     /// <summary>
@@ -29,8 +34,7 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     /// <summary>
     /// 스크립트로 사용할 씬 데이터
     /// </summary>
-    private Dictionary<Minigame, Scene> sceneDataDic;
-    public Dictionary<Minigame, Scene> SceneDataDic => sceneDataDic;
+    private Dictionary<Minigame, SceneData> sceneDataDic;
 
     /// <summary>
     /// 랜덤 맵 선택용 리스트
@@ -66,37 +70,62 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
         minigames.OrderBy(_ => Random.value);
     }
 
-    private void OnEnable()
+    private void OnEnable() => Init();
+
+    private void Init()
     {
-        if (false == Application.isPlaying)
-            return;
+        Debug.Log("MinigameSceneData SO 초기화");
 
-        sceneDataDic = new Dictionary<Minigame, Scene>(sceneDatas.Length << 1);
+        sceneDataDic = new Dictionary<Minigame, SceneData>(sceneDatas.Length << 1);
 
-        // 씬 이름 검사, 중복 검사 및 인덱스 가져오기
-        for (int i = 0; i < sceneDatas.Length; i++)
+        foreach (var sceneData in sceneDatas)
         {
-            Scene scene = SceneManager.GetSceneByName(sceneDatas[i].sceneName);
-            if (false == scene.IsValid())
-            {
-                Debug.LogWarning($"씬 이름({sceneDatas[i].sceneName})이 잘못되었거나 Build 대상으로 등록되지 않음");
-                return;
-            }
-
-            if (sceneDataDic.ContainsKey(sceneDatas[i].minigame))
-            {
-                Debug.LogWarning($"중복된 키 값({sceneDatas[i].minigame})이 존재함");
-                return;
-            }
-
-            sceneDataDic.Add(sceneDatas[i].minigame, scene);
+            sceneDataDic.Add(sceneData.minigame, sceneData);
         }
 
         ResetRandomList();
     }
 
+#if UNITY_EDITOR
+    [ContextMenu("씬 이름으로부터 Index 설정(Play Mode)")]
+    private void SetBuildIndexByName()
+    {
+        if (false == Application.isPlaying)
+        {
+            Debug.LogWarning("이 기능은 PlayMode에서만 작동함");
+            return;
+        }
+
+        List<Minigame> duplicateCheck = new List<Minigame>(sceneDatas.Length);
+
+        for (int i = 0; i < sceneDatas.Length; i++)
+        {
+            int buildIndex = SceneUtility.GetBuildIndexByScenePath(sceneDatas[i].sceneName);
+            if (-1 == buildIndex)
+            {
+                Debug.LogWarning($"씬 이름({sceneDatas[i].sceneName})이 잘못되었거나 Build 대상으로 등록되지 않음");
+                continue;
+            }
+
+            if (duplicateCheck.Contains(sceneDatas[i].minigame))
+            {
+                Debug.LogWarning($"중복된 키 값({sceneDatas[i].minigame})이 존재함");
+                continue;
+            }
+            duplicateCheck.Add(sceneDatas[i].minigame);
+
+            sceneDatas[i].buildIndex = buildIndex;
+        }
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        Init();
+    }
+#endif // UNITY_EDITOR
+
     private void OnDisable()
     {
-        Debug.Log("MinigameSceneData SO disabled");
+        Debug.Log("MinigameSceneData SO 비활성화");
     }
 }
