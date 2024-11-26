@@ -34,23 +34,24 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AddKillLog
+  - AddScore
+  - AddScoreRPC
   - ClickRpc
   - DestroyRpc
-  - AddScoreRPC
-  - TestStartRPC
-  - Fire
-  - SyncPosition
-  - UpdateScoreOnKillRPC
-  - TakeDamage
-  - AddScore
-  - SyncScore
-  - UpdateScore
-  - AddKillLog
-  - TryGetCoinRPC
-  - SyncAnimation
-  - SyncTrigger
-  - SetLayerWeight
+  - DestroyTarget
   - FailedRPC
+  - Fire
+  - GameWinner
+  - SetLayerWeight
+  - SyncAnimation
+  - SyncCubeColor
+  - SyncRotation
+  - SyncScore
+  - SyncTrigger
+  - TakeDamage
+  - TestStartRPC
+  - TryGetCoinRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
