@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerCharacterControl2 : MonoBehaviourPun
 {
-    [SerializeField] Animator animator;
-    private int hashSpeed;
-
     [SerializeField] float speed;
+
+    private Animator animator;
+    private int hashSpeed;
 
     private ILocomotion2 movement;
 
@@ -18,6 +18,7 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         movement = GetComponent<ILocomotion2>();
         if (movement == null)
         {

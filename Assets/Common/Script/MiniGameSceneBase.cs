@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 미니게임 씬의 베이스 클래스<br/>
@@ -21,6 +22,10 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             return;
         }
 
+        // Ready를 기본값으로 변경
+        // 게임 종료시 다음 게임으로 넘어가는데 사용
+        PhotonNetwork.LocalPlayer.SetReady(false);
+
         if (PhotonNetwork.IsMasterClient)
         {
             ReadyNetworkScene();
@@ -30,10 +35,6 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
         // 로딩 완료 통지
         PhotonNetwork.LocalPlayer.SetLoad(true);
-
-        // Ready를 기본값으로 변경
-        // 게임 종료시 다음 게임으로 넘어가는데 사용
-        PhotonNetwork.LocalPlayer.SetReady(false);
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
     private bool CheckAllLoad()
     {
+        // PhotonNetwork.LevelLoadingProgress
         foreach (Player player in PhotonNetwork.PlayerList)
             if (!player.GetLoad()) return false;
         return true;
@@ -95,6 +97,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         foreach (Player roomPlayer in PhotonNetwork.PlayerList)
         {
             roomPlayer.SetLoad(false);
+            roomPlayer.SetReady(false);
         }
 
         int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
@@ -110,7 +113,10 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             }
         }
 
+        int nextScene = MinigameSelecter.Instance.PopRandomSceneIndex();
+        Debug.Log($"다음 스테이지로 이동({SceneManager.GetActiveScene().buildIndex}->{nextScene})");
+
         // 아직 선택되지 않은 무작위 미니게임으로 진입
-        PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
+        PhotonNetwork.LoadLevel(nextScene);
     }
 }
