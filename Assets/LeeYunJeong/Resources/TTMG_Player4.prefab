@@ -1577,6 +1577,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   animator: {fileID: 3123308869886027189}
+  rotationSpeed: 100
+  cameraOffset: {x: 0, y: 5, z: -7}
+  mouseSensitivity: 2
 --- !u!1 &9095702449811090885
 GameObject:
   m_ObjectHideFlags: 0

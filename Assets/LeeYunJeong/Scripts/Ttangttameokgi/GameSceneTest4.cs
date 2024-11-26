@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameSceneTest4 : MonoBehaviourPunCallbacks
 {
@@ -29,7 +30,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Vector3 spawnPosition = new Vector3(Random.Range(-30, 30), 0.5f, Random.Range(-30, 30));
+        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 10f);
         PhotonNetwork.Instantiate("TTMG_Player4", spawnPosition, Quaternion.identity);
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
@@ -119,4 +120,18 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
         isGameEnded = true;
         endGamePanel?.SetActive(true);
     }
+
+    private Vector3 RandomPositionNavMesh(Vector3 center, float range)
+    {
+        // 범위 내에서 랜덤한 위치를 생성
+        Vector3 spawnPosition = center + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
+
+        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
+        {
+            return hit.position; 
+        }
+
+        return Vector3.zero;
+    }
+
 }
