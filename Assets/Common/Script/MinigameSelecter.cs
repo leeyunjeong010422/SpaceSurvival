@@ -64,10 +64,8 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     /// </summary>
     public void ResetRandomList()
     {
-        minigames = new List<Minigame>(sceneDataDic.Keys);
-        
         // 미니게임 목록을 무작위 정렬
-        minigames.OrderBy(_ => Random.value);
+        minigames = new List<Minigame>(sceneDataDic.Keys).OrderBy(_ => Random.value).ToList();
     }
 
     private void OnEnable() => Init();

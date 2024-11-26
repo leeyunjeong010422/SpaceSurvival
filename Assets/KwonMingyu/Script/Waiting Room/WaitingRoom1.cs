@@ -78,12 +78,12 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         {
             Renderer renderer = photonView.gameObject.GetComponentInChildren<Renderer>();
             if (renderer == null) continue;
-            renderer.material.color = photonView.Owner.GetNuberColor();
+            renderer.material.color = photonView.Owner.GetNumberColor();
         }
         // 카드의 아웃라인 색갈을 플레이어 색갈로 변경
         foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            playerCards[player.GetPlayerNumber()].CardOutLineSet(player.GetNuberColor());
+            playerCards[player.GetPlayerNumber()].CardOutLineSet(player.GetNumberColor());
         }
 
     }

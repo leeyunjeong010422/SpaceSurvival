@@ -18,6 +18,6 @@ public class PlayerInfoCell2 : MonoBehaviour
     public void InitPlayerInfo(Player player)
     {
         NicknameText = player.NickName;
-        PersonalColor = player.GetColor();
+        PersonalColor = player.GetNumberColor();
     }
 }
