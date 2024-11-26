@@ -79,6 +79,11 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     {
         SetActivePanel(Panel.Menu);
     }
+    // Room 입장에 실패할 때
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        PopUp1.Instance.PopUpOpen(false, "방을 찾지 못했어요");
+    }
 
     // 랜덤 Room 입장을 실패할 때 호출
     public override void OnJoinRandomFailed(short returnCode, string message)
