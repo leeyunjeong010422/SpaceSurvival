@@ -37,5 +37,10 @@ public class WinningPointCell : MonoBehaviourPunCallbacks
         {
             readyImage.gameObject.SetActive(target.GetReady());
         }
+
+        if (changedProps.ContainsKey(CustomProperty.WINNIN_POINT))
+        {
+            fillImage.fillAmount = (float)target.GetWinningPoint() / (float)PhotonNetwork.CurrentRoom.GetGoalPoint();
+        }
     }
 }
