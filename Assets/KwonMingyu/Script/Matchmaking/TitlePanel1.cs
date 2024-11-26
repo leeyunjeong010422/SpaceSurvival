@@ -58,7 +58,7 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PopUp1.Instance.PopUpClose();
-        PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity);
+        PhotonNetwork.Instantiate("Cube", Vector3.up, Quaternion.identity);
         SetActivePanel(Panel.Room);
     }
 

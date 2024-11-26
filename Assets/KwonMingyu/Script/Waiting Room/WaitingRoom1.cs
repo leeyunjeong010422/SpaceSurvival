@@ -56,7 +56,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 모든 포톤뷰를 순회 하면서 소유자의 색갈로 변경
         foreach (PhotonView photonView in FindObjectsOfType<PhotonView>())
         {
-            photonView.gameObject.GetComponent<Renderer>().material.color = photonView.Owner.GetNuberColor();
+            Renderer renderer = photonView.gameObject.GetComponent<Renderer>();
+            if (renderer == null) return;
+            renderer.material.color = photonView.Owner.GetNuberColor();
         }
         // 카드의 아웃라인 색갈을 플레이어 색갈로 변경
         foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)

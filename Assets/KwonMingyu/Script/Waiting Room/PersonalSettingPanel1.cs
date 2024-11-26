@@ -87,6 +87,11 @@ public class PersonalSettingPanel1 : MonoBehaviour
     }
     public void LeftRoom()
     {
+        // 변경된 프로퍼티를 초기화
+        PhotonNetwork.LocalPlayer.SetReady(false);
+        PhotonNetwork.LocalPlayer.SetColorNumber(-1);
+        
+        // 룸 이탈 후 프로퍼티 조작시 오류 발생, 초기화 이후에 룸 나가기
         PhotonNetwork.LeaveRoom();
     }
 
