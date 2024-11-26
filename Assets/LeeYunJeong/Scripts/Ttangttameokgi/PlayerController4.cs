@@ -63,7 +63,7 @@ public class PlayerController4 : MonoBehaviourPun
             animator.SetFloat("Speed", 0);
         }
 
-        photonView.RPC("SyncAnimation", RpcTarget.Others, animator.GetFloat("Speed"));
+        photonView.RPC(nameof(SyncAnimation), RpcTarget.Others, animator.GetFloat("Speed"));
     }
 
     private void RotateView()
@@ -81,7 +81,7 @@ public class PlayerController4 : MonoBehaviourPun
 
         UpdateCameraPosition();
 
-        photonView.RPC("SyncRotation", RpcTarget.Others, transform.rotation);
+        photonView.RPC(nameof(SyncRotation), RpcTarget.Others, transform.rotation);
     }
 
     private void UpdateCameraPosition()
@@ -111,12 +111,6 @@ public class PlayerController4 : MonoBehaviourPun
                 playerColor = Color.green;
                 break;
         }
-
-        // 플레이어의 색 설정
-        //playerRenderer.material.color = playerColor;
-
-        // 색 동기화
-        photonView.RPC("SyncPlayerColor", RpcTarget.All, playerColor.r, playerColor.g, playerColor.b);
     }
 
     // 큐브 색을 변경하는 함수
@@ -131,7 +125,7 @@ public class PlayerController4 : MonoBehaviourPun
                 cubeRenderer.material.color = playerColor;
 
                 // 색 동기화
-                photonView.RPC("SyncCubeColor", RpcTarget.All, collision.gameObject.GetInstanceID(), playerColor.r, playerColor.g, playerColor.b);
+                photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, collision.gameObject.GetInstanceID(), playerColor.r, playerColor.g, playerColor.b);
             }
         }
     }
@@ -171,13 +165,5 @@ public class PlayerController4 : MonoBehaviourPun
     private void SyncRotation(Quaternion rotation)
     {
         transform.rotation = rotation;
-    }
-
-    // 색 동기화 (다른 플레이어들에게 색을 적용)
-    [PunRPC]
-    private void SyncPlayerColor(float r, float g, float b)
-    {
-        playerColor = new Color(r, g, b); // 받은 값으로 Color 객체 재생성
-        playerRenderer.material.color = playerColor;
     }
 }
