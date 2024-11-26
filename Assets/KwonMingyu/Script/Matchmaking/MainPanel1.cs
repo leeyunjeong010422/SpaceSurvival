@@ -49,12 +49,12 @@ public class MainPanel1 : MonoBehaviour
 
         createRoomPanel.SetActive(false);
         PhotonNetwork.CreateRoom(roomName, roomOptions);
-        PopUp1.Instance.PopUpOpen(true, "방을 생성하고 있어요", true);
+        PopUp1.Instance.PopUpOpen(true, "방을 생성하고 있어요");
     }
     public void RandomMatching()
     {
         PhotonNetwork.JoinRandomRoom();
-        PopUp1.Instance.PopUpOpen(true, "랜덤 방에 접속하고 있어요", true);
+        PopUp1.Instance.PopUpOpen(true, "랜덤 방에 접속하고 있어요");
     }
     public void JoinLobby()
     {

@@ -23,6 +23,7 @@ public class RoomEntry1 : MonoBehaviour
     {
         PhotonNetwork.LeaveLobby();
         PhotonNetwork.JoinRoom(roomName.text);
+        PopUp1.Instance.PopUpOpen(true, "방에 들어가고 있어요");
     }
 }
 
