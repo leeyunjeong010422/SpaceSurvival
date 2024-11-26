@@ -115,6 +115,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     public void GameStart()
     {
-        Debug.Log("게임시작");
+        if(!PhotonNetwork.LocalPlayer.IsMasterClient) return;
+        MinigameSelecter.Instance.ResetRandomList();
+        PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
     }
 }

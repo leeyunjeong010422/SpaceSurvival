@@ -38,12 +38,4 @@ public class PlayerCard1 : MonoBehaviour
         readyText.color = Color.black;
         outline.effectColor = Color.black;
     }
-
-    // 카드 버튼에 달릴 함수
-    private void LocalPlayerReady()
-    {
-        Player localPlayer = PhotonNetwork.LocalPlayer;
-
-        localPlayer.SetReady(!localPlayer.GetReady());
-    }
 }
