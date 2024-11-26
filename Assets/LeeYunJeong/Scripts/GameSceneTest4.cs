@@ -110,7 +110,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private void StartGameTimer()
     {
         Debug.Log("타이머 시작한다");
-        gameTimer = 100f;
+        gameTimer = 30f;
     }
 
     private void EndGame()
@@ -134,23 +134,56 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
             playerScores.Add((player.photonView.Owner.NickName, player.GetScore(), isLocal));
         }
 
-        // 점수 내림차순 정렬
-        playerScores.Sort((x, y) => y.score.CompareTo(x.score));
+        int maxScore = -1;
 
-        var rankingText = endGamePanel.GetComponentsInChildren<TMP_Text>();
-        for (int i = 0; i < playerScores.Count; i++)
+        foreach (var scoreData in playerScores)
         {
-            string playerName = playerScores[i].playerName;
-            int score = playerScores[i].score;
-            bool isLocalPlayer = playerScores[i].isLocalPlayer;
-
-            rankingText[i].text = $"{i + 1}. <b>NickName</b>: {playerName} / <b>Score</b>: {score}";
-
-            if (isLocalPlayer)
+            if (scoreData.score > maxScore)
             {
-                rankingText[i].color = Color.red;
+                maxScore = scoreData.score;
             }
         }
+
+        var topScorers = playerScores.FindAll(player => player.score == maxScore);
+
+        var rankingText = endGamePanel.GetComponentsInChildren<TMP_Text>();
+        if (rankingText.Length > 0)
+        {
+            string topScorerText = "";
+
+            foreach (var scorer in topScorers)
+            {
+                string playerName = scorer.playerName;
+                int score = scorer.score;
+                if (scorer.isLocalPlayer)
+                {
+                    topScorerText += $"<color=red>닉네임: {playerName} / 점수: {score}</color>\n";
+                }
+                else
+                {
+                    topScorerText += $"닉네임: {playerName} / 점수: {score}\n";
+                }
+            }
+            rankingText[0].text = topScorerText.TrimEnd('\n');
+        }
+
+        //// 점수 내림차순 정렬
+        //playerScores.Sort((x, y) => y.score.CompareTo(x.score));
+
+        //var rankingText = endGamePanel.GetComponentsInChildren<TMP_Text>();
+        //for (int i = 0; i < playerScores.Count; i++)
+        //{
+        //    string playerName = playerScores[i].playerName;
+        //    int score = playerScores[i].score;
+        //    bool isLocalPlayer = playerScores[i].isLocalPlayer;
+
+        //    rankingText[i].text = $"{i + 1}. <b>NickName</b>: {playerName} / <b>Score</b>: {score}";
+
+        //    if (isLocalPlayer)
+        //    {
+        //        rankingText[i].color = Color.red;
+        //    }
+        //}
     }
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {
