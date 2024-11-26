@@ -33,6 +33,7 @@ public class IcySlidingGameScene : MiniGameSceneBase
         GameObject instance = PhotonNetwork.Instantiate("Character2 IcySliding", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
         localPlayerCharacter = instance.GetComponent<PlayerCharacterControl2>();
 
+        Camera.main.GetComponent<CameraController2>().Target = localPlayerCharacter.transform;
         localPlayerCharacter.enabled = false; // 게임 시작 전까지 플레이어 컨트롤 비활성화
         alivePlayers = PhotonNetwork.PlayerList.Length;
         playerIsFali = new bool[alivePlayers];

@@ -103,7 +103,9 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             if (goal <= roomPlayer.GetWinningPoint())
             {
                 Debug.LogWarning($"세트 승리 씬 진입 필요");
-                // PhotonNetwork.LoadLevel(0);
+
+                // 임시 코드: 바로 로비씬으로 보내기
+                PhotonNetwork.LoadLevel(0);
                 return;
             }
         }
