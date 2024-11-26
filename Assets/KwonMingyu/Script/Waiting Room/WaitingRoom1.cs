@@ -1,29 +1,53 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WaitingRoom1 : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerCard1[] playerCards;
-    [SerializeField] Button startButton;
+    [SerializeField] TMP_Text countdownText;
+
+    private Coroutine GameStartCounterCoroutine;
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            Player localPlayer = PhotonNetwork.LocalPlayer;
+            localPlayer.SetReady(!localPlayer.GetReady());
+        }
+    }
 
     // 플레이어의 정보가 업데이트 될 때 (플레이어의 Room number가 지정될 때)
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         // 룸 넘버가 할당되지 않았다면 리턴
         if (targetPlayer.GetPlayerNumber() == -1) return;
+
         // 플레이어 카드 업데이트
         UpdatePlayerCards();
+
         // 플레이어의 컬러가 기본값이라면 PlayerNuber를 부여
         if (targetPlayer.GetColorNumber() == -1)
         {
             targetPlayer.SetColorNumber(targetPlayer.GetPlayerNumber());
             return;
         }
+
         // 색갈 업데이트
         PlayerColorSet();
+
+
+        // 모든 플레이어가 Ready && 플레이어가 2명 이상일 때 게임 시작 카운트다운
+        if (CheckAllReady() && PhotonNetwork.CurrentRoom.Players.Count > 1)
+        {
+            if (GameStartCounterCoroutine != null) return;
+            GameStartCounterCoroutine = StartCoroutine(StartCountDownCoroutine());
+        }
     }
 
     // 플레이어가 나가면 카드 업데이트
@@ -46,17 +70,15 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         {
             playerCards[player.GetPlayerNumber()].CardInfoCanger(player);
         }
-
-        // 모든 플레이어가 Ready && 마스터 클라이언트 라면 시작버튼 활성화
-        startButton.interactable = CheckAllReady() && PhotonNetwork.LocalPlayer.IsMasterClient;
-        startButton.gameObject.SetActive(PhotonNetwork.CurrentRoom.Players.Count > 1);
     }
     private void PlayerColorSet()
     {
         // 모든 포톤뷰를 순회 하면서 소유자의 색갈로 변경
         foreach (PhotonView photonView in FindObjectsOfType<PhotonView>())
         {
-            photonView.gameObject.GetComponent<Renderer>().material.color = photonView.Owner.GetNuberColor();
+            Renderer renderer = photonView.gameObject.GetComponentInChildren<Renderer>();
+            if (renderer == null) continue;
+            renderer.material.color = photonView.Owner.GetNuberColor();
         }
         // 카드의 아웃라인 색갈을 플레이어 색갈로 변경
         foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -64,6 +86,25 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             playerCards[player.GetPlayerNumber()].CardOutLineSet(player.GetNuberColor());
         }
 
+    }
+    IEnumerator StartCountDownCoroutine()
+    {
+        YieldInstruction waitCountDown = new WaitForSeconds(1f);
+        countdownText.gameObject.SetActive(true);
+        for (int i = 0; i < 5; i++)
+        {
+            // 플레이어가 레디를 풀거나 인원이 2명보다 적으면 카운트다운 중지
+            if (!CheckAllReady() || PhotonNetwork.CurrentRoom.Players.Count < 2)
+            {
+                countdownText.gameObject.SetActive(false);
+                StopCoroutine(GameStartCounterCoroutine);
+                GameStartCounterCoroutine = null;
+            }
+            countdownText.text = (5 - i).ToString();
+            yield return waitCountDown;
+        }
+        countdownText.gameObject.SetActive(false);
+        GameStart();
     }
 
     private bool CheckAllReady()
@@ -74,6 +115,6 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     public void GameStart()
     {
-
+        Debug.Log("게임시작");
     }
 }

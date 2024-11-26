@@ -58,7 +58,8 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PopUp1.Instance.PopUpClose();
-        PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity);
+        Camera.main.GetComponent<CameraController2>().enabled = true;
+        PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
         SetActivePanel(Panel.Room);
     }
 
@@ -78,6 +79,11 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SetActivePanel(Panel.Menu);
+    }
+    // Room 입장에 실패할 때
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        PopUp1.Instance.PopUpOpen(false, "방을 찾지 못했어요");
     }
 
     // 랜덤 Room 입장을 실패할 때 호출
