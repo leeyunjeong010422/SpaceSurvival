@@ -20,7 +20,9 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.InRoom)
         {
-            PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
+            GameObject instance = PhotonNetwork.Instantiate("Player2", Vector3.up, Quaternion.identity);
+            Camera.main.GetComponent<CameraController2>().Target = instance.transform;
+
             waitingRoom.UpdatePlayerCards();
             SetActivePanel(Panel.Room);
             return;
@@ -58,7 +60,8 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     {
         PopUp1.Instance.PopUpClose();
         Camera.main.GetComponent<CameraController2>().enabled = true;
-        PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
+        GameObject instance = PhotonNetwork.Instantiate("Player2", Vector3.up, Quaternion.identity);
+        Camera.main.GetComponent<CameraController2>().Target = instance.transform;
         SetActivePanel(Panel.Room);
     }
 
