@@ -12,14 +12,14 @@ public class LoginPanel1 : MonoBehaviour
 
     public void Login()
     {
-        PopUp1.Instance.PopUpOpen(true, "로그인 중", true);
+        PopUp1.Instance.PopUpOpen(true, "로그인 중");
         string email = emaillInput.text;
         string password = passwordInput.text;
         BackendManager1.Auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled || task.IsFaulted)
             {
-                PopUp1.Instance.PopUpOpen(true, "로그인 실패");
+                PopUp1.Instance.PopUpOpen(false, "로그인 실패");
                 return;
             }
             if (BackendManager1.Auth.CurrentUser.IsEmailVerified)

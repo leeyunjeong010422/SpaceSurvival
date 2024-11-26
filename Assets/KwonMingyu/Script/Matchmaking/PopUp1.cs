@@ -16,12 +16,12 @@ public class PopUp1 : MonoBehaviour
     {
         Instance = this;
     }
-    public void PopUpOpen(bool loadding, string info, bool notClose = false)
+    public void PopUpOpen(bool loadding, string info)
     {
         loaddingImg.SetActive(loadding);
         popUpInfo.text = info;
         popUp.SetActive(true);
-        if (notClose)
+        if (loadding)
         {
             closeButton.gameObject.SetActive(false);
             backgroundButton.onClick.RemoveAllListeners();
