@@ -13,6 +13,9 @@ public class IcySlidingGameScene : MiniGameSceneBase
     [SerializeField] Transform icePlatform;
     [SerializeField] LocalPlayerTrigger2 failTrigger;
 
+    // 승점 UI
+    [SerializeField] RectTransform winningScoreUI;
+
     [Header("게임 설정")]
     [SerializeField] float maxPlayTime = 20f; // 플랫폼 크기가 0이 되는 시간
 
@@ -79,6 +82,7 @@ public class IcySlidingGameScene : MiniGameSceneBase
     private void LocalPlayerFailed()
     {
         photonView.RPC(nameof(FailedRPC), RpcTarget.AllViaServer);
+        Camera.main.GetComponent<CameraController2>().Target = icePlatform; // 탈락시 카메라의 플레이어 추적 중단
     }
 
     [PunRPC]
@@ -117,6 +121,8 @@ public class IcySlidingGameScene : MiniGameSceneBase
             }
 
             Debug.Log($"승자: {winner.NickName}");
+
+            winningScoreUI.gameObject.SetActive(true);
         }
     }
 }
