@@ -2635,7 +2635,9 @@ MonoBehaviour:
   scoreManager: {fileID: 1765081568}
   playerInfoUI: {fileID: 166523276}
   countdownText: {fileID: 439100143}
+  mainLight: {fileID: 1991277052}
   winningScoreUI: {fileID: 28989566}
+  maxPlayTime: 40
   coins:
   - {fileID: 691385151}
   - {fileID: 634501896}

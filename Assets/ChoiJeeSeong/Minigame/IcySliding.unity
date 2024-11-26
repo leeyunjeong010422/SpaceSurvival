@@ -220,7 +220,7 @@ MonoBehaviour:
   countdownText: {fileID: 755713756}
   icePlatform: {fileID: 120185941}
   failTrigger: {fileID: 2134311117}
-  winningScoreUI: {fileID: 0}
+  winningScoreUI: {fileID: 1659305747}
   maxPlayTime: 20
 --- !u!114 &165173023
 MonoBehaviour:
