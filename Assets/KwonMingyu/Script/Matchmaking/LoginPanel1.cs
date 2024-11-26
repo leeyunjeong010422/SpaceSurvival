@@ -1,5 +1,6 @@
 using Firebase.Extensions;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 
@@ -11,13 +12,14 @@ public class LoginPanel1 : MonoBehaviour
 
     public void Login()
     {
+        PopUp1.Instance.PopUpOpen(true, "로그인 중", true);
         string email = emaillInput.text;
         string password = passwordInput.text;
         BackendManager1.Auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled || task.IsFaulted)
             {
-                Debug.LogError("로그인 취소/실패 됨.");
+                PopUp1.Instance.PopUpOpen(true, "로그인 실패");
                 return;
             }
             if (BackendManager1.Auth.CurrentUser.IsEmailVerified)

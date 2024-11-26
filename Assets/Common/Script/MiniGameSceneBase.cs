@@ -32,6 +32,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetLoad(true);
 
         // Ready를 기본값으로 변경
+        // 게임 종료시 다음 게임으로 넘어가는데 사용
         PhotonNetwork.LocalPlayer.SetReady(false);
     }
 
@@ -47,12 +48,24 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     /// </summary>
     protected abstract void ReadyPlayerClient();
 
+    /// <summary>
+    /// 각 클라이언트에서 게임 시작 시점에 할 작업(예: 게임 타이머 시작)
+    /// </summary>
+    protected abstract void GameStart();
+
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if (changedProps.ContainsKey(CustomProperty.LOAD))
         {
             if (CheckAllLoad())
                 GameStart();
+        }
+
+        // 미니게임 종료 후 모두가 READY 상태라면 다음 미니게임으로
+        if (PhotonNetwork.IsMasterClient && changedProps.ContainsKey(CustomProperty.READY))
+        {
+            if (CheckAllReady())
+                LoadNextStage();
         }
     }
 
@@ -63,16 +76,18 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         return true;
     }
 
-    /// <summary>
-    /// 각 클라이언트에서 게임 시작 시점에 할 작업(예: 게임 타이머 시작)
-    /// </summary>
-    protected abstract void GameStart();
+    private bool CheckAllReady()
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+            if (!player.GetReady()) return false;
+        return true;
+    }
 
     /// <summary>
     /// 승점이 목표에 도달한 플레이어가 있다면 축하 씬으로, 없다면 다음 미니게임으로 진입<br/>
     /// 마스터 클라이언트가 아니라면 무시
     /// </summary>
-    public void LoadNextStage()
+    private void LoadNextStage()
     {
         if (false == PhotonNetwork.IsMasterClient)
             return;
@@ -88,11 +103,14 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             if (goal <= roomPlayer.GetWinningPoint())
             {
                 Debug.LogWarning($"세트 승리 씬 진입 필요");
-                // PhotonNetwork.LoadLevel(0);
+
+                // 임시 코드: 바로 로비씬으로 보내기
+                PhotonNetwork.LoadLevel(0);
                 return;
             }
         }
 
+        // 아직 선택되지 않은 무작위 미니게임으로 진입
         PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
     }
 }

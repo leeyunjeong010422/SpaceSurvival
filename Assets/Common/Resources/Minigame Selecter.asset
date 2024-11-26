@@ -15,7 +15,7 @@ MonoBehaviour:
   sceneDatas:
   - minigame: 0
     sceneName: CoinCollecter
-    sceneBuildIndex: 0
+    buildIndex: 1
   - minigame: 1
     sceneName: IcySliding
-    sceneBuildIndex: 0
+    buildIndex: 2
