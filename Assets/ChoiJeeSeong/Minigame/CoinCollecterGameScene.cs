@@ -4,12 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.InputSystem.HID;
 
 public class CoinCollecterGameScene : MiniGameSceneBase
 {
     [SerializeField] MiniGameScore scoreManager;
     [SerializeField] PlayerInfoPanel2 playerInfoUI;
     [SerializeField] TMP_Text countdownText;
+    [SerializeField] Light mainLight; // 타임아웃 요소: 조명이 점점 어두워져서 Emission을 갖는 코인이 강조됨
+
+    // 승점 UI
+    [SerializeField] RectTransform winningScoreUI;
+
+    [Header("게임 설정")]
+    [SerializeField] float maxPlayTime = 40f; // 조명값이 최소가 되는 시간
 
     /*
     애셋 선정 전 단계에서는 [SerializeField]로 맵에 배치된 코인을 참조해 초기화한다
@@ -30,10 +39,13 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     protected override void ReadyPlayerClient()
     {
         // 로컬 플레이어의 캐릭터 생성
-        // TODO: 맵에 따라 스폰 지점 결정
-        GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(Random.Range(-5f, 5f), 1f, Random.Range(-5f, 5f)), Quaternion.identity);
+        NavMeshHit spawnPoseHit;
+        while (false == NavMesh.SamplePosition(new Vector3(Random.Range(-20f, 20f), 0f, Random.Range(-20f, 20f)), out spawnPoseHit, 3f, NavMesh.AllAreas));
+
+        GameObject instance = PhotonNetwork.Instantiate("Character2", spawnPoseHit.position, Quaternion.identity);
         localPlayerCharacter = instance.GetComponent<PlayerCharacterControl2>();
 
+        Camera.main.GetComponent<CameraController2>().Target = localPlayerCharacter.transform;
         localPlayerCharacter.enabled = false; // 게임 시작 전까지 플레이어 컨트롤 비활성화
 
         // 스코어 시스템 및 UI 초기화
@@ -60,6 +72,9 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     private IEnumerator CountDownAndStart()
     {
         YieldInstruction waitCountDown = new WaitForSeconds(1f);
+        YieldInstruction lightReducePeriod = new WaitForSeconds(0.1f);
+        float lightReducePerPeriod = 0.1f / maxPlayTime;
+
         countdownText.gameObject.SetActive(true);
         for (int i = 0; i < 5; i++)
         {
@@ -70,6 +85,14 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 
         // 카운트다운 종료 후 입력 활성화
         localPlayerCharacter.enabled = true;
+
+        while (mainLight.intensity > 0f)
+        {
+            yield return lightReducePeriod;
+            mainLight.intensity -= lightReducePerPeriod;
+        }
+
+        mainLight.intensity = 0f;
     }
 
     private void TryGetCoin(int coinId)
@@ -102,14 +125,15 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         if (remainCoins <= 0)
         {
             StopCoroutine(gamePlayRoutine);
-            gamePlayRoutine = StartCoroutine(GameOverRoutine());
+            GameOver();
         }
     }
 
-    private IEnumerator GameOverRoutine()
+    private void GameOver()
     {
-        Debug.Log("모든 코인이 수집됨");
-        localPlayerCharacter.enabled = false; // 플레이어 컨트롤 비활성화
+        // 모든 게임이 수집되어 미니게임 종료
+        // 승자 결정 및 승점 UI 띄우기
+        // 승점 UI에서 다음 스테이지로 이동하기 위해 READY
 
         int winnerScore = scoreManager.ScoreTable.Max(x => x.Value);
 
@@ -117,16 +141,13 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         {
             // 최고점 혹은 최고점과 동점이라면 승리
             countdownText.text = "승리";
-            PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
+            PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint()); // 승점 획득
         }
         else
         {
             countdownText.text = "패배";
         }
         countdownText.gameObject.SetActive(true);
-
-        yield return new WaitForSecondsRealtime(3f);
-
-        LoadNextStage();
+        winningScoreUI.gameObject.SetActive(true);
     }
 }

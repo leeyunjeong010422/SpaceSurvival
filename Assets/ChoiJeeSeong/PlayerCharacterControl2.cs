@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerCharacterControl2 : MonoBehaviourPun
 {
-    [SerializeField] Animator animator;
-    private int hashSpeed;
-
     [SerializeField] float speed;
+
+    private Animator animator;
+    private int hashSpeed;
 
     private ILocomotion2 movement;
 
@@ -18,6 +18,7 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         movement = GetComponent<ILocomotion2>();
         if (movement == null)
         {
@@ -31,13 +32,6 @@ public class PlayerCharacterControl2 : MonoBehaviourPun
         fireInput = input.actions["Fire"];
 
         hashSpeed = Animator.StringToHash("Speed");
-    }
-
-    private void Start()
-    {
-        // 카메라가 캐릭터를 추적하도록 설정
-        // LocalPlayer의 캐릭터가 아니라면 Enable이 불가능해서 Start에 진입하지 못한다
-        Camera.main.GetComponent<CameraController2>().Target = this.transform;
     }
 
     private void OnEnable()

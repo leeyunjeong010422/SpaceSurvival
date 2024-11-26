@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainPanel1 : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class MainPanel1 : MonoBehaviour
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] TMP_Text levelText;
     [SerializeField] TMP_InputField nickChangeField;
+    [SerializeField] Toggle visibleToggle;
+    [SerializeField] TMP_InputField joinToRoomNameInputField;
     private int maxPlayer;
     
     // 메인 화면으로 이동할 때 우상단의 플레이어 정보를 입력
@@ -42,6 +45,7 @@ public class MainPanel1 : MonoBehaviour
 
         RoomOptions roomOptions = new();
         roomOptions.MaxPlayers = maxPlayer;
+        roomOptions.IsVisible = !visibleToggle.isOn;
 
         createRoomPanel.SetActive(false);
         PhotonNetwork.CreateRoom(roomName, roomOptions);
@@ -50,15 +54,22 @@ public class MainPanel1 : MonoBehaviour
     public void RandomMatching()
     {
         PhotonNetwork.JoinRandomRoom();
+        PopUp1.Instance.PopUpOpen(true, "랜덤 방에 접속하고 있어요");
     }
     public void JoinLobby()
     {
         PhotonNetwork.JoinLobby();
     }
+    public void JoinRoomToName()
+    {
+        Debug.Log(PhotonNetwork.JoinRoom(joinToRoomNameInputField.text));
+        joinToRoomNameInputField.transform.parent.gameObject.SetActive(false);
+    }
     // 플레이어 정보 세팅을 위한 함수
     private async void PlayerInfoSetting()
     {
         UserData1 userData = (await BackendManager1.Instance.GetPlayerData());
+        PhotonNetwork.LocalPlayer.NickName = userData.name;
         nickNameText.text = userData.name;
         levelText.text = "LV " + userData.level;
     }

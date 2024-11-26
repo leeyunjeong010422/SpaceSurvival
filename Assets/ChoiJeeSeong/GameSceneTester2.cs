@@ -47,9 +47,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         // rgb에 랜덤값 넣기
-        PhotonNetwork.LocalPlayer.SetColorR(Random.Range(0f, 1f));
-        PhotonNetwork.LocalPlayer.SetColorG(Random.Range(0f, 1f));
-        PhotonNetwork.LocalPlayer.SetColorB(Random.Range(0f, 1f));
+        PhotonNetwork.LocalPlayer.SetColorNumber(Random.Range(0, 8));
 
         PhotonNetwork.JoinOrCreateRoom(testRoomName,
             new RoomOptions()

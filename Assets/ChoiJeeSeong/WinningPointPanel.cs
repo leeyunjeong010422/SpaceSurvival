@@ -26,6 +26,13 @@ public class WinningPointPanel : MonoBehaviour, IPointerClickHandler
             WinningPointCell cellInstance = Instantiate(cellPrefab, layoutGroup.transform);
             cellInstance.SetInfo(player);
         }
-        
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            PhotonNetwork.LocalPlayer.SetReady(true);
+        }
     }
 }

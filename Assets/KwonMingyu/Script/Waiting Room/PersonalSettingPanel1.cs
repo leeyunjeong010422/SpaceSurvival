@@ -28,15 +28,19 @@ public class PersonalSettingPanel1 : MonoBehaviour
     [SerializeField] Color[] colors = { Color.red, Color.yellow, Color.green, Color.blue, Color.cyan, Color.black, Color.white, Color.gray };
 
     // 선택된 색갈의 인덱스
-    private int selectColorNum = 0;
+    [SerializeField] int selectColorNum = 0;
+
+    // GoolScore룸 프로퍼티 설정을 위한 변수
+    [SerializeField] TMP_Text goalScoreText;
+    [SerializeField] int goalScore = 30;
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             settingWindow.SetActive(!settingWindow.activeSelf);
-            // 임시
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = settingWindow.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+            goalScoreText.text = $"{PhotonNetwork.CurrentRoom.GetGoalPoint()}";
         }
     }
     public void ColorChange(bool next)
@@ -85,8 +89,23 @@ public class PersonalSettingPanel1 : MonoBehaviour
         overlapText.SetActive(true);
         ColorChangeButton.interactable = false;
     }
+    public void RoomGoalScoreChange(bool up)
+    {
+        goalScore += 5 * (up ? 1 : -1);
+        goalScore = Mathf.Clamp(goalScore, 5, 100);
+        goalScoreText.text = $"{goalScore}";
+    }
+    public void RoomGoalScoreSet()
+    {
+        PhotonNetwork.CurrentRoom.SetGoalPoint(goalScore);
+    }
     public void LeftRoom()
     {
+        // 변경된 프로퍼티를 초기화
+        PhotonNetwork.LocalPlayer.SetReady(false);
+        PhotonNetwork.LocalPlayer.SetColorNumber(-1);
+        
+        // 룸 이탈 후 프로퍼티 조작시 오류 발생, 초기화 이후에 룸 나가기
         PhotonNetwork.LeaveRoom();
     }
 

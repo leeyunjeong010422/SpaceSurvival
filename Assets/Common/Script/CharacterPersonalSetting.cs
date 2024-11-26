@@ -17,9 +17,6 @@ public class CharacterPersonalSetting : MonoBehaviourPun
 
     public void UpdateColor()
     {
-        meshRenderer.material.color = new Color(
-            photonView.Owner.GetColorR(),
-            photonView.Owner.GetColorG(),
-            photonView.Owner.GetColorB());
+        meshRenderer.material.color = photonView.Owner.GetNumberColor();
     }
 }

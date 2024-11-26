@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChoiJeeSeong/Minigame/CoinCollecter.unity
     guid: abe048e776d01854fafde84be8e0fffa
+  - enabled: 1
+    path: Assets/ChoiJeeSeong/Minigame/IcySliding.unity
+    guid: e31b0b9323e9a3542a430f53241a1dff
   m_configObjects: {}

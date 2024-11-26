@@ -20,7 +20,11 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.InRoom)
         {
-            PhotonNetwork.Instantiate("Player4", Vector3.up, Quaternion.identity);
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            Camera.main.GetComponent<CameraController2>().enabled = true;
+            GameObject instance = PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
+            Camera.main.GetComponent<CameraController2>().Target = instance.transform;
+
             waitingRoom.UpdatePlayerCards();
             SetActivePanel(Panel.Room);
             return;
@@ -30,10 +34,9 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     }
 
     // 서버에 접속 했을때 호출
-    public override async void OnConnectedToMaster()
+    public override void OnConnectedToMaster()
     {
-        // 닉네임을 파이어베이스의 name 값으로 지정
-        PhotonNetwork.LocalPlayer.NickName = (await BackendManager1.Instance.GetPlayerData()).name;
+        PopUp1.Instance.PopUpClose();
         SetActivePanel(Panel.Menu);
     }
 
@@ -58,7 +61,9 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PopUp1.Instance.PopUpClose();
-        PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity);
+        Camera.main.GetComponent<CameraController2>().enabled = true;
+        GameObject instance = PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
+        Camera.main.GetComponent<CameraController2>().Target = instance.transform;
         SetActivePanel(Panel.Room);
     }
 
@@ -78,6 +83,11 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SetActivePanel(Panel.Menu);
+    }
+    // Room 입장에 실패할 때
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        PopUp1.Instance.PopUpOpen(false, "방을 찾지 못했어요");
     }
 
     // 랜덤 Room 입장을 실패할 때 호출
