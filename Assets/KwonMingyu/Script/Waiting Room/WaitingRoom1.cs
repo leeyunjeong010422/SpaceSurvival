@@ -4,7 +4,6 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class WaitingRoom1 : MonoBehaviourPunCallbacks
 {
@@ -13,9 +12,12 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     private Coroutine GameStartCounterCoroutine;
 
+    // 게임 승리 점수 설정 버튼 호스트만
+    [SerializeField] GameObject roomSettingButtons;
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             Player localPlayer = PhotonNetwork.LocalPlayer;
             localPlayer.SetReady(!localPlayer.GetReady());
@@ -41,6 +43,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 색갈 업데이트
         PlayerColorSet();
 
+        roomSettingButtons.SetActive(PhotonNetwork.LocalPlayer.IsMasterClient);
 
         // 모든 플레이어가 Ready && 플레이어가 2명 이상일 때 게임 시작 카운트다운
         if (CheckAllReady() && PhotonNetwork.CurrentRoom.Players.Count > 1)
@@ -54,8 +57,12 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         UpdatePlayerCards();
+        PlayerColorSet();
     }
-
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        roomSettingButtons.SetActive(PhotonNetwork.LocalPlayer.IsMasterClient);
+    }
     public void UpdatePlayerCards()
     {
         // 방 최대 인원수 만큼 카드를 활성화 후 리셋
@@ -115,7 +122,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     public void GameStart()
     {
-        if(!PhotonNetwork.LocalPlayer.IsMasterClient) return;
+        if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
         MinigameSelecter.Instance.ResetRandomList();
         PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
     }

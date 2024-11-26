@@ -34,16 +34,6 @@ public class PersonalSettingPanel1 : MonoBehaviour
     [SerializeField] TMP_Text goalScoreText;
     [SerializeField] int goalScore = 30;
 
-    // 호스트만 출력할 오브젝트
-    [SerializeField] GameObject[] roomSettingButtons;
-
-    private void OnEnable()
-    {
-        if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
-        foreach (var item in roomSettingButtons)
-            item.SetActive(true);
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
