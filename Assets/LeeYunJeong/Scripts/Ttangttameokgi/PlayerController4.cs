@@ -95,22 +95,8 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void SetPlayerColor()
     {
-        int playerIndex = PhotonNetwork.LocalPlayer.ActorNumber; // 입장 순서대로 플레이어에게 색을 부여
-        switch (playerIndex)
-        {
-            case 1:
-                playerColor = Color.red;
-                break;
-            case 2:
-                playerColor = Color.blue;
-                break;
-            case 3:
-                playerColor = Color.yellow;
-                break;
-            case 4:
-                playerColor = Color.green;
-                break;
-        }
+        // PhotonNetwork.LocalPlayer.GetNumberColor()을 사용하여 색상을 가져옴
+        playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
     }
 
     // 큐브 색을 변경하는 함수
