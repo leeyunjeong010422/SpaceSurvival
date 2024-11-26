@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 미니게임 씬의 베이스 클래스<br/>
@@ -71,6 +72,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
     private bool CheckAllLoad()
     {
+        // PhotonNetwork.LevelLoadingProgress
         foreach (Player player in PhotonNetwork.PlayerList)
             if (!player.GetLoad()) return false;
         return true;
@@ -111,7 +113,10 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             }
         }
 
+        int nextScene = MinigameSelecter.Instance.PopRandomSceneIndex();
+        Debug.Log($"다음 스테이지로 이동({SceneManager.GetActiveScene().buildIndex}->{nextScene})");
+
         // 아직 선택되지 않은 무작위 미니게임으로 진입
-        PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
+        PhotonNetwork.LoadLevel(nextScene);
     }
 }

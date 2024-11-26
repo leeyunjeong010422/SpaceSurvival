@@ -120,6 +120,10 @@ public class IcySlidingGameScene : MiniGameSceneBase
                 Debug.LogWarning($"승자를 찾지 못함");
                 return;
             }
+            else if (winner == PhotonNetwork.LocalPlayer)
+            {
+                PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint()); // 승점 획득
+            }
 
             Debug.Log($"승자: {winner.NickName}");
 
