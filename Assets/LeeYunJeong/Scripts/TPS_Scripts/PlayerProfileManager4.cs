@@ -37,7 +37,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         InitializeProfileCards();
 
         // 로컬 플레이어의 정보 가져 와서 내 프로필 정보를 업데이트
-        PlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as PlayerController4;
+        TPSPlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as TPSPlayerController4;
         if (playerController != null)
         {
             UpdateProfileInfo(PhotonNetwork.LocalPlayer.ActorNumber - 1, playerController.GetScore(), playerController.GetHealth());
@@ -74,7 +74,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.PlayerList[i].ActorNumber)
                 {
                     profileCards[i].GetComponent<Image>().color = myProfileColor; // 본인 프로필 카드 색상 변경
-                    PlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as PlayerController4;
+                    TPSPlayerController4 playerController = PhotonNetwork.LocalPlayer.TagObject as TPSPlayerController4;
                     if (playerController != null)
                     {
                         // 내 점수와 HP를 업데이트

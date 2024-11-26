@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController4 : MonoBehaviourPun, IPunObservable
+public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] float speed;
     //[SerializeField] float jumpForce;
@@ -161,7 +161,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         Vector3 aimDirection = mainCamera.transform.forward; // 카메라가 바라보는 방향
         if (Physics.Raycast(mainCamera.transform.position, aimDirection, out hit))
         {
-            PlayerController4 hitPlayer = hit.collider.GetComponent<PlayerController4>();
+            TPSPlayerController4 hitPlayer = hit.collider.GetComponent<TPSPlayerController4>();
             if (hitPlayer != null && hitPlayer.photonView.IsMine == false)
             {
                 // 50 데미지를 줌
@@ -262,7 +262,7 @@ public class PlayerController4 : MonoBehaviourPun, IPunObservable
         PhotonView attackerPhotonView = PhotonView.Find(attackerViewID);
         if (attackerPhotonView != null)
         {
-            PlayerController4 attackerController = attackerPhotonView.GetComponent<PlayerController4>();
+            TPSPlayerController4 attackerController = attackerPhotonView.GetComponent<TPSPlayerController4>();
             if (attackerController != null)
             {
                 attackerController.photonView.RPC("AddScore", RpcTarget.All, 50);
