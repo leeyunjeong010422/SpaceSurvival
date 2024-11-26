@@ -200,7 +200,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
     // 프로필 정보 업데이트
     private void UpdateProfileInfo()
     {
-        PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
+        TPSPlayerProfileManager4 profileManager = FindObjectOfType<TPSPlayerProfileManager4>();
         if (profileManager != null)
         {
             profileManager.UpdateProfileInfo(photonView.OwnerActorNr - 1, score, currentHealth);
