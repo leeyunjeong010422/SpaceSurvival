@@ -8,7 +8,6 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject[] profileCards;
     [SerializeField] TMP_Text[] nickNameTexts;
-    [SerializeField] Image[] profileImages;
     [SerializeField] TMP_Text[] scoreTexts;
     [SerializeField] TMP_Text[] hpTexts;
     [SerializeField] Color myProfileColor = default; // 내 프로필 카드 색상
@@ -16,7 +15,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     private void Awake()
     {
         // Hex 색상을 Color로 변환
-        if (ColorUtility.TryParseHtmlString("#FF3636", out var color))
+        if (ColorUtility.TryParseHtmlString("#FF9090", out var color))
         {
             myProfileColor = color;
         }
@@ -89,7 +88,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     public void UpdateProfileInfo(int playerIndex, int score, int hp)
     {
         // 해당 플레이어의 점수와 HP 업데이트
-        scoreTexts[playerIndex].text = $"{score}";
+        scoreTexts[playerIndex].text = $"점수: {score}";
         hpTexts[playerIndex].text = (playerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1) ? $"HP: {hp}" : " "; // 본인만 HP 표시
     }
 }
