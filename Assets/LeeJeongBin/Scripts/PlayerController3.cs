@@ -14,9 +14,10 @@ public class PlayerController3 : MonoBehaviourPun
 
     private PhotonTransformView photonTransformView;
 
+    // 체크포인트 통과 수
     [SerializeField] int checkPointsReached;
 
-    private static List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
+    public static List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
 
     void Start()
     {
@@ -106,8 +107,24 @@ public class PlayerController3 : MonoBehaviourPun
         }
     }
 
-    public static void ResetCheckPoints()
+    public void IncrementCheckPointsReached()
+    {
+        checkPointsReached++;
+    }
+
+    public void ResetCheckPoints()
     {
         visitedCheckPoint.Clear();
+    }
+
+    public static void ResetCheckPointsStatic()
+    {
+        visitedCheckPoint.Clear();
+    }
+
+    public int CheckPointsReached
+    {
+        get { return checkPointsReached; }
+        set { checkPointsReached = value; }
     }
 }

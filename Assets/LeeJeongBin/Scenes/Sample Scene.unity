@@ -19015,6 +19015,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiSpawner: {fileID: 131676603}
+  checkpointTransforms:
+  - {fileID: 2079742203}
+  - {fileID: 935253008}
+  - {fileID: 1238461896}
+  - {fileID: 479477647}
+  checkpointRadius: 5
+  maxSpawnAttempts: 10
 --- !u!4 &1771054494
 Transform:
   m_ObjectHideFlags: 0
