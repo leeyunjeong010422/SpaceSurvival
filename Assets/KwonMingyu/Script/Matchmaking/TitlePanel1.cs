@@ -20,6 +20,8 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.InRoom)
         {
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            Camera.main.GetComponent<CameraController2>().enabled = true;
             GameObject instance = PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
             Camera.main.GetComponent<CameraController2>().Target = instance.transform;
 
