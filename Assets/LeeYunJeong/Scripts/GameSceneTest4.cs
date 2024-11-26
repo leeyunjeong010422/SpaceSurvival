@@ -125,7 +125,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private void DisplayRankings()
     {
         Debug.Log("랭크 표시");
-        PlayerController4[] players = FindObjectsOfType<PlayerController4>();
+        TPSPlayerController4[] players = FindObjectsOfType<TPSPlayerController4>();
         var playerScores = new List<(string playerName, int score, bool isLocalPlayer)> ();
 
         foreach (var player in players)
