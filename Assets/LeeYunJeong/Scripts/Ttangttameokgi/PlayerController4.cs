@@ -95,12 +95,6 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void SetPlayerColor()
     {
-        if (playerRenderer == null)
-        {
-            Debug.LogError("playerRenderer is null in SetPlayerColor. Cannot set player color.");
-            return;
-        }
-
         int playerIndex = PhotonNetwork.LocalPlayer.ActorNumber; // 입장 순서대로 플레이어에게 색을 부여
         switch (playerIndex)
         {
@@ -119,7 +113,7 @@ public class PlayerController4 : MonoBehaviourPun
         }
 
         // 플레이어의 색 설정
-        playerRenderer.material.color = playerColor;
+        //playerRenderer.material.color = playerColor;
 
         // 색 동기화
         photonView.RPC("SyncPlayerColor", RpcTarget.All, playerColor.r, playerColor.g, playerColor.b);
