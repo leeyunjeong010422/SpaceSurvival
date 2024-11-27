@@ -153,6 +153,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 1
     Name: Idle4
+  - Type: 9
+    SynchronizeType: 0
+    Name: MeleeAttack
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
