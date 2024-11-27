@@ -22,6 +22,10 @@ public class PlayerController4 : MonoBehaviourPun
 
     private Color playerColor; // 플레이어 색
 
+    public int playerScore = 0;
+
+    private GameSceneTest4 gameSceneTest;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -29,10 +33,19 @@ public class PlayerController4 : MonoBehaviourPun
 
         mainCamera = Camera.main;
 
+        gameSceneTest = FindObjectOfType<GameSceneTest4>();
+
+        // 내 PlayerController를 LocalPlayer에 Tag로 연결
         if (photonView.IsMine)
         {
+            PhotonNetwork.LocalPlayer.TagObject = this; // LocalPlayer에 현재 PlayerController 연결
+
             UpdateCameraPosition();
+
             SetPlayerColor();
+
+            // 나중에 입장한 플레이어에게도 RPC 호출
+            photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
         }
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -95,38 +108,78 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void SetPlayerColor()
     {
-        int playerIndex = PhotonNetwork.LocalPlayer.ActorNumber; // 입장 순서대로 플레이어에게 색을 부여
-        switch (playerIndex)
+        //최종적으로 사용할 코드
+        //playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
+        //photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
+
+        if (Application.isEditor)
         {
-            case 1:
-                playerColor = Color.red;
-                break;
-            case 2:
-                playerColor = Color.blue;
-                break;
-            case 3:
-                playerColor = Color.yellow;
-                break;
-            case 4:
-                playerColor = Color.green;
-                break;
+            playerColor = (PhotonNetwork.LocalPlayer.ActorNumber == 1) ? Color.red :
+                          (PhotonNetwork.LocalPlayer.ActorNumber == 2) ? Color.blue :
+                          (PhotonNetwork.LocalPlayer.ActorNumber == 3) ? Color.green : Color.yellow;
+        }
+        else
+        {
+            playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
+        }
+
+        photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
+    }
+
+    [PunRPC]
+    private void SyncPlayerColor(float r, float g, float b)
+    {
+        playerColor = new Color(r, g, b);
+        if (playerRenderer != null)
+        {
+            playerRenderer.material.color = playerColor;  // 플레이어의 렌더러 색 변경
         }
     }
 
-    // 큐브 색을 변경하는 함수
     private void OnCollisionEnter(Collision collision)
     {
+        if (gameSceneTest == null || !gameSceneTest.gameStarted) return;
+
         if (collision.gameObject.CompareTag("Cube"))
         {
             Renderer cubeRenderer = collision.gameObject.GetComponent<Renderer>();
             if (cubeRenderer != null)
             {
-                // 큐브 색 변경
-                cubeRenderer.material.color = playerColor;
+                // 다른 플레이어가 칠한 큐브를 밟으면 점수를 차감
+                if (cubeRenderer.material.color != playerColor)
+                {
+                    // 해당 큐브를 칠한 플레이어의 점수를 차감
+                    photonView.RPC(nameof(DecreaseScoreForPlayer), RpcTarget.All, cubeRenderer.material.color.r, cubeRenderer.material.color.g, cubeRenderer.material.color.b);
 
-                // 색 동기화
-                photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, collision.gameObject.GetInstanceID(), playerColor.r, playerColor.g, playerColor.b);
+                    // 큐브 색 변경
+                    cubeRenderer.material.color = playerColor;
+
+                    // 색상 동기화만 처리 (점수는 동기화하지 않음)
+                    photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, collision.gameObject.GetInstanceID(), playerColor.r, playerColor.g, playerColor.b);
+
+                    if (!photonView.IsMine) return; // 로컬 플레이어만 점수 처리
+
+                    // 로컬 점수 증가
+                    playerScore++;
+
+                    // 점수를 다른 클라이언트에 동기화
+                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, playerScore);
+
+                    // 로컬 UI 업데이트
+                    UpdateLocalUI();
+                }
             }
+        }
+    }
+
+    // 큐브 색 동기화
+    private void UpdateLocalUI()
+    {
+        PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
+        if (profileManager != null)
+        {
+            // 모든 클라이언트가 해당 플레이어의 UI를 업데이트
+            profileManager.UpdateProfileInfo(PhotonNetwork.LocalPlayer.ActorNumber - 1, playerScore);
         }
     }
 
@@ -140,15 +193,51 @@ public class PlayerController4 : MonoBehaviourPun
             Renderer cubeRenderer = cube.GetComponent<Renderer>();
             if (cubeRenderer != null)
             {
-                cubeRenderer.material.color = new Color(r, g, b);
+                cubeRenderer.material.color = new Color(r, g, b); // 모든 클라이언트에서 색상만 동기화
             }
         }
     }
 
-    // 큐브를 ID로 찾기
+    [PunRPC]
+    private void SyncPlayerScore(int actorNumber, int score)
+    {
+        // 특정 플레이어(actorNumber)의 점수를 업데이트
+        if (PhotonNetwork.LocalPlayer.ActorNumber == actorNumber)
+        {
+            playerScore = score; // 본인의 점수만 업데이트
+        }
+
+        // 모든 클라이언트에서 UI 업데이트
+        PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
+        if (profileManager != null)
+        {
+            profileManager.UpdateProfileInfo(actorNumber - 1, score);
+        }
+    }
+
+    [PunRPC]
+    private void DecreaseScoreForPlayer(float r, float g, float b)
+    {
+        // 큐브를 칠한 플레이어의 색이 r, g, b와 일치하면 해당 플레이어의 점수를 차감
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.TagObject != null)
+            {
+                PlayerController4 controller = player.TagObject as PlayerController4;
+                if (controller != null && controller.playerColor.r == r && controller.playerColor.g == g && controller.playerColor.b == b)
+                {
+                    Debug.LogWarning("점수가 차감되었습니다.");
+                    controller.playerScore--; // 해당 플레이어의 점수 차감
+
+                    // 점수 차감 후, 해당 플레이어의 점수를 모든 클라이언트와 동기화
+                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, player.ActorNumber, controller.playerScore);
+                }
+            }
+        }
+    }
+
     private GameObject FindCubeByID(int cubeID)
     {
-        // 큐브 ID로 해당 큐브를 찾기 위해 큐브를 GameObject 배열로 관리
         return GameObject.FindGameObjectsWithTag("Cube")
                           .FirstOrDefault(cube => cube.GetInstanceID() == cubeID);
     }

@@ -52,6 +52,9 @@ MonoBehaviour:
   - TakeDamage
   - TestStartRPC
   - TryGetCoinRPC
+  - SyncPlayerColor
+  - SyncPlayerScore
+  - DecreaseScoreForPlayer
   - SetInfoUIRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
