@@ -21,3 +21,7 @@ MonoBehaviour:
     infoPrefab: {fileID: 7582887204830617854, guid: 03fe45fae7f875845821b7601dd072f3, type: 3}
     sceneName: IcySliding
     buildIndex: 3
+  - minigame: 2
+    infoPrefab: {fileID: 7582887204830617854, guid: e5fb7485ee6e9db4fa2fdea7b089382f, type: 3}
+    sceneName: HideAndSeek
+    buildIndex: 4
