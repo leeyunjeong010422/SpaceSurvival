@@ -113,10 +113,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             }
         }
 
-        int nextScene = MinigameSelecter.Instance.PopRandomSceneIndex();
-        Debug.Log($"다음 스테이지로 이동({SceneManager.GetActiveScene().buildIndex}->{nextScene})");
-
-        // 아직 선택되지 않은 무작위 미니게임으로 진입
-        PhotonNetwork.LoadLevel(nextScene);
+        // 미니게임 선택 중간다리 씬으로 이동
+        PhotonNetwork.LoadLevel(1);
     }
 }

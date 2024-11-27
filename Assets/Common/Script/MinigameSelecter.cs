@@ -19,9 +19,10 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     }
 
     [System.Serializable]
-    private struct SceneData
+    public struct MinigameData
     {
         public Minigame minigame;
+        public MiniGameInfoUI1 infoPrefab;
         public string sceneName;
         public int buildIndex;
     }
@@ -29,13 +30,16 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     /// <summary>
     /// 직렬화를 위한 필드
     /// </summary>
-    [SerializeField] SceneData[] sceneDatas;
+    [SerializeField] MinigameData[] sceneDatas;
 
     /// <summary>
     /// 스크립트로 사용할 씬 데이터
     /// </summary>
-    private Dictionary<Minigame, SceneData> sceneDataDic;
+    private Dictionary<Minigame, MinigameData> sceneDataDic;
 
+    public MinigameData GetData(Minigame minigame) => sceneDataDic[minigame];
+
+    #region randomSelect
     /// <summary>
     /// 랜덤 맵 선택용 리스트
     /// </summary>
@@ -74,7 +78,7 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
     {
         Debug.Log("MinigameSceneData SO 초기화");
 
-        sceneDataDic = new Dictionary<Minigame, SceneData>(sceneDatas.Length << 1);
+        sceneDataDic = new Dictionary<Minigame, MinigameData>(sceneDatas.Length << 1);
 
         foreach (var sceneData in sceneDatas)
         {
@@ -83,6 +87,7 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
 
         ResetRandomList();
     }
+    #endregion
 
 #if UNITY_EDITOR
     [ContextMenu("씬 이름으로부터 Index 설정(Play Mode)")]
