@@ -93,7 +93,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4429009822361198102, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_Name
-      value: Mini Game Info Canvas
+      value: Lastman Game Info Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429009823189527431, guid: b127642c600c02449b2c463a78647184, type: 3}
+      propertyPath: m_text
+      value: "\uD50C\uB808\uC774\uBC29\uBC95\uC124\uBA85\uD14D\uC2A4\uD2B8\n\uD14D\uC2A4\uD2B8\uD14D\uC2A4\uD2B8"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429009823286436347, guid: b127642c600c02449b2c463a78647184, type: 3}
+      propertyPath: m_text
+      value: "\uAC8C\uC784\uC774\uB984\uD14D\uC2A4\uD2B8"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b127642c600c02449b2c463a78647184, type: 3}
