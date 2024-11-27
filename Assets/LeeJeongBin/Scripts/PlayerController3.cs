@@ -8,11 +8,10 @@ public class PlayerController3 : MonoBehaviourPun
     [SerializeField] float moveSpeed;
     [SerializeField] float sprintMultiplier;
     [SerializeField] float rotationSpeed;
-    [SerializeField] float deceleration;
     [SerializeField] Camera playerCamera;
-    [SerializeField] CharacterController characterController;
     [SerializeField] Vector3 velocity;
 
+    private CharacterController characterController;
     private PhotonTransformView photonTransformView;
     private Animator animator;
 
