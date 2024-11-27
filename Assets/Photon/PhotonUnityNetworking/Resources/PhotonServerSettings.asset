@@ -54,6 +54,7 @@ MonoBehaviour:
   - TryGetCoinRPC
   - SyncPlayerColor
   - SyncPlayerScore
+  - DecreaseScoreForPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
