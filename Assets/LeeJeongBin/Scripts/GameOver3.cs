@@ -44,7 +44,7 @@ public class GameOver3 : MonoBehaviourPun
         if (PhotonNetwork.LocalPlayer == winner)
         {
             PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
-            photonView.RPC("GameWinner", RpcTarget.All, winner);
+            photonView.RPC(nameof(GameWinner), RpcTarget.All, winner);
         }
     }
 
