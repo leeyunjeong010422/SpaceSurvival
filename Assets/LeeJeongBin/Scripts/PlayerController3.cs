@@ -29,7 +29,7 @@ public class PlayerController3 : MonoBehaviourPun
 
     private void OnDestroy()
     {
-        GameOver3.Instance.OnPlayerDeath(this);
+        GameOver3.Instance?.OnPlayerDeath(this);
     }
 
     void Update()
