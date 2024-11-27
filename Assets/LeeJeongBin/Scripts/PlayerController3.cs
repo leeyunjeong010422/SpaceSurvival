@@ -24,6 +24,12 @@ public class PlayerController3 : MonoBehaviourPun
         characterController = GetComponent<CharacterController>();
         photonTransformView = GetComponent<PhotonTransformView>();
         animator = GetComponent<Animator>();
+        GameOver3.Instance.OnPlayerSpawn(this);
+    }
+
+    private void OnDestroy()
+    {
+        GameOver3.Instance.OnPlayerDeath(this);
     }
 
     void Update()
