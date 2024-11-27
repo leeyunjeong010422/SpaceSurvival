@@ -15,84 +15,18 @@ public class Killing3 : MonoBehaviourPun
         if (!photonView.IsMine)
             return; // 내 플레이어가 아닌 경우 공격 무시
 
-        CheckAndRemoveTargetInRange();
-
         if (Input.GetMouseButtonDown(0))
         {
-            Attack();
+            attackRange.SetActive(true);
             Debug.Log("공격");
         }
-    }
-
-    private void CheckAndRemoveTargetInRange() // 타겟 확인 후 범위 벗어난 타겟을 리스트에서 제거
-    {
-        SphereCollider sphereCollider = attackRange.GetComponent<SphereCollider>();
-        if (sphereCollider != null)
+        if (Input.GetMouseButtonUp(0))
         {
-            Collider[] colliders = Physics.OverlapSphere(attackRange.transform.position, sphereCollider.radius);
-
-            // 새로운 타겟을 찾고 리스트에 추가
-            foreach (Collider collider in colliders)
-            {
-                GameObject target = collider.gameObject;
-
-                // 본인을 제외한 범위 내에 들어온 타겟을 제거
-                if (target != gameObject && target != null && !targetInRange.Contains(target))
-                {
-                    targetInRange.Add(target);
-                }
-            }
-
-            // 범위에서 벗어난 타겟들을 제거
-            List<GameObject> toRemoveList = new List<GameObject>();
-
-            foreach (GameObject target in targetInRange)
-            {
-                if (target == null || !IsTargetInRange(target))  // 타겟이 null이거나 범위에서 벗어난 경우
-                {
-                    toRemoveList.Add(target); // 리스트에 추가
-                }
-            }
-
-            // 범위에서 벗어난 타겟들을 리스트에서 제거
-            foreach (GameObject target in toRemoveList)
-            {
-                if (target != null)  // null인 타겟을 처리하지 않음
-                {
-                    targetInRange.Remove(target);
-                }
-            }
+            attackRange.SetActive(false);
         }
     }
 
-    // 공격 범위(Spere 콜라이더) 내에 있는 타겟이 여전히 범위 내에 있는지
-    private bool IsTargetInRange(GameObject target)
-    {
-        if (target == null) return false;  // 타겟이 nuul이면 범위 내에 없는 것으로 간주하고 반환
-        SphereCollider sphereCollider = attackRange.GetComponent<SphereCollider>();
-        if (sphereCollider != null)
-        {
-            return Vector3.Distance(target.transform.position, attackRange.transform.position) <= sphereCollider.radius;
-        }
-        return false;
-    }
-
-    // 공격 처리
-    private void Attack()
-    {
-        List<GameObject> targetsToAttack = new List<GameObject>(targetInRange);
-
-        foreach (GameObject target in targetsToAttack)
-        {
-            // 타겟이 null이 아닌지 확인
-            if (target != null && (target.CompareTag("AI") || target.CompareTag("Player")))
-            {
-                HandleTargetDeath(target);
-            }
-        }
-    }
-
-    private void HandleTargetDeath(GameObject target)
+    public void HandleTargetDeath(GameObject target)
     {
         if (target == null)
         {

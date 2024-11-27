@@ -127,6 +127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 827538246977904492}
   - component: {fileID: 2743965565687315963}
+  - component: {fileID: 7800928652628555799}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: Untagged
@@ -162,6 +163,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7800928652628555799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6834562129685216608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547b98e939cda984db76241e3b548b27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killing3: {fileID: 596197589522874384}
 --- !u!1001 &7318712743789510061
 PrefabInstance:
   m_ObjectHideFlags: 0
