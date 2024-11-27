@@ -91,8 +91,8 @@ public class PersonalSettingPanel1 : MonoBehaviour
     }
     public void RoomGoalScoreChange(bool up)
     {
-        goalScore += 5 * (up ? 1 : -1);
-        goalScore = Mathf.Clamp(goalScore, 5, 100);
+        if((goalScore > 90 && up) || (goalScore < 20 && !up)) return;
+        goalScore += 10 * (up ? 1 : -1);
         goalScoreText.text = $"{goalScore}";
     }
     public void RoomGoalScoreSet()
