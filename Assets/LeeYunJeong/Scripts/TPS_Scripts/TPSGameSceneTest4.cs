@@ -187,9 +187,11 @@ public class TPSGameSceneTest4 : MonoBehaviourPunCallbacks
     }
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {
-        Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 50f);
+        // 임의의 위치 생성
+        Vector3 randomPosition = center + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
 
-        if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
+        // NavMesh에서 유효한 위치인지 확인
+        if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, range, NavMesh.AllAreas))
         {
             return hit.position;
         }
