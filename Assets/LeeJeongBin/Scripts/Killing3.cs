@@ -12,11 +12,15 @@ public class Killing3 : MonoBehaviourPun
 
     private void Update()
     {
+        if (!photonView.IsMine)
+            return; // 내 플레이어가 아닌 경우 공격 무시
+
         CheckAndRemoveTargetInRange();
 
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
+            Debug.Log("공격");
         }
     }
 
