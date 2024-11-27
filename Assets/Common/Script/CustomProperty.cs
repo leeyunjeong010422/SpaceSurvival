@@ -65,11 +65,13 @@ public static class CustomProperty
     public const string WINNIN_POINT = "WnPt";
     public const string COLOR_NUBER = "ColorNum";
     public static Color[] colors = { Color.red, Color.yellow, Color.green, Color.blue, Color.cyan, Color.black, Color.white, Color.gray, Color.magenta/* 마지막 원소는 Default color */ };
+    public const string LEVEL = "Level";
 
     private static readonly CustomPlayerProperty<bool> s_ready = new CustomPlayerProperty<bool>(READY, false);
     private static readonly CustomPlayerProperty<bool> s_load = new CustomPlayerProperty<bool>(LOAD, false);
     private static readonly CustomPlayerProperty<int> s_winningPoint = new CustomPlayerProperty<int>(WINNIN_POINT, 0);
     private static readonly CustomPlayerProperty<int> S_colorNumber = new CustomPlayerProperty<int>(COLOR_NUBER, -1);
+    private static readonly CustomPlayerProperty<long> s_level = new CustomPlayerProperty<long>(LEVEL, 1);
 
 
     public static void SetReady(this Player Player, bool ready) => s_ready.Set(Player, ready);
@@ -90,7 +92,8 @@ public static class CustomProperty
 
         return colors[number];
     }
-
+    public static void SetLevel(this Player Player, long point) => s_level.Set(Player, point);
+    public static long GetLevel(this Player Player) => s_level.Get(Player);
 
 
 
