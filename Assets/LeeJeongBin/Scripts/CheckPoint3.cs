@@ -22,14 +22,11 @@ public class CheckPoint3 : MonoBehaviourPun
         {
             PlayerController3 playerController = other.GetComponent<PlayerController3>();
 
-            if (playerController != null && !PlayerController3.visitedCheckPoint.Contains(this))
+            if (playerController != null && playerController.photonView.IsMine && !PlayerController3.visitedCheckPoint.Contains(this))
             {
                 Debug.Log($"플레이어가 체크포인트 {gameObject.name}에 도달했습니다.");
                 playerController.OnTriggerCheckPoint(this);
 
-                PlayerController3.visitedCheckPoint.Add(this);
-
-                playerController.IncrementCheckPointsReached();
                 Debug.Log($"현재 체크포인트 통과 : {playerController.CheckPointsReached}");
 
                 if (playerController.CheckPointsReached >= TotalCheckPoints)

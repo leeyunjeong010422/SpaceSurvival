@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ChoiJeeSeong/Minigame/IcySliding.unity
     guid: e31b0b9323e9a3542a430f53241a1dff
+  - enabled: 1
+    path: Assets/LeeJeongBin/Scenes/LastMan.unity
+    guid: be1b310c83b94c84299173a7d4b1afa9
   m_configObjects: {}
