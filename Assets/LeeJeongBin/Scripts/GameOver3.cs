@@ -8,6 +8,7 @@ public class GameOver3 : MonoBehaviourPun
 {
     public static GameOver3 Instance;
     [SerializeField] RectTransform winningPointUI;
+    private List<PlayerController3> alivePlayers = new List<PlayerController3>(4);
 
     private void Awake()
     {
@@ -21,12 +22,21 @@ public class GameOver3 : MonoBehaviourPun
         }
     }
 
-    // 플레이어 사망 시 호출
-    public void OnPlayerDeath(Player deadPlayer)
+    public void OnPlayerSpawn(PlayerController3 spawnedPlayerCharacter)
     {
-        // 네트워크 상 존재하는 다른 플레이어들이 모두 사망한 경우 승리
+        alivePlayers.Add(spawnedPlayerCharacter);
+    }
 
+    // 플레이어 사망 시 호출
+    public void OnPlayerDeath(PlayerController3 deadPlayerCharacter)
+    {
+        alivePlayers.Remove(deadPlayerCharacter);
 
+        // 생존한 플레이어 캐릭터가 유일하다면 그 플레이어 승리
+        if (alivePlayers.Count == 1)
+        {
+            PlayerWin(alivePlayers[0].photonView.Owner);
+        }
     }
 
     // 승리 처리
@@ -44,7 +54,7 @@ public class GameOver3 : MonoBehaviourPun
         if (PhotonNetwork.LocalPlayer == winner)
         {
             PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
-            photonView.RPC("GameWinner", RpcTarget.All, winner);
+            photonView.RPC(nameof(GameWinner), RpcTarget.All, winner);
         }
     }
 
