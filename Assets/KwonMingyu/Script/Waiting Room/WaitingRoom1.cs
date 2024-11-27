@@ -127,11 +127,14 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         Debug.Log("GameStart");
+
+        // 플레이어 프로퍼티 초기화
         PhotonNetwork.LocalPlayer.SetReady(false);
         PhotonNetwork.LocalPlayer.SetWinningPoint(0);
+
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
-        MinigameSelecter.Instance.ResetRandomList();
-        PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
+
+        PhotonNetwork.LoadLevel(1);
     }
 
     public IEnumerator WinnerEventCoroutine()
