@@ -117,25 +117,8 @@ public class PlayerController3 : MonoBehaviourPun
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {
             Debug.Log($"플레이어 {photonView.Owner.NickName}가 모든 체크포인트를 통과했습니다");
-            GameOver3.Instance.PlayerWin(photonView.Owner.NickName);
+            GameOver3.Instance.PlayerWin(photonView.Owner);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("CheckPoint"))
-        {
-            CheckPoint3 checkPoint = other.GetComponent<CheckPoint3>();
-            if (checkPoint != null)
-            {
-                OnTriggerCheckPoint(checkPoint);
-            }
-        }
-    }
-
-    public void IncrementCheckPointsReached()
-    {
-        checkPointsReached++;
     }
 
     public void ResetCheckPoints()
