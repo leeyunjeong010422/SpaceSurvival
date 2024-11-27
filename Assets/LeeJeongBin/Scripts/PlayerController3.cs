@@ -6,6 +6,7 @@ using Photon.Pun;
 public class PlayerController3 : MonoBehaviourPun
 {
     [SerializeField] float moveSpeed;
+    [SerializeField] float sprintMultiplier;
     [SerializeField] float rotationSpeed;
     [SerializeField] float deceleration;
     [SerializeField] Camera playerCamera;
@@ -13,8 +14,8 @@ public class PlayerController3 : MonoBehaviourPun
     [SerializeField] Vector3 velocity;
 
     private PhotonTransformView photonTransformView;
+    private Animator animator;
 
-    // 체크포인트 통과 수
     [SerializeField] int checkPointsReached;
 
     public static List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
@@ -23,6 +24,7 @@ public class PlayerController3 : MonoBehaviourPun
     {
         characterController = GetComponent<CharacterController>();
         photonTransformView = GetComponent<PhotonTransformView>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -30,10 +32,11 @@ public class PlayerController3 : MonoBehaviourPun
         if (photonView.IsMine)
         {
             HandleMovement();
+            UpdateAnimator();
         }
         else
         {
-            velocity = Vector3.zero;
+            velocity = Vector3.zero; // 네트워크 상 다른 플레이어는 로컬에서 움직이지 않음
         }
     }
 
@@ -50,30 +53,53 @@ public class PlayerController3 : MonoBehaviourPun
 
         Vector3 moveDirection = (forward * vertical + right * horizontal).normalized;
 
+        float currentSpeed = moveSpeed;
+
+        // Shift 키를 누르면 스프린트 활성화
+        if (Input.GetKey(KeyCode.LeftShift) && vertical > 0) // W 키와 함께 Shift를 누른 경우에만
+        {
+            currentSpeed *= sprintMultiplier; // 기본 속도에 스프린트 배율 적용 (최대 3.5)
+        }
+
         if (moveDirection.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
             float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, rotationSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            velocity.x = moveDirection.x * moveSpeed;
-            velocity.z = moveDirection.z * moveSpeed;
+            velocity.x = moveDirection.x * currentSpeed;
+            velocity.z = moveDirection.z * currentSpeed;
         }
         else
         {
-            velocity = Vector3.zero;
+            velocity.x = 0;
+            velocity.z = 0;
         }
 
         if (characterController.isGrounded)
-        {
-            velocity.y = -0.5f;
-        }
-        else
         {
             velocity.y += Physics.gravity.y * Time.deltaTime;
         }
 
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    private void UpdateAnimator()
+    {
+        // 이동 속도 계산
+        float speed = new Vector3(velocity.x, 0, velocity.z).magnitude;
+
+        // Speed 애니메이션 파라미터 업데이트
+        animator.SetFloat("Speed", speed);
+
+        // 애니메이션 전환을 위한 Speed 값 로깅 (디버깅용)
+        Debug.Log($"Current Speed: {speed}");
+
+        // 예시: 죽음 모션과 같은 특정 애니메이션 호출 (필요 시 추가)
+        if (Input.GetKeyDown(KeyCode.K)) // 예: K 키로 죽는 애니메이션 트리거
+        {
+            animator.SetTrigger("Die4");
+        }
     }
 
     public void OnTriggerCheckPoint(CheckPoint3 checkPoint)
