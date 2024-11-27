@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +14,16 @@ public class AIController3 : MonoBehaviour
     [SerializeField] Vector3 targetPosition;
     [SerializeField] NavMeshAgent navMeshAgent;
 
+    private Animator animator;
+
     void Start()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return; // 마스터 클라이언트에서만 AI 루프 실행
+
         navMeshAgent = GetComponent<NavMeshAgent>();
-        if (navMeshAgent == null)
+        animator = GetComponent<Animator>();
+        if (navMeshAgent == null || animator == null)
             return;
 
         navMeshAgent.speed = moveSpeed;
@@ -31,6 +38,7 @@ public class AIController3 : MonoBehaviour
         {
             // AI의 역동적 움직임을 위한 이동 후 멈춤 시간 설정
             float pauseTime = Random.Range(minPauseTime, maxPauseTime);
+            UpdateAnimator(0f); // 멈춰있는 상태로 애니메이션 업데이트
             yield return new WaitForSeconds(pauseTime);
 
             // 목표 지점 설정 및 이동
@@ -48,12 +56,14 @@ public class AIController3 : MonoBehaviour
                 if (navMeshAgent.isActiveAndEnabled)
                 {
                     RotateTowardsTarget();
+                    UpdateAnimator(navMeshAgent.velocity.magnitude);
                 }
                 yield return null;
             }
 
-            // 목표에 도달한 후 1f ~ 3f 만큼 랜덤 정지
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
+            // 목표에 도달한 후 0f ~ 3f 간격 만큼 랜덤 정지
+            UpdateAnimator(0f);
+            yield return new WaitForSeconds(Random.Range(0f, 3f));
         }
     }
 
@@ -71,6 +81,14 @@ public class AIController3 : MonoBehaviour
             Vector3 direction = (targetPosition - transform.position).normalized;
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void UpdateAnimator(float speed)
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", speed); // Speed 파라미터를 업데이트
         }
     }
 
