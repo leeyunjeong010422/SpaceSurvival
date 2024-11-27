@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneDatas:
   - minigame: 0
+    infoPrefab: {fileID: 7582887204830617854, guid: 37c2ca59168077841a5043731ef85677, type: 3}
     sceneName: CoinCollecter
-    buildIndex: 1
-  - minigame: 1
-    sceneName: IcySliding
     buildIndex: 2
+  - minigame: 1
+    infoPrefab: {fileID: 7582887204830617854, guid: 03fe45fae7f875845821b7601dd072f3, type: 3}
+    sceneName: IcySliding
+    buildIndex: 3
