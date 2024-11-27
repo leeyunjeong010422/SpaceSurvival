@@ -1575,12 +1575,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 404e004b9cbaa9b4dbbb60d9a4e02cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   animator: {fileID: 3123308869886027189}
-  rotationSpeed: 100
+  rotationSpeed: 200
   cameraOffset: {x: 0, y: 5, z: -7}
   mouseSensitivity: 2
   playerRenderer: {fileID: 6030031250267817052}
+  playerScore: 0
 --- !u!1 &9095702449811090885
 GameObject:
   m_ObjectHideFlags: 0
