@@ -166,24 +166,6 @@ public class TPSGameSceneTest4 : MonoBehaviourPunCallbacks
             }
             rankingText[0].text = topScorerText.TrimEnd('\n');
         }
-
-        //// 점수 내림차순 정렬
-        //playerScores.Sort((x, y) => y.score.CompareTo(x.score));
-
-        //var rankingText = endGamePanel.GetComponentsInChildren<TMP_Text>();
-        //for (int i = 0; i < playerScores.Count; i++)
-        //{
-        //    string playerName = playerScores[i].playerName;
-        //    int score = playerScores[i].score;
-        //    bool isLocalPlayer = playerScores[i].isLocalPlayer;
-
-        //    rankingText[i].text = $"{i + 1}. <b>NickName</b>: {playerName} / <b>Score</b>: {score}";
-
-        //    if (isLocalPlayer)
-        //    {
-        //        rankingText[i].color = Color.red;
-        //    }
-        //}
     }
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {

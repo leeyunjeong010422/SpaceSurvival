@@ -7,9 +7,9 @@ using UnityEngine.AI;
 
 public class TPSGameScene : MiniGameSceneBase
 {
-    [SerializeField] private TMP_Text timerText;
-    [SerializeField] private GameObject endGamePanel;
-    [SerializeField] private float gameDuration = 30f;
+    [SerializeField] private TMP_Text timerText; // 타이머
+    [SerializeField] private GameObject endGamePanel; // 게임 끝난 후 승리자 표시
+    [SerializeField] private float gameDuration = 30f; // 게임 몇 초 동안 할 건지
 
     private float gameTimer;
     private bool gameStarted = false;
