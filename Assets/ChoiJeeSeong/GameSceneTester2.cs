@@ -39,6 +39,7 @@ public class GameSceneTester2 : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.LocalPlayer.NickName = $"Player {Random.Range(1000, 10000)}";
         PhotonNetwork.ConnectUsingSettings();
     }
