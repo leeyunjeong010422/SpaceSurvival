@@ -378,6 +378,7 @@ MonoBehaviour:
   playerCamera: {fileID: 8451779769153920926}
   velocity: {x: 0, y: 0, z: 0}
   checkPointsReached: 0
+  visitedCheckPoint: []
 --- !u!114 &8075774712913738872
 MonoBehaviour:
   m_ObjectHideFlags: 0
