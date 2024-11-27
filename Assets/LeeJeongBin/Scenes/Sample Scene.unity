@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 304ec69909ac2634492abe356b10f31b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AIPrefab: {fileID: 7275364715514683491, guid: 31728fa1aeb37cf4791f12eade361758, type: 3}
+  AIPrefab: {fileID: 7588604573338534140, guid: 1b3f71e804097324aa0570eb86660aad, type: 3}
   AICount: 50
   spawnAreaSize: 50
 --- !u!4 &131676604
