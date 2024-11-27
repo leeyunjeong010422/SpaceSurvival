@@ -1581,7 +1581,6 @@ MonoBehaviour:
   cameraOffset: {x: 0, y: 5, z: -7}
   mouseSensitivity: 2
   playerRenderer: {fileID: 6030031250267817052}
-  playerScore: 0
 --- !u!1 &9095702449811090885
 GameObject:
   m_ObjectHideFlags: 0
