@@ -9,6 +9,7 @@ public class GameOver3 : MonoBehaviourPun
     public static GameOver3 Instance;
     [SerializeField] RectTransform winningPointUI;
     private List<PlayerController3> alivePlayers = new List<PlayerController3>(4);
+    private bool gameIsOver = false;
 
     private void Awake()
     {
@@ -19,6 +20,14 @@ public class GameOver3 : MonoBehaviourPun
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
         }
     }
 
@@ -42,6 +51,14 @@ public class GameOver3 : MonoBehaviourPun
     // 승리 처리
     public void PlayerWin(Player winner)
     {
+        if (gameIsOver)
+        {
+            Debug.Log("이미 게임이 종료됨");
+            return;
+        }
+
+        gameIsOver = true;
+
         Debug.Log($"{winner.NickName} 승리");
 
         if (photonView == null)
@@ -61,6 +78,8 @@ public class GameOver3 : MonoBehaviourPun
     [PunRPC]
     private void GameWinner(Player winner)
     {
+        gameIsOver = true;
+
         // 게임 종료 처리 및 승리 메시지 출력
         Debug.Log($"게임 종료 {winner.NickName}이 승리했습니다");
 
