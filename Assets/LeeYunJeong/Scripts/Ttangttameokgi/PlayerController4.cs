@@ -24,12 +24,16 @@ public class PlayerController4 : MonoBehaviourPun
 
     public int playerScore = 0;
 
+    private GameSceneTest4 gameSceneTest;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
         mainCamera = Camera.main;
+
+        gameSceneTest = FindObjectOfType<GameSceneTest4>();
 
         // 내 PlayerController를 LocalPlayer에 Tag로 연결
         if (photonView.IsMine)
@@ -134,6 +138,8 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (gameSceneTest == null || !gameSceneTest.gameStarted) return;
+
         if (collision.gameObject.CompareTag("Cube"))
         {
             Renderer cubeRenderer = collision.gameObject.GetComponent<Renderer>();
