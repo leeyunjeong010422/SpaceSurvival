@@ -116,4 +116,18 @@ public class BackendManager1 : MonoBehaviour
         PhotonNetwork.LocalPlayer.NickName = name;
         return true;
     }
+
+    // 레벨업 함수, 게임 종료시 우승자에게 호출됨
+    public async void PlayerLevelUp()
+    {
+        await userUidDataRef.Child("level").SetValueAsync(PhotonNetwork.LocalPlayer.GetLevel() + 1).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                Debug.LogWarning("레벨 변경 취소/실패 됨");
+            }
+        });
+        PhotonNetwork.LocalPlayer.SetLevel(PhotonNetwork.LocalPlayer.GetLevel() + 1);
+        Debug.Log($"레벨 변경 성공");
+    }
 }

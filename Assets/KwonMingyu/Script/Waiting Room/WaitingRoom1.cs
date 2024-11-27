@@ -170,6 +170,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             winner = photonView.gameObject;
             winnerColor = photonView.Owner.GetNumberColor();
             winnerText.text = $"우승자\n{photonView.Owner.NickName}";
+            BackendManager1.Instance.PlayerLevelUp();
         }
         // 날라가는거 구경시간
         yield return new WaitForSeconds(2f);

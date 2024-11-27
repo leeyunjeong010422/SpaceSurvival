@@ -70,6 +70,7 @@ public class MainPanel1 : MonoBehaviour
     {
         UserData1 userData = (await BackendManager1.Instance.GetPlayerData());
         PhotonNetwork.LocalPlayer.NickName = userData.name;
+        PhotonNetwork.LocalPlayer.SetLevel(userData.level);
         nickNameText.text = userData.name;
         levelText.text = "LV " + userData.level;
     }
