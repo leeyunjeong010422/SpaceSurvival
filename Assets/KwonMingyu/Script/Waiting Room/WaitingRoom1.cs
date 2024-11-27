@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     // 게임 승리 점수 설정 버튼 호스트만
     [SerializeField] GameObject roomSettingButtons;
+
+    [SerializeField] Transform porce;
+    [SerializeField] float power;
+    [SerializeField] TMP_Text winnerText;
 
     private void Update()
     {
@@ -30,9 +35,6 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 룸 넘버가 할당되지 않았다면 리턴
         if (targetPlayer.GetPlayerNumber() == -1) return;
 
-        // 플레이어 카드 업데이트
-        UpdatePlayerCards();
-
         // 플레이어의 컬러가 기본값이라면 PlayerNuber를 부여
         if (targetPlayer.GetColorNumber() == -1)
         {
@@ -40,8 +42,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             return;
         }
 
-        // 색갈 업데이트
-        PlayerColorSet();
+        // 플레이어 카드 업데이트
+        UpdatePlayerCards();
 
         roomSettingButtons.SetActive(PhotonNetwork.LocalPlayer.IsMasterClient);
 
@@ -57,7 +59,6 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         UpdatePlayerCards();
-        PlayerColorSet();
     }
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
@@ -77,6 +78,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         {
             playerCards[player.GetPlayerNumber()].CardInfoCanger(player);
         }
+
+        // 색갈 업데이트
+        PlayerColorSet();
     }
     private void PlayerColorSet()
     {
@@ -122,8 +126,77 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     public void GameStart()
     {
+        Debug.Log("GameStart");
+        PhotonNetwork.LocalPlayer.SetReady(false);
+        PhotonNetwork.LocalPlayer.SetWinningPoint(0);
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
         MinigameSelecter.Instance.ResetRandomList();
         PhotonNetwork.LoadLevel(MinigameSelecter.Instance.PopRandomSceneIndex());
+    }
+
+    public IEnumerator WinnerEventCoroutine()
+    {
+        GameObject winner = null;
+        Color winnerColor = Color.white;
+
+        // 플레이어를 생성하고 Load 완료
+        GameObject instance = PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
+        PhotonNetwork.LocalPlayer.SetLoad(true);
+
+        // 모든 플레이어 Load 대기
+        while (!AllLoad())
+            yield return null;
+
+        // 플레이어 카드 안보이게 하기
+        foreach (var item in playerCards)
+            item.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(1f);
+
+        // 플레이어 캐릭터를 순회
+        foreach (PhotonView photonView in FindObjectsOfType<PhotonView>())
+        {
+            // 플레이어의 점수가 우승 점수가 아니라면 창 밖으로 날려버림
+            if (photonView.Owner.GetWinningPoint() != PhotonNetwork.CurrentRoom.GetGoalPoint())
+            {
+                photonView.GetComponent<Rigidbody>().velocity = (porce.position - photonView.transform.position).normalized * power;
+                yield return new WaitForSeconds(0.3f);
+                continue;
+            }
+            // 우승자 정보를 저장
+            winner = photonView.gameObject;
+            winnerColor = photonView.Owner.GetNumberColor();
+            winnerText.text = $"우승자\n{photonView.Owner.NickName}";
+        }
+        // 날라가는거 구경시간
+        yield return new WaitForSeconds(2f);
+
+        // 메인 카메라의 타겟을 우승자로
+        Camera.main.GetComponent<CameraController2>().enabled = true;
+        Camera.main.GetComponent<CameraController2>().Target = winner.transform;
+
+        // 우승 텍스트 출력
+        winnerText.color = winnerColor;
+        winnerText.gameObject.SetActive(true);
+
+        // 우승자 구경 시간
+        yield return new WaitForSeconds(5f);
+        winnerText.gameObject.SetActive(false);
+
+        // 날라간 플레이어 돌아와
+        instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        instance.transform.position = Vector3.up;
+        Camera.main.GetComponent<CameraController2>().Target = instance.transform;
+
+        // 플레이어 카드 업데이트
+        UpdatePlayerCards();
+    }
+    private bool AllLoad()
+    {
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            if (!player.GetLoad()) return false;
+        }
+        return true;
     }
 }
