@@ -127,11 +127,11 @@ public class PlayerController3 : MonoBehaviourPun
         checkPointsReached++;
         visitedCheckPoint.Add(checkPoint);
 
-       // if (score != null)
-       // {
-       //     int checkPointNum = checkPoint.CheckPointNum;
-       //     score.UpdateScore(photonView.Owner, checkPointNum);
-       // }
+        if (score != null)
+        {
+            int checkPointNum = checkPoint.CheckPointNum;
+            score.UpdateScore(photonView.Owner, checkPointNum);
+        }
 
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {

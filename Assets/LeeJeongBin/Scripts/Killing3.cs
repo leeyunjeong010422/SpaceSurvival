@@ -141,8 +141,8 @@ public class Killing3 : MonoBehaviourPun
                     // 플레이어 사망 처리
                     StartCoroutine(HandlePlayerDeath(target.GetComponent<PlayerController3>()));
                 }
-                //   if (target.CompareTag("Player"))
-                //       target.GetComponent<PlayerController3>().score.PlayerDead(targetPhotonView.Owner);
+                   if (target.CompareTag("Player"))
+                       target.GetComponent<PlayerController3>().score.PlayerDead(targetPhotonView.Owner);
             }
         }
     }
