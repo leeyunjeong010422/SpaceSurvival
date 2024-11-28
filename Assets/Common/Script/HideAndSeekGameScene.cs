@@ -47,7 +47,7 @@ public class HideAndSeekGameScene : MiniGameSceneBase
             // 스폰 범위 내에서 랜덤으로 생성
             float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
             float randomZ = Random.Range(-spawnAreaSize, spawnAreaSize);
-            spawnPosition = new Vector3(randomX, 1f, randomZ); // y 값은 1로 고정
+            spawnPosition = new Vector3(randomX, 0f, randomZ); // y 값은 1로 고정
 
             // 체크포인트 범위 내에 있는지 확인
             validPosition = IsSpawnPositionValid(spawnPosition);

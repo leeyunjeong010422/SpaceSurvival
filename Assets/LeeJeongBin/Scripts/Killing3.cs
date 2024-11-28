@@ -134,7 +134,6 @@ public class Killing3 : MonoBehaviourPun
                 target.GetComponent<CapsuleCollider>().enabled = false;
                 if (target.CompareTag("AI"))
                 {
-                    target.GetComponent<NavMeshAgent>().enabled = false;
                     StartCoroutine(HandleAIDeath(target.GetComponent<AIController3>()));
                 }
                 else if (target.CompareTag("Player"))
@@ -158,7 +157,10 @@ public class Killing3 : MonoBehaviourPun
 
         playerController.enabled = false;
 
-        PhotonNetwork.Destroy(playerController.gameObject);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(playerController.gameObject);
+        }
     }
 
     // AI 사망시 5초뒤 Destroy 및 사망 애니메이션
@@ -171,6 +173,9 @@ public class Killing3 : MonoBehaviourPun
 
         yield return new WaitForSeconds(5f);
 
-        PhotonNetwork.Destroy (aiController.gameObject);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(aiController.gameObject);
+        }
     }
 }

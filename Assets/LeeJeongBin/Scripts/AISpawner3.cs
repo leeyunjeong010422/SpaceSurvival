@@ -61,7 +61,7 @@ public class AISpawner3 : MonoBehaviourPunCallbacks
             // 랜덤 좌표 생성
             float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
             float randomZ = Random.Range(-spawnAreaSize, spawnAreaSize);
-            randomPosition = new Vector3(randomX, 1f, randomZ); // 스폰 좌표 y값은 1로 고정
+            randomPosition = new Vector3(randomX, 0f, randomZ);
 
             validPosition = true;
 
