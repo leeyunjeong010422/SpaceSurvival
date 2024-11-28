@@ -28,6 +28,7 @@ public class TPSPlayerProfileManager4 : MonoBehaviourPunCallbacks
         {
             card.SetActive(false);
         }
+        InitializeProfileCards();
     }
 
     public override void OnJoinedRoom()

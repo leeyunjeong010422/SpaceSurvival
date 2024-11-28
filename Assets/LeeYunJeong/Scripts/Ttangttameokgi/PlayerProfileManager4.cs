@@ -31,6 +31,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         {
             card.SetActive(false);
         }
+        InitializeProfileCards();
     }
 
     public override void OnJoinedRoom()
