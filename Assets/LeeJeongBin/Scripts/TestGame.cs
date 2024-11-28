@@ -55,7 +55,7 @@ public class TestGame : MonoBehaviourPunCallbacks
             // 스폰 범위 내에서 랜덤으로 생성
             float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
             float randomZ = Random.Range(-spawnAreaSize, spawnAreaSize);
-            spawnPosition = new Vector3(randomX, 0f, randomZ); // y 값은 1로 고정
+            spawnPosition = new Vector3(randomX, 0f, randomZ);
 
             // 체크포인트 범위 내에 있는지 확인
             validPosition = IsSpawnPositionValid(spawnPosition);
@@ -67,7 +67,7 @@ public class TestGame : MonoBehaviourPunCallbacks
         if (!validPosition)
         {
             // 기본 위치로 스폰
-            spawnPosition = new Vector3(0f, 1f, 0f);
+            spawnPosition = new Vector3(0f, 0f, 0f);
         }
 
         return spawnPosition;

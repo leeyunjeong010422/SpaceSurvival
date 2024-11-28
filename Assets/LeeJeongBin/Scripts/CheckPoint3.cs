@@ -8,6 +8,8 @@ public class CheckPoint3 : MonoBehaviourPun
     public static CheckPoint3 Instance;
     public int TotalCheckPoints { get; private set; } = 4;
 
+    public int CheckPointNum;
+
     private void Awake()
     {
         if (Instance == null)

@@ -69,8 +69,8 @@ public class AIController3 : MonoBehaviour
 
     private void SetRandomTargetPosition()
     {
-        float randomX = Random.Range(-50f, 50f);
-        float randomZ = Random.Range(-50f, 50f);
+        float randomX = Random.Range(-45f, 45f);
+        float randomZ = Random.Range(-45f, 45f);
         targetPosition = new Vector3(randomX, transform.position.y, randomZ);
     }
 

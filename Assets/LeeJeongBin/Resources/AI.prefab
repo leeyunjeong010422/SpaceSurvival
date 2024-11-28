@@ -161,6 +161,8 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 0
     LayerIndex: 1
+  - SynchronizeType: 0
+    LayerIndex: 2
 --- !u!114 &5634717846102553959
 MonoBehaviour:
   m_ObjectHideFlags: 0
