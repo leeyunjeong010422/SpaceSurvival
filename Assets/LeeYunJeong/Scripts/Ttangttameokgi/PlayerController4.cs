@@ -125,21 +125,21 @@ public class PlayerController4 : MonoBehaviourPun
     private void SetPlayerColor()
     {
         //최종적으로 사용할 코드
-        //playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
-        //photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
-
-        if (Application.isEditor)
-        {
-            playerColor = (PhotonNetwork.LocalPlayer.ActorNumber == 1) ? Color.red :
-                          (PhotonNetwork.LocalPlayer.ActorNumber == 2) ? Color.blue :
-                          (PhotonNetwork.LocalPlayer.ActorNumber == 3) ? Color.green : Color.yellow;
-        }
-        else
-        {
-            playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
-        }
-
+        playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
         photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
+
+        //if (Application.isEditor)
+        //{
+        //    playerColor = (PhotonNetwork.LocalPlayer.ActorNumber == 1) ? Color.red :
+        //                  (PhotonNetwork.LocalPlayer.ActorNumber == 2) ? Color.blue :
+        //                  (PhotonNetwork.LocalPlayer.ActorNumber == 3) ? Color.green : Color.yellow;
+        //}
+        //else
+        //{
+        //    playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
+        //}
+
+        //photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
     }
 
     [PunRPC]
