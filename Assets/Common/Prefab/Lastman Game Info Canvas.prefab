@@ -97,7 +97,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4429009823189527431, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_text
-      value: "\uD50C\uB808\uC774\uBC29\uBC95\uC124\uBA85\uD14D\uC2A4\uD2B8\n\uD14D\uC2A4\uD2B8\uD14D\uC2A4\uD2B8"
+      value: "AI\uC778\uCC99 \uB2E4\uB978 \uD50C\uB808\uC774\uC5B4\uB97C \uC18D\uC5EC\n4\uAC1C\uC758
+        \uCCB4\uD06C \uD3EC\uC778\uD2B8 \uB2EC\uC131 \uB610\uB294\n\uBAA8\uB4E0 \uD50C\uB808\uC774\uC5B4
+        \uCC98\uCE58"
       objectReference: {fileID: 0}
     - target: {fileID: 4429009823286436347, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_text

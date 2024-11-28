@@ -126,7 +126,7 @@ public class PlayerController3 : MonoBehaviourPun
 
         checkPointsReached++;
         visitedCheckPoint.Add(checkPoint);
-
+        
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {
             Debug.Log($"모든 체크포인트를 통과했습니다");
