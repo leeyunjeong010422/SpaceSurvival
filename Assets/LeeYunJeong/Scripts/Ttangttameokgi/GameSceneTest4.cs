@@ -31,7 +31,10 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 10f);
-        PhotonNetwork.Instantiate("TTMG_Player4", spawnPosition, Quaternion.identity);
+        GameObject playerObject = PhotonNetwork.Instantiate("TTMG_Player4", spawnPosition, Quaternion.identity);
+
+        PlayerController4 playerController = playerObject.GetComponent<PlayerController4>();
+        PhotonNetwork.LocalPlayer.TagObject = playerController;
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
         endGamePanel?.SetActive(false);
@@ -110,7 +113,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private void StartGameTimer()
     {
         Debug.Log("타이머 시작한다");
-        gameTimer = 30f;
+        gameTimer = 10f;
     }
 
     private void EndGame()
@@ -119,7 +122,40 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
         gameStarted = false;
         isGameEnded = true;
         endGamePanel?.SetActive(true);
+
+        DisplayRankings();
     }
+
+    private void DisplayRankings()
+    {
+        Player highestPlayer = null;
+        int highestScore = -1;
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            PlayerController4 controller = player.TagObject as PlayerController4;
+            if (controller != null)
+            {
+                Debug.Log($"플레이어: {player.NickName}, 점수: {controller.playerScore}"); // 모든 플레이어의 점수 출력
+
+                if (controller.playerScore > highestScore)
+                {
+                    highestScore = controller.playerScore;
+                    highestPlayer = player;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"플레이어 {player.NickName}의 TagObject가 null입니다.");
+            }
+        }
+
+        if (highestPlayer != null)
+        {
+            Debug.Log($"최고 점수: {highestPlayer.NickName} - {highestScore}점");
+        }
+    }
+
 
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {
