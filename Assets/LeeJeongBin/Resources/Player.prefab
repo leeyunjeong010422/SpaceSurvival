@@ -95,6 +95,8 @@ MonoBehaviour:
   maxYAngle: 60
   player: {fileID: 7069511271410817606}
   playerCamera: {fileID: 8451779769153920926}
+  distancePlayer: 5
+  cameraHeight: 2
 --- !u!114 &1649516735506711446
 MonoBehaviour:
   m_ObjectHideFlags: 0

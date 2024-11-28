@@ -11,6 +11,8 @@ public class CameraController3 : MonoBehaviour
     [SerializeField] float maxYAngle = 60f;
     [SerializeField] Transform player;
     [SerializeField] Camera playerCamera;
+    [SerializeField] float distancePlayer;
+    [SerializeField] float cameraHeight;
 
     private float rotationX = 0f;
     private PhotonView photonView;
@@ -50,6 +52,9 @@ public class CameraController3 : MonoBehaviour
         // X 축 회전 처리
         rotationX -= mouseY * sensitivityY;
         rotationX = Mathf.Clamp(rotationX, minYAngle, maxYAngle);
+
+        Vector3 targetPosition = player.position - transform.forward * distancePlayer + Vector3.up * cameraHeight;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 10f);
 
         // 카메라 회전 적용
         transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
