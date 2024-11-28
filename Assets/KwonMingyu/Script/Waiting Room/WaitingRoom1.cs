@@ -20,6 +20,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     [SerializeField] float power;
     [SerializeField] TMP_Text winnerText;
 
+    private bool winnerEvent;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -43,7 +45,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         }
 
         // 플레이어 카드 업데이트
-        UpdatePlayerCards();
+        if (!winnerEvent)
+        {
+            UpdatePlayerCards();
+        }
 
         roomSettingButtons.SetActive(PhotonNetwork.LocalPlayer.IsMasterClient);
 
@@ -134,16 +139,19 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
 
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(4);
     }
 
     public IEnumerator WinnerEventCoroutine()
     {
         GameObject winner = null;
         Color winnerColor = Color.white;
+        winnerEvent = true;
 
         // 플레이어를 생성하고 Load 완료
-        GameObject instance = PhotonNetwork.Instantiate("Character2", Vector3.up, Quaternion.identity);
+        GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(PhotonNetwork.LocalPlayer.GetPlayerNumber(), 1, 0), Quaternion.identity);
+        instance.GetComponent<PlayerCharacterControl2>().enabled = false;
+
         PhotonNetwork.LocalPlayer.SetLoad(true);
 
         // 모든 플레이어 Load 대기
@@ -171,6 +179,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             winnerColor = photonView.Owner.GetNumberColor();
             winnerText.text = $"우승자\n{photonView.Owner.NickName}";
             BackendManager1.Instance.PlayerLevelUp();
+            photonView.gameObject.GetComponent<PlayerCharacterControl2>().enabled = true;
         }
         // 날라가는거 구경시간
         yield return new WaitForSeconds(2f);
@@ -191,6 +200,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
         instance.transform.position = Vector3.up;
         Camera.main.GetComponent<CameraController2>().Target = instance.transform;
+        instance.GetComponent<PlayerCharacterControl2>().enabled = true;
+
+        winnerEvent = false;
 
         // 플레이어 카드 업데이트
         UpdatePlayerCards();
