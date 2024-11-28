@@ -139,7 +139,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
 
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(4);
     }
 
     public IEnumerator WinnerEventCoroutine()
