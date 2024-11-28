@@ -148,8 +148,8 @@ public class PlayerController4 : MonoBehaviourPun
                 // 다른 플레이어가 칠한 큐브를 밟으면 점수를 차감
                 if (cubeRenderer.material.color != playerColor)
                 {
-                    // 해당 큐브를 칠한 플레이어의 점수를 차감
-                    photonView.RPC(nameof(DecreaseScoreForPlayer), RpcTarget.All, cubeRenderer.material.color.r, cubeRenderer.material.color.g, cubeRenderer.material.color.b);
+                    // 큐브 색이 다른 플레이어의 색이라면 점수 차감
+                    DecreaseScore(cubeRenderer.material.color);
 
                     // 큐브 색 변경
                     cubeRenderer.material.color = playerColor;
@@ -215,8 +215,7 @@ public class PlayerController4 : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    private void DecreaseScoreForPlayer(float r, float g, float b)
+    private void DecreaseScore(Color cubeColor)
     {
         // 큐브를 칠한 플레이어의 색이 r, g, b와 일치하면 해당 플레이어의 점수를 차감
         foreach (var player in PhotonNetwork.PlayerList)
@@ -224,7 +223,7 @@ public class PlayerController4 : MonoBehaviourPun
             if (player.TagObject != null)
             {
                 PlayerController4 controller = player.TagObject as PlayerController4;
-                if (controller != null && controller.playerColor.r == r && controller.playerColor.g == g && controller.playerColor.b == b)
+                if (controller != null && controller.playerColor == cubeColor)
                 {
                     Debug.LogWarning("점수가 차감되었습니다.");
                     controller.playerScore--; // 해당 플레이어의 점수 차감
