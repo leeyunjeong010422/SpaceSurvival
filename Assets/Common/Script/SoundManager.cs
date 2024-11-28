@@ -44,13 +44,14 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     /// <summary>
     /// 해당 오디오 그룹에 대한 전역 음량 스케일을 설정<br/>
-    /// Playe 메서드의 매개변수 volumeScale과는 별개
+    /// Playe 메서드의 매개변수 volumeScale과는 별개<br/>
+    /// 0~1 입력값이 -20dB ~ 0dB로 조정됨
     /// </summary>
     /// <param name="group">그룹</param>
-    /// <param name="scale">음량</param>
+    /// <param name="scale">음량(0~1 권장)</param>
     public void SetMixerScale(AudioGroup group, float scale)
     {
-        if (false == mixer.SetFloat(paramNames[(int)group], scale))
+        if (false == mixer.SetFloat(paramNames[(int)group], (scale - 1f) * 20f))
         {
             Debug.LogWarning("잘못된 AudioGroup");
         }
@@ -62,6 +63,26 @@ public class SoundManager : SingletonBehaviour<SoundManager>
         {
             Debug.LogWarning("잘못된 AudioGroup");
         }
-        return value;
+        return (value * 0.05f) + 1f;
+    }
+
+    public void PlayTestSound(AudioGroup group, AudioClip clip)
+    {
+        switch (group)
+        {
+            case AudioGroup.MASTER:
+                bgmSource.PlayOneShot(clip);
+                sfxSource.PlayOneShot(clip);
+                return;
+            case AudioGroup.BGM:
+                bgmSource.PlayOneShot(clip);
+                return;
+            case AudioGroup.SFX:
+                sfxSource.PlayOneShot(clip);
+                return;
+            default:
+                Debug.LogWarning("잘못된 AudioGroup");
+                return;
+        }
     }
 }
