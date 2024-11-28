@@ -66,7 +66,7 @@ public class Killing3 : MonoBehaviourPun
     {
         IsAttack = true;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         IsAttack = false;
     }
