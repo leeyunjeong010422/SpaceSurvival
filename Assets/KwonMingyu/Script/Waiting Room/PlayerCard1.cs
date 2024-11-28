@@ -34,7 +34,7 @@ public class PlayerCard1 : MonoBehaviour
     public void CardInfoReset()
     {
         playerName.text = "Empty";
-        readyText.text = "준비안됨";
+        readyText.text = "";
         readyText.color = Color.black;
         outline.effectColor = Color.black;
     }
