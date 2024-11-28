@@ -24,7 +24,8 @@ public class PlayerController4 : MonoBehaviourPun
 
     public int playerScore = 0;
 
-    private GameSceneTest4 gameSceneTest;
+    private TtangttameokgiGameScene gameScene;
+    private CubeId cubeId;
 
     private void Start()
     {
@@ -33,7 +34,8 @@ public class PlayerController4 : MonoBehaviourPun
 
         mainCamera = Camera.main;
 
-        gameSceneTest = FindObjectOfType<GameSceneTest4>();
+        gameScene = FindObjectOfType<TtangttameokgiGameScene>();
+        cubeId = FindObjectOfType<CubeId>();
 
         // 내 PlayerController를 LocalPlayer에 Tag로 연결
         if (photonView.IsMine)
@@ -154,7 +156,7 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Cube"))
+        if (gameScene != null && gameScene.gameStarted && photonView.IsMine && collision.gameObject.CompareTag("Cube"))
         {
             Renderer cubeRenderer = collision.gameObject.GetComponent<Renderer>();
             if (cubeRenderer != null)
@@ -166,18 +168,15 @@ public class PlayerController4 : MonoBehaviourPun
                     DecreaseScore(cubeRenderer.material.color);
 
                     // 큐브 색 변경
-                    cubeRenderer.material.color = playerColor;
+                    // cubeRenderer.material.color = playerColor;
 
                     // 색상 동기화만 처리 (점수는 동기화하지 않음)
-                    photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, collision.gameObject.GetInstanceID(), playerColor.r, playerColor.g, playerColor.b);
+                    photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, cubeId.GetId(collision.gameObject), playerColor.r, playerColor.g, playerColor.b);
 
                     if (!photonView.IsMine) return; // 로컬 플레이어만 점수 처리
 
-                    // 로컬 점수 증가
-                    playerScore++;
-
-                    // 점수를 다른 클라이언트에 동기화
-                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, playerScore);
+                    // 점수 증가를 다른 클라이언트에 동기화
+                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, 1);
 
                     // 로컬 UI 업데이트
                     UpdateLocalUI(PhotonNetwork.LocalPlayer.ActorNumber, playerScore);
@@ -199,7 +198,7 @@ public class PlayerController4 : MonoBehaviourPun
     [PunRPC]
     private void SyncCubeColor(int cubeID, float r, float g, float b)
     {
-        GameObject cube = FindCubeByID(cubeID); // 큐브 ID로 큐브를 찾음
+        GameObject cube = cubeId.GetCube(cubeID); // 큐브 ID로 큐브를 찾음
         if (cube != null)
         {
             Renderer cubeRenderer = cube.GetComponent<Renderer>();
@@ -211,7 +210,7 @@ public class PlayerController4 : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void SyncPlayerScore(int actorNumber, int score)
+    private void SyncPlayerScore(int actorNumber, int scoreChanged)
     {
         foreach (var player in PhotonNetwork.PlayerList)
         {
@@ -220,10 +219,10 @@ public class PlayerController4 : MonoBehaviourPun
                 PlayerController4 controller = player.TagObject as PlayerController4;
                 if (controller != null)
                 {
-                    controller.playerScore = score;
+                    controller.playerScore += scoreChanged;
 
                     // UI 업데이트
-                    UpdateLocalUI(player.ActorNumber, score);
+                    UpdateLocalUI(player.ActorNumber, controller.playerScore);
                 }
             }
         }
@@ -240,10 +239,9 @@ public class PlayerController4 : MonoBehaviourPun
                 if (controller != null && controller.playerColor == cubeColor)
                 {
                     Debug.LogWarning("점수가 차감되었습니다.");
-                    controller.playerScore--; // 해당 플레이어의 점수 차감
 
-                    // 점수 차감 후, 해당 플레이어의 점수를 모든 클라이언트와 동기화
-                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, player.ActorNumber, controller.playerScore);
+                    // 점수 차감 사실을 모든 클라이언트와 동기화
+                    photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, player.ActorNumber, -1);
                 }
             }
         }
