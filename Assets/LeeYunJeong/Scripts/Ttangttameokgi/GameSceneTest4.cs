@@ -136,22 +136,26 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
             PlayerController4 controller = player.TagObject as PlayerController4;
             if (controller != null)
             {
-                Debug.Log($"플레이어: {player.NickName}, 점수: {controller.playerScore}"); // 모든 플레이어의 점수 출력
-
+                // 최고 점수 찾기
                 if (controller.playerScore > highestScore)
                 {
                     highestScore = controller.playerScore;
                     highestPlayer = player;
                 }
             }
-            else
-            {
-                Debug.LogWarning($"플레이어 {player.NickName}의 TagObject가 null입니다.");
-            }
         }
 
+        // 최고 점수 플레이어 출력
         if (highestPlayer != null)
         {
+            string rankingText = $"<color=red>닉네임: {highestPlayer.NickName} / 점수: {highestScore}점</color>";
+
+            TMP_Text rankingTextComponent = endGamePanel.GetComponentInChildren<TMP_Text>();
+            if (rankingTextComponent != null)
+            {
+                rankingTextComponent.text = rankingText;
+            }
+
             Debug.Log($"최고 점수: {highestPlayer.NickName} - {highestScore}점");
         }
     }
