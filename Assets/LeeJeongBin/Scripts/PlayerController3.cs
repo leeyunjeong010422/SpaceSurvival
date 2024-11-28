@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerController3 : MonoBehaviourPun
 {
@@ -19,12 +20,17 @@ public class PlayerController3 : MonoBehaviourPun
 
     public List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
 
+    public LastManScore1 score;
+
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         photonTransformView = GetComponent<PhotonTransformView>();
         animator = GetComponent<Animator>();
         GameOver3.Instance.OnPlayerSpawn(this);
+
+        score = FindObjectOfType<LastManScore1>();
     }
 
     private void OnDestroy()
@@ -44,6 +50,7 @@ public class PlayerController3 : MonoBehaviourPun
             velocity = Vector3.zero; // 네트워크 상 다른 플레이어는 로컬에서 움직이지 않음
         }
     }
+
 
     private void HandleMovement()
     {
@@ -115,11 +122,11 @@ public class PlayerController3 : MonoBehaviourPun
         }
 
         // 체크포인트 진입시 전체 알림
-        photonView.RPC(nameof(TriggerCheckPointRPC), RpcTarget.All);
+        photonView.RPC(nameof(TriggerCheckPointRPC), RpcTarget.All, checkPoint.CheckPointNum);
 
         checkPointsReached++;
         visitedCheckPoint.Add(checkPoint);
-
+        
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {
             Debug.Log($"모든 체크포인트를 통과했습니다");
@@ -128,10 +135,11 @@ public class PlayerController3 : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void TriggerCheckPointRPC()
+    private void TriggerCheckPointRPC(int checkPointNum)
     {
         // 사운드 재생 필요
         Debug.Log($"플레이어 {photonView.Owner.NickName} 체크포인트 통과");
+        score.UpdateScore(photonView.Owner, checkPointNum);
 
     }
 

@@ -379,6 +379,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   checkPointsReached: 0
   visitedCheckPoint: []
+  score: {fileID: 0}
 --- !u!114 &8075774712913738872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,3 +415,5 @@ MonoBehaviour:
     LayerIndex: 0
   - SynchronizeType: 0
     LayerIndex: 1
+  - SynchronizeType: 1
+    LayerIndex: 2

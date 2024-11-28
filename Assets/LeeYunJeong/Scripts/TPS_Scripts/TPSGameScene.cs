@@ -7,9 +7,10 @@ using UnityEngine.AI;
 
 public class TPSGameScene : MiniGameSceneBase
 {
-    [SerializeField] private TMP_Text timerText; // 타이머
-    [SerializeField] private GameObject endGamePanel; // 게임 끝난 후 승리자 표시
-    [SerializeField] private float gameDuration = 30f; // 게임 몇 초 동안 할 건지
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private GameObject endGamePanel;
+    [SerializeField] private GameObject winninPointPanel;
+    [SerializeField] private float gameDuration = 30f;
 
     private float gameTimer;
     private bool gameStarted = false;
@@ -83,11 +84,11 @@ public class TPSGameScene : MiniGameSceneBase
         // 타이머가 끝났을 경우 게임 종료
         if (gameTimer <= 0)
         {
-            EndGame();
+            StartCoroutine(EndGameRoutine());
         }
     }
 
-    private void EndGame()
+    private IEnumerator EndGameRoutine()
     {
         Debug.Log("게임 종료");
         gameStarted = false;
@@ -98,6 +99,10 @@ public class TPSGameScene : MiniGameSceneBase
         }
 
         DisplayRankings();
+
+        yield return new WaitForSeconds(3f);
+
+        winninPointPanel.SetActive(true);
     }
 
     private void DisplayRankings()
@@ -138,6 +143,9 @@ public class TPSGameScene : MiniGameSceneBase
                 if (scorer.isLocalPlayer)
                 {
                     rankingDisplay += $"<color=red>닉네임: {playerName} / 점수: {score}</color>\n";
+
+                    // 로컬 플레이어에 승점 추가
+                    PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
                 }
                 else
                 {

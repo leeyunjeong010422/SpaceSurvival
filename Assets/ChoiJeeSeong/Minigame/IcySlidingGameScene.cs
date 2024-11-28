@@ -9,7 +9,7 @@ using UnityEngine;
 public class IcySlidingGameScene : MiniGameSceneBase
 {
     [SerializeField] PlayerInfoPanel2 playerInfoUI;
-    [SerializeField] TMP_Text countdownText;
+    [SerializeField] CountdownText countdownText;
     [SerializeField] Transform icePlatform;
     [SerializeField] LocalPlayerTrigger2 failTrigger;
 
@@ -47,26 +47,18 @@ public class IcySlidingGameScene : MiniGameSceneBase
 
     protected override void GameStart()
     {
-        gamePlayRoutine = StartCoroutine(CountDownAndStart());
+        countdownText.CountdownStart(5);
+        countdownText.OnCountdownComplete.AddListener(() => gamePlayRoutine = StartCoroutine(GamePlayeRoutine()));
     }
 
-    private IEnumerator CountDownAndStart()
+    private IEnumerator GamePlayeRoutine()
     {
-        YieldInstruction waitCountDown = new WaitForSeconds(1f);
         YieldInstruction platformReducePeriod = new WaitForSeconds(0.1f);
         Vector3 scaleReducePerPeriod;
         {
             float reducePerPeriod = 0.1f / maxPlayTime;
             scaleReducePerPeriod = new Vector3(reducePerPeriod, 0f, reducePerPeriod);
         }
-
-        countdownText.gameObject.SetActive(true);
-        for (int i = 0; i < 5; i++)
-        {
-            countdownText.text = (5 - i).ToString();
-            yield return waitCountDown;
-        }
-        countdownText.gameObject.SetActive(false);
 
         // 카운트다운 종료 후 입력 활성화
         localPlayerCharacter.enabled = true;

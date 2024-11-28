@@ -42,31 +42,31 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
         animator = GetComponent<Animator>();
 
+        UpdateProfileInfo();
+
         if (photonView.IsMine)
         {
             // PlayerController4를 로컬 플레이어의 TagObject로 설정
             PhotonNetwork.LocalPlayer.TagObject = this;
+
+            if (countdownCanvas == null)
+            {
+                countdownCanvas = GameObject.Find("CountdownCanvas");
+            }
+
+            if (countdownText == null && countdownCanvas != null)
+            {
+                countdownText = countdownCanvas.GetComponentInChildren<TMP_Text>();
+            }
+
+            if (countdownCanvas != null)
+            {
+                countdownCanvas.SetActive(false);
+            };
+
+            takeDamagePanel = GameObject.Find("Canvas/TakeDamagePanel");
+            takeDamagePanel?.SetActive(false);
         }
-
-        UpdateProfileInfo();
-
-        if (countdownCanvas == null)
-        {
-            countdownCanvas = GameObject.Find("CountdownCanvas");
-        }
-
-        if (countdownText == null && countdownCanvas != null)
-        {
-            countdownText = countdownCanvas.GetComponentInChildren<TMP_Text>();
-        }
-
-        if (countdownCanvas != null)
-        {
-            countdownCanvas.SetActive(false);
-        };
-
-        takeDamagePanel = GameObject.Find("Canvas/TakeDamagePanel");
-        takeDamagePanel?.SetActive(false);
     }
 
     private void Update()
