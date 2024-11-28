@@ -31,7 +31,10 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Vector3 spawnPosition = RandomPositionNavMesh(Vector3.zero, 10f);
-        PhotonNetwork.Instantiate("TTMG_Player4", spawnPosition, Quaternion.identity);
+        GameObject playerObject = PhotonNetwork.Instantiate("TTMG_Player4", spawnPosition, Quaternion.identity);
+
+        PlayerController4 playerController = playerObject.GetComponent<PlayerController4>();
+        PhotonNetwork.LocalPlayer.TagObject = playerController;
 
         endGamePanel = GameObject.Find("Canvas/EndGamePanel");
         endGamePanel?.SetActive(false);
@@ -110,7 +113,7 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
     private void StartGameTimer()
     {
         Debug.Log("타이머 시작한다");
-        gameTimer = 30f;
+        gameTimer = 10f;
     }
 
     private void EndGame()
@@ -119,7 +122,44 @@ public class GameSceneTest4 : MonoBehaviourPunCallbacks
         gameStarted = false;
         isGameEnded = true;
         endGamePanel?.SetActive(true);
+
+        DisplayRankings();
     }
+
+    private void DisplayRankings()
+    {
+        Player highestPlayer = null;
+        int highestScore = -1;
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            PlayerController4 controller = player.TagObject as PlayerController4;
+            if (controller != null)
+            {
+                // 최고 점수 찾기
+                if (controller.playerScore > highestScore)
+                {
+                    highestScore = controller.playerScore;
+                    highestPlayer = player;
+                }
+            }
+        }
+
+        // 최고 점수 플레이어 출력
+        if (highestPlayer != null)
+        {
+            string rankingText = $"<color=red>닉네임: {highestPlayer.NickName} / 점수: {highestScore}점</color>";
+
+            TMP_Text rankingTextComponent = endGamePanel.GetComponentInChildren<TMP_Text>();
+            if (rankingTextComponent != null)
+            {
+                rankingTextComponent.text = rankingText;
+            }
+
+            Debug.Log($"최고 점수: {highestPlayer.NickName} - {highestScore}점");
+        }
+    }
+
 
     private Vector3 RandomPositionNavMesh(Vector3 center, float range)
     {

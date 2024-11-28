@@ -39,6 +39,8 @@ public class PlayerController4 : MonoBehaviourPun
         if (photonView.IsMine)
         {
             PhotonNetwork.LocalPlayer.TagObject = this; // LocalPlayer에 현재 PlayerController 연결
+            Debug.Log($"TagObject 설정완료: {PhotonNetwork.LocalPlayer.NickName}");
+            photonView.RPC(nameof(SyncTagObject), RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber); // 다른 플레이어에게 동기화
 
             UpdateCameraPosition();
 
@@ -49,6 +51,20 @@ public class PlayerController4 : MonoBehaviourPun
         }
 
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    [PunRPC]
+    private void SyncTagObject(int actorNumber)
+    {
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.ActorNumber == actorNumber)
+            {
+                player.TagObject = this;
+                Debug.Log($"플레이어 {player.NickName}의 TagObject가 설정되었습니다.");
+                break;
+            }
+        }
     }
 
     private void Update()
@@ -148,8 +164,8 @@ public class PlayerController4 : MonoBehaviourPun
                 // 다른 플레이어가 칠한 큐브를 밟으면 점수를 차감
                 if (cubeRenderer.material.color != playerColor)
                 {
-                    // 해당 큐브를 칠한 플레이어의 점수를 차감
-                    photonView.RPC(nameof(DecreaseScoreForPlayer), RpcTarget.All, cubeRenderer.material.color.r, cubeRenderer.material.color.g, cubeRenderer.material.color.b);
+                    // 큐브 색이 다른 플레이어의 색이라면 점수 차감
+                    DecreaseScore(cubeRenderer.material.color);
 
                     // 큐브 색 변경
                     cubeRenderer.material.color = playerColor;
@@ -166,20 +182,18 @@ public class PlayerController4 : MonoBehaviourPun
                     photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, playerScore);
 
                     // 로컬 UI 업데이트
-                    UpdateLocalUI();
+                    UpdateLocalUI(PhotonNetwork.LocalPlayer.ActorNumber, playerScore);
                 }
             }
         }
     }
 
-    // 큐브 색 동기화
-    private void UpdateLocalUI()
+    private void UpdateLocalUI(int actorNumber, int score)
     {
         PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
         if (profileManager != null)
         {
-            // 모든 클라이언트가 해당 플레이어의 UI를 업데이트
-            profileManager.UpdateProfileInfo(PhotonNetwork.LocalPlayer.ActorNumber - 1, playerScore);
+            profileManager.UpdateProfileInfo(actorNumber - 1, score); // UI 동기화
         }
     }
 
@@ -201,22 +215,23 @@ public class PlayerController4 : MonoBehaviourPun
     [PunRPC]
     private void SyncPlayerScore(int actorNumber, int score)
     {
-        // 특정 플레이어(actorNumber)의 점수를 업데이트
-        if (PhotonNetwork.LocalPlayer.ActorNumber == actorNumber)
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            playerScore = score; // 본인의 점수만 업데이트
-        }
+            if (player.ActorNumber == actorNumber)
+            {
+                PlayerController4 controller = player.TagObject as PlayerController4;
+                if (controller != null)
+                {
+                    controller.playerScore = score;
 
-        // 모든 클라이언트에서 UI 업데이트
-        PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
-        if (profileManager != null)
-        {
-            profileManager.UpdateProfileInfo(actorNumber - 1, score);
+                    // UI 업데이트
+                    UpdateLocalUI(player.ActorNumber, score);
+                }
+            }
         }
     }
 
-    [PunRPC]
-    private void DecreaseScoreForPlayer(float r, float g, float b)
+    private void DecreaseScore(Color cubeColor)
     {
         // 큐브를 칠한 플레이어의 색이 r, g, b와 일치하면 해당 플레이어의 점수를 차감
         foreach (var player in PhotonNetwork.PlayerList)
@@ -224,7 +239,7 @@ public class PlayerController4 : MonoBehaviourPun
             if (player.TagObject != null)
             {
                 PlayerController4 controller = player.TagObject as PlayerController4;
-                if (controller != null && controller.playerColor.r == r && controller.playerColor.g == g && controller.playerColor.b == b)
+                if (controller != null && controller.playerColor == cubeColor)
                 {
                     Debug.LogWarning("점수가 차감되었습니다.");
                     controller.playerScore--; // 해당 플레이어의 점수 차감
