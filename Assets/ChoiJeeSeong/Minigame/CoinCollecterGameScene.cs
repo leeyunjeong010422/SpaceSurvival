@@ -11,7 +11,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 {
     [SerializeField] MiniGameScore scoreManager;
     [SerializeField] PlayerInfoPanel2 playerInfoUI;
-    [SerializeField] TMP_Text countdownText;
+    [SerializeField] CountdownText countdownText;
     [SerializeField] Light mainLight; // 타임아웃 요소: 조명이 점점 어두워져서 Emission을 갖는 코인이 강조됨
 
     // 승점 UI
@@ -66,22 +66,19 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     {
         // 모든 플레이어의 로딩이 완료된 시점
         // 게임 타이머 시작
-        gamePlayRoutine = StartCoroutine(CountDownAndStart());
+        countdownText.CountdownStart(5);
+        countdownText.OnCountdownComplete.AddListener(GamePlay);
     }
 
-    private IEnumerator CountDownAndStart()
+    private void GamePlay()
     {
-        YieldInstruction waitCountDown = new WaitForSeconds(1f);
+        gamePlayRoutine = StartCoroutine(GamePlayRoutine());
+    }
+
+    private IEnumerator GamePlayRoutine()
+    {
         YieldInstruction lightReducePeriod = new WaitForSeconds(0.1f);
         float lightReducePerPeriod = 0.1f / maxPlayTime;
-
-        countdownText.gameObject.SetActive(true);
-        for (int i = 0; i < 5; i++)
-        {
-            countdownText.text = (5 - i).ToString();
-            yield return waitCountDown;
-        }
-        countdownText.gameObject.SetActive(false);
 
         // 카운트다운 종료 후 입력 활성화
         localPlayerCharacter.enabled = true;
@@ -140,14 +137,9 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         if (winnerScore == scoreManager.ScoreTable[PhotonNetwork.LocalPlayer.ActorNumber])
         {
             // 최고점 혹은 최고점과 동점이라면 승리
-            countdownText.text = "승리";
             PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint()); // 승점 획득
         }
-        else
-        {
-            countdownText.text = "패배";
-        }
-        countdownText.gameObject.SetActive(true);
+
         winningScoreUI.gameObject.SetActive(true);
     }
 }
