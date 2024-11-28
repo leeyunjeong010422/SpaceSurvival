@@ -154,8 +154,6 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (gameSceneTest == null || !gameSceneTest.gameStarted) return;
-
         if (collision.gameObject.CompareTag("Cube"))
         {
             Renderer cubeRenderer = collision.gameObject.GetComponent<Renderer>();
