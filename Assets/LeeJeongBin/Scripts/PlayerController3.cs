@@ -122,16 +122,10 @@ public class PlayerController3 : MonoBehaviourPun
         }
 
         // 체크포인트 진입시 전체 알림
-        photonView.RPC(nameof(TriggerCheckPointRPC), RpcTarget.All);
+        photonView.RPC(nameof(TriggerCheckPointRPC), RpcTarget.All, checkPoint.CheckPointNum);
 
         checkPointsReached++;
         visitedCheckPoint.Add(checkPoint);
-
-       // if (score != null)
-       // {
-       //     int checkPointNum = checkPoint.CheckPointNum;
-       //     score.UpdateScore(photonView.Owner, checkPointNum);
-       // }
 
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {
@@ -141,10 +135,11 @@ public class PlayerController3 : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void TriggerCheckPointRPC()
+    private void TriggerCheckPointRPC(int checkPointNum)
     {
         // 사운드 재생 필요
         Debug.Log($"플레이어 {photonView.Owner.NickName} 체크포인트 통과");
+        score.UpdateScore(photonView.Owner, checkPointNum);
 
     }
 

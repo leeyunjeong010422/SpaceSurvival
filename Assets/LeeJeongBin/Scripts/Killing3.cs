@@ -15,6 +15,8 @@ public class Killing3 : MonoBehaviourPun
     private Animator animator;
     private bool IsAttack = false;
 
+    private Coroutine playerDeadCoroutine;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -139,7 +141,8 @@ public class Killing3 : MonoBehaviourPun
                 else if (target.CompareTag("Player"))
                 {
                     // 플레이어 사망 처리
-                    StartCoroutine(HandlePlayerDeath(target.GetComponent<PlayerController3>()));
+                    if (playerDeadCoroutine != null) return;
+                    playerDeadCoroutine = StartCoroutine(HandlePlayerDeath(target.GetComponent<PlayerController3>()));
                 }
                 //   if (target.CompareTag("Player"))
                 //       target.GetComponent<PlayerController3>().score.PlayerDead(targetPhotonView.Owner);
@@ -161,6 +164,7 @@ public class Killing3 : MonoBehaviourPun
         {
             PhotonNetwork.Destroy(playerController.gameObject);
         }
+        playerDeadCoroutine = null;
     }
 
     // AI 사망시 5초뒤 Destroy 및 사망 애니메이션
