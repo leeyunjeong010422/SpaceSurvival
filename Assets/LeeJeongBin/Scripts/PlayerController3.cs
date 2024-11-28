@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerController3 : MonoBehaviourPun
 {
@@ -19,12 +20,17 @@ public class PlayerController3 : MonoBehaviourPun
 
     public List<CheckPoint3> visitedCheckPoint = new List<CheckPoint3>();
 
+    public LastManScore1 score;
+
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         photonTransformView = GetComponent<PhotonTransformView>();
         animator = GetComponent<Animator>();
         GameOver3.Instance.OnPlayerSpawn(this);
+
+        score = FindObjectOfType<LastManScore1>();
     }
 
     private void OnDestroy()
@@ -44,6 +50,7 @@ public class PlayerController3 : MonoBehaviourPun
             velocity = Vector3.zero; // 네트워크 상 다른 플레이어는 로컬에서 움직이지 않음
         }
     }
+
 
     private void HandleMovement()
     {
@@ -119,6 +126,12 @@ public class PlayerController3 : MonoBehaviourPun
 
         checkPointsReached++;
         visitedCheckPoint.Add(checkPoint);
+
+       // if (score != null)
+       // {
+       //     int checkPointNum = checkPoint.CheckPointNum;
+       //     score.UpdateScore(photonView.Owner, checkPointNum);
+       // }
 
         if (checkPointsReached >= checkPoint.TotalCheckPoints)
         {
