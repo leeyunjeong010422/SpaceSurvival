@@ -153,12 +153,12 @@ public class Killing3 : MonoBehaviourPun
     // 플레이어 사망시 5초뒤 Destroy 및 사망 애니메이션
     private IEnumerator HandlePlayerDeath(PlayerController3 playerController)
     {
+        playerController.enabled = false;
+
         Animator animator = playerController.GetComponent<Animator>();
         animator.SetTrigger("Die4");
 
         yield return new WaitForSeconds(5f);
-
-        playerController.enabled = false;
 
         if (PhotonNetwork.IsMasterClient)
         {
