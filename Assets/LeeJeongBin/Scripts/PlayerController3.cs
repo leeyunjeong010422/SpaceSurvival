@@ -100,18 +100,7 @@ public class PlayerController3 : MonoBehaviourPun
     {
         // 이동 속도 계산
         float speed = new Vector3(velocity.x, 0, velocity.z).magnitude;
-
-        // Speed 애니메이션 파라미터 업데이트
         animator.SetFloat("Speed", speed);
-
-        // 애니메이션 전환을 위한 Speed 값 로깅 (디버깅용)
-        Debug.Log($"Current Speed: {speed}");
-
-        // 예시: 죽음 모션과 같은 특정 애니메이션 호출 (필요 시 추가)
-        if (Input.GetKeyDown(KeyCode.K)) // 예: K 키로 죽는 애니메이션 트리거
-        {
-            animator.SetTrigger("Die4");
-        }
     }
 
     public void OnTriggerCheckPoint(CheckPoint3 checkPoint)
