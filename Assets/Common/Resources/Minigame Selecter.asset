@@ -29,3 +29,7 @@ MonoBehaviour:
     infoPrefab: {fileID: 7582887204830617854, guid: 0389af9c3ad86854bbdf3000f29d340a, type: 3}
     sceneName: TPSGame
     buildIndex: 5
+  - minigame: 4
+    infoPrefab: {fileID: 7582887204830617854, guid: 1281f1f2ed7cff74a9d8ebc1a88daa34, type: 3}
+    sceneName: Ttangttameokgi
+    buildIndex: 6

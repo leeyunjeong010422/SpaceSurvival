@@ -10,6 +10,7 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
 {
     [SerializeField] private TMP_Text timerText;
     private GameObject endGamePanel;
+    [SerializeField] GameObject winningPointPanel;
     [SerializeField] private float gameDuration = 30f;
 
     private float gameTimer; // 게임 시간
@@ -129,6 +130,12 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
             }
 
             Debug.Log($"최고 점수: {highestPlayer.NickName} - {highestScore}점");
+
+            if (highestPlayer == PhotonNetwork.LocalPlayer)
+            {
+                PhotonNetwork.LocalPlayer.SetWinningPoint(10 + PhotonNetwork.LocalPlayer.GetWinningPoint());
+            }
+            winningPointPanel.SetActive(true);
         }
     }
 

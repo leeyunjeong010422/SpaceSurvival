@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/LeeYunJeong/TPSGame.unity
     guid: e5c8ee066ff4e9d4c9059b3b663ac102
+  - enabled: 1
+    path: Assets/LeeYunJeong/Ttangttameokgi.unity
+    guid: b502eab57fa573e4f8efb99f2916ea9d
   m_configObjects: {}

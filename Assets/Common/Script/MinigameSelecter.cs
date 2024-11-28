@@ -16,6 +16,7 @@ public class MinigameSelecter : SingletonScriptable<MinigameSelecter>
         ICY_SLIDING,
         LAST_MAN,
         TPS_SHOOTING,
+        TTANG,
     }
 
     [System.Serializable]

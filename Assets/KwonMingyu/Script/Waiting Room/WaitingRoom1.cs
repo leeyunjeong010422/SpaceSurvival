@@ -20,6 +20,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     [SerializeField] float power;
     [SerializeField] TMP_Text winnerText;
 
+    [SerializeField] int testField = -1;
+
     private bool winnerEvent;
 
     private void Update()
@@ -139,7 +141,11 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
 
-        PhotonNetwork.LoadLevel(4);
+        // 기본적으로 무작위 씬 선택으로 이동, testField 설정시 해당 씬으로 이동
+        if (testField < 0)
+            PhotonNetwork.LoadLevel(1);
+        else
+            PhotonNetwork.LoadLevel(testField);
     }
 
     public IEnumerator WinnerEventCoroutine()
