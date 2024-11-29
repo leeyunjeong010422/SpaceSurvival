@@ -28,10 +28,20 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     {
         RegisterSingleton(this);
 
+    }
+
+    private void Start()
+    {
+        // 음량 기본값 설정
+        // 플레이어 로컬 설정 파일을 만든다면 여기서 입력
         for (int i = 0; i < mixerVolume.Length; i++)
         {
             mixerVolume[i].scale = 1f;
         }
+
+        UpdateMixer(AudioGroup.MASTER);
+        UpdateMixer(AudioGroup.BGM);
+        UpdateMixer(AudioGroup.SFX);
     }
 
     /// <summary>
@@ -73,18 +83,18 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     public float GetMixerScale(AudioGroup group)
     {
-        if (false == mixer.GetFloat(paramNames[(int)group], out float value))
-        {
-            Debug.LogWarning("잘못된 AudioGroup");
-        }
-        mixerVolume[(int)group].scale = value;
-        return (value * 0.05f) + 1f;
+        return (mixerVolume[(int)group].scale * 0.05f) + 1f;
     }
 
     public void SetMute(AudioGroup group, bool isMute)
     {
         mixerVolume[(int)group].isMute = isMute;
         UpdateMixer(group);
+    }
+
+    public bool GetMute(AudioGroup group)
+    {
+        return mixerVolume[(int)group].isMute;
     }
 
     private void UpdateMixer(AudioGroup group)

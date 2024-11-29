@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.XR;
 
-public class AIController3 : MonoBehaviour
+public class AIController3 : MonoBehaviourPun
 {
     public float moveSpeed;
     public float minPauseTime;
@@ -30,6 +31,32 @@ public class AIController3 : MonoBehaviour
         navMeshAgent.autoBraking = false; // AI가 도착 지점에 도달하였을 경우 즉시 멈춤
         navMeshAgent.updateRotation = true;  // 회전을 NavMeshAgent에서 처리
         StartCoroutine(AILoop());
+    }
+
+    public void DieAICharacter()
+    {
+        photonView.RPC(nameof(DieAICharacterRPC), RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void DieAICharacterRPC()
+    {
+        // 사운드 재생(공통)
+
+        if (false == PhotonNetwork.IsMasterClient)
+            return;
+
+        // 사망 처리(마스터)
+        animator.SetTrigger("Die4");
+        navMeshAgent.enabled = false;
+        StartCoroutine(NetworkDestroyRoutine(5f));
+    }
+
+    private IEnumerator NetworkDestroyRoutine(float waitSeconds)
+    {
+        yield return new WaitForSeconds(waitSeconds);
+
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
     private IEnumerator AILoop()
