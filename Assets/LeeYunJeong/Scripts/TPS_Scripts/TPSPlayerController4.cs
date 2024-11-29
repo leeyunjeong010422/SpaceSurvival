@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -203,7 +204,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
         TPSPlayerProfileManager4 profileManager = FindObjectOfType<TPSPlayerProfileManager4>();
         if (profileManager != null)
         {
-            profileManager.UpdateProfileInfo(photonView.OwnerActorNr - 1, score, currentHealth);
+            profileManager.UpdateProfileInfo(photonView.Owner.GetPlayerNumber(), score, currentHealth);
         }
     }
 

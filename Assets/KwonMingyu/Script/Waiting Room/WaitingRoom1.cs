@@ -83,7 +83,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 플레이어 룸 넘버의 카드에 정보를 입력
         foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            playerCards[player.GetPlayerNumber()].CardInfoCanger(player);
+            int pNum = player.GetPlayerNumber();
+            if (pNum < 0)
+                continue;
+            playerCards[pNum].CardInfoCanger(player);
         }
 
         // 색갈 업데이트
@@ -101,7 +104,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 카드의 아웃라인 색갈을 플레이어 색갈로 변경
         foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            playerCards[player.GetPlayerNumber()].CardOutLineSet(player.GetNumberColor());
+            int pNum = player.GetPlayerNumber();
+            if (pNum < 0)
+                continue;
+            playerCards[pNum].CardOutLineSet(player.GetNumberColor());
         }
 
     }
