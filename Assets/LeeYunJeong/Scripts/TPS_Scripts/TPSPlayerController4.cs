@@ -35,6 +35,8 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
     [SerializeField] AudioClip fireSound;
     [SerializeField] AudioClip takeDamageSound;
 
+    AudioSource fireSoundSource;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,6 +48,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
         mainCamera = Camera.main;
 
         animator = GetComponent<Animator>();
+        fireSoundSource = GetComponent<AudioSource>();
 
         UpdateProfileInfo();
 
@@ -406,6 +409,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void PlayFireSound()
     {
-        GameManager.Sound.PlaySFX(fireSound, 0.8f);
+        fireSoundSource.Play();
+        //GameManager.Sound.PlaySFX(fireSound, 0.8f);
     }
 }
