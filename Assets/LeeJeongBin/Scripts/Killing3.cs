@@ -1,8 +1,6 @@
-using System;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,38 +25,17 @@ public class Killing3 : MonoBehaviourPun
         if (!photonView.IsMine)
             return; // 내 플레이어가 아닌 경우 공격 무시
 
-        if (Input.GetMouseButtonDown(0) && !IsAttack) 
+        if (Input.GetMouseButtonDown(0) && !IsAttack)
         {
+            // 어택 애니메이션 트리거
+            animator.SetTrigger("MeleeAttack");
+            photonView.RPC("SyncTrigger", RpcTarget.All, "MeleeAttack");
+
+            // 레이어2 활성화
+            animator.SetLayerWeight(2, 1f);
+            photonView.RPC("SetLayerWeight", RpcTarget.All, 2, 1f);
+
             StartCoroutine(AttackDelay());
-
-            attackRange.SetActive(true);
-
-            if (animator != null)
-            {
-                // 어택 애니메이션 트리거
-                animator.SetTrigger("MeleeAttack");
-                photonView.RPC("SyncTrigger", RpcTarget.All, "MeleeAttack");
-
-                // 레이어2 활성화
-                animator.SetLayerWeight(2, 1f);
-                photonView.RPC("SetLayerWeight", RpcTarget.All, 2, 1f);
-            }
-        }
-
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            attackRange.SetActive(false);
-
-            // 애니메이션 종료 후 레이어2를 비활성화
-            if (animator != null)
-            {
-                animator.SetTrigger("Idle4");
-                photonView.RPC("SyncTrigger", RpcTarget.All, "Idle4");
-
-                // 애니메이션 종료 후 레이어2 비활성화
-                StartCoroutine(WaitForAnimation());
-            }
         }
     }
 
@@ -66,7 +43,15 @@ public class Killing3 : MonoBehaviourPun
     {
         IsAttack = true;
 
-        yield return new WaitForSeconds(1f);
+        // 0.1초만 공격 콜라이더 활성화
+        attackRange.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        attackRange.SetActive(false);
+
+        yield return new WaitForSeconds(0.9f);
+
+        animator.SetLayerWeight(2, 0f);
+        photonView.RPC("SetLayerWeight", RpcTarget.All, 2, 0f);
 
         IsAttack = false;
     }
