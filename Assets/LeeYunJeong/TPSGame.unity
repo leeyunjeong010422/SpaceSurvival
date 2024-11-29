@@ -3950,6 +3950,11 @@ MonoBehaviour:
   - {fileID: 674096766}
   - {fileID: 1270781572}
   - {fileID: 1577150127}
+  profileCardsHead:
+  - {fileID: 2018540264}
+  - {fileID: 1093703500}
+  - {fileID: 1950872694}
+  - {fileID: 1975574942}
   nickNameTexts:
   - {fileID: 1142418500}
   - {fileID: 1888209575}

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject[] profileCards;
+    [SerializeField] Image[] profileCardsHead;
     [SerializeField] TMP_Text[] nickNameTexts;
     [SerializeField] TMP_Text[] scoreTexts; // 본인 땅 개수 (점수)
     [SerializeField] Color myProfileColor = default; // 내 프로필 카드 색상
@@ -31,11 +32,15 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         {
             card.SetActive(false);
         }
+        SetMyProfileHeadColor();
+
         InitializeProfileCards();
     }
 
     public override void OnJoinedRoom()
     {
+        SetMyProfileHeadColor();
+
         // 프로필 카드 초기화
         InitializeProfileCards();
 
@@ -51,6 +56,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     {
         // 플레이어가 입장할 때마다 프로필 카드 활성화
         InitializeProfileCards();
+        SetMyProfileHeadColor();
     }
 
     // 플레이어가 나가면 카드 업데이트
@@ -64,11 +70,37 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         InitializeProfileCards();
     }
 
+    private void SetMyProfileHeadColor()
+    {
+        int playerCount = PhotonNetwork.PlayerList.Length;
+
+        for (int i = 0; i < playerCount; i++)
+        {
+            Player player = PhotonNetwork.PlayerList[i];
+
+            if (profileCardsHead[i] != null)
+            {
+                if (PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
+                {
+                    // 로컬 플레이어의 프로필 색상 변경
+                    profileCardsHead[i].color = PhotonNetwork.LocalPlayer.GetNumberColor();
+                    Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}의 프로필 헤드 색상 변경");
+                }
+                else
+                {
+                    profileCardsHead[i].color = player.GetNumberColor(); // 다른 플레이어의 색상을 설정
+                    Debug.Log($"{player.NickName}의 프로필 헤드 색상 변경");
+                }
+            }
+        }
+    }
+
+
     private void InitializeProfileCards()
     {
         int playerCount = PhotonNetwork.PlayerList.Length; // 현재 방에 있는 플레이어 수
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < playerCount; i++)
         {
             profileCards[i].SetActive(i < playerCount);
 

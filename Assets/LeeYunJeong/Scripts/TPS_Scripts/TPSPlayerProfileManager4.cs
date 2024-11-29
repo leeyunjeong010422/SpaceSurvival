@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TPSPlayerProfileManager4 : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject[] profileCards;
+    [SerializeField] Image[] profileCardsHead;
     [SerializeField] TMP_Text[] nickNameTexts;
     [SerializeField] TMP_Text[] scoreTexts;
     [SerializeField] TMP_Text[] hpTexts;
@@ -28,11 +29,15 @@ public class TPSPlayerProfileManager4 : MonoBehaviourPunCallbacks
         {
             card.SetActive(false);
         }
+        SetMyProfileHeadColor();
+
         InitializeProfileCards();
     }
 
     public override void OnJoinedRoom()
     {
+        SetMyProfileHeadColor();
+
         // 프로필 카드 초기화
         InitializeProfileCards();
 
@@ -48,12 +53,38 @@ public class TPSPlayerProfileManager4 : MonoBehaviourPunCallbacks
     {
         // 플레이어가 입장할 때마다 프로필 카드 활성화
         InitializeProfileCards();
+        SetMyProfileHeadColor();
     }
 
     // 플레이어가 나가면 카드 업데이트
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         InitializeProfileCards();
+    }
+
+    private void SetMyProfileHeadColor()
+    {
+        int playerCount = PhotonNetwork.PlayerList.Length;
+
+        for (int i = 0; i < playerCount; i++)
+        {
+            Player player = PhotonNetwork.PlayerList[i];
+
+            if (profileCardsHead[i] != null)
+            {
+                if (PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
+                {
+                    // 로컬 플레이어의 프로필 색상 변경
+                    profileCardsHead[i].color = PhotonNetwork.LocalPlayer.GetNumberColor();
+                    Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}의 프로필 헤드 색상 변경");
+                }
+                else
+                {
+                    profileCardsHead[i].color = player.GetNumberColor(); // 다른 플레이어의 색상을 설정
+                    Debug.Log($"{player.NickName}의 프로필 헤드 색상 변경");
+                }
+            }
+        }
     }
 
     // 플레이어 수에 맞게 프로필 카드 활성화
