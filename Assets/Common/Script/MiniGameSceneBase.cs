@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 {
     [SerializeField] AudioClip bgmClip;
+    [SerializeField, Range(0f, 1f)] float bgmVolumeScale = 1f;
 
     protected virtual void Start()
     {
@@ -40,7 +41,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
         if (bgmClip != null)
         {
-            GameManager.Sound.PlayBGM(bgmClip);
+            GameManager.Sound.PlayBGM(bgmClip, bgmVolumeScale);
         }
     }
 

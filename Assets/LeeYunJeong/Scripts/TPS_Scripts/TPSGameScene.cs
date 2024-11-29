@@ -11,7 +11,6 @@ public class TPSGameScene : MiniGameSceneBase
     [SerializeField] private GameObject endGamePanel;
     [SerializeField] private GameObject winninPointPanel;
     [SerializeField] private float gameDuration = 30f;
-    [SerializeField] AudioClip TPSBGM;
 
     private float gameTimer;
     private bool gameStarted = false;
@@ -39,7 +38,6 @@ public class TPSGameScene : MiniGameSceneBase
     {
         // 모든 플레이어 로딩 완료 후 게임 시작
         StartCoroutine(GameStartRoutine());
-        GameManager.Sound.PlayBGM(TPSBGM, 0.8f);
     }
 
     private IEnumerator GameStartRoutine()

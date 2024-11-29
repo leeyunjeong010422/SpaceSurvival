@@ -416,11 +416,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4378009f1870fec4c901eab15a3f7599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 83bd8f42dbcc9a245bde3487cc3979be, type: 3}
+  bgmVolumeScale: 0.4
   timerText: {fileID: 659517896}
   endGamePanel: {fileID: 3616348879701337000}
   winninPointPanel: {fileID: 962453815}
   gameDuration: 30
-  TPSBGM: {fileID: 8300000, guid: 83bd8f42dbcc9a245bde3487cc3979be, type: 3}
 --- !u!4 &59978490
 Transform:
   m_ObjectHideFlags: 0
