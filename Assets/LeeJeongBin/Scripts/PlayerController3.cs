@@ -150,6 +150,7 @@ public class PlayerController3 : MonoBehaviourPun
     {
         transform.GetComponent<Animator>().SetTrigger("Die4");
         if (dead || !photonView.IsMine) return;
+        transform.GetComponent<Killing3>().enabled = false;
         dead = true;
         StartCoroutine(PlayerDestroy());
 
