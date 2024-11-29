@@ -11,6 +11,9 @@ public class AudioMixerSettingPanel : MonoBehaviour
     [SerializeField] Slider masterSlider;
     [SerializeField] Slider bgmSlider;
     [SerializeField] Slider sfxSlider;
+    [SerializeField] Toggle masterMuteToggle;
+    [SerializeField] Toggle bgmMuteToggle;
+    [SerializeField] Toggle sfxMuteToggle;
 
     private AudioGroup targetGroup;
     private bool valueChanged = false;
@@ -24,6 +27,10 @@ public class AudioMixerSettingPanel : MonoBehaviour
         masterSlider.onValueChanged.AddListener(value => { valueChanged = true; targetGroup = AudioGroup.MASTER; });
         bgmSlider.onValueChanged.AddListener(value => { valueChanged = true; targetGroup = AudioGroup.BGM; });
         sfxSlider.onValueChanged.AddListener(value => { valueChanged = true; targetGroup = AudioGroup.SFX; });
+
+        masterMuteToggle.onValueChanged.AddListener(value => GameManager.Sound.SetMute(AudioGroup.MASTER, value));
+        bgmMuteToggle.onValueChanged.AddListener(value => GameManager.Sound.SetMute(AudioGroup.BGM, value));
+        sfxMuteToggle.onValueChanged.AddListener(value => GameManager.Sound.SetMute(AudioGroup.SFX, value));
     }
 
     private void Update()

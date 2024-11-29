@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UIElements;
 
 public enum AudioGroup { MASTER, BGM, SFX }
 
@@ -12,6 +15,14 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     [SerializeField] AudioSource sfxSource;
 
     private static readonly string[] paramNames = { "Master", "BGM", "SFX" };
+
+    private struct Volume
+    {
+        public bool isMute;
+        public float scale;
+    }
+
+    private Volume[] mixerVolume = new Volume[3];
 
     private void Awake()
     {
@@ -51,10 +62,8 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     /// <param name="scale">음량(0~1 권장)</param>
     public void SetMixerScale(AudioGroup group, float scale)
     {
-        if (false == mixer.SetFloat(paramNames[(int)group], (scale - 1f) * 20f))
-        {
-            Debug.LogWarning("잘못된 AudioGroup");
-        }
+        mixerVolume[(int)group].scale = scale;
+        UpdateMixer(group);
     }
 
     public float GetMixerScale(AudioGroup group)
@@ -63,7 +72,25 @@ public class SoundManager : SingletonBehaviour<SoundManager>
         {
             Debug.LogWarning("잘못된 AudioGroup");
         }
+        mixerVolume[(int)group].scale = value;
         return (value * 0.05f) + 1f;
+    }
+
+    public void SetMute(AudioGroup group, bool isMute)
+    {
+        mixerVolume[(int)group].isMute = isMute;
+        UpdateMixer(group);
+    }
+
+    private void UpdateMixer(AudioGroup group)
+    {
+        float scale;
+        if (mixerVolume[(int)group].isMute)
+            scale = -80f;
+        else
+            scale = (mixerVolume[(int)group].scale - 1f) * 20f;
+
+        mixer.SetFloat(paramNames[(int)group], scale);
     }
 
     public void PlayTestSound(AudioGroup group, AudioClip clip)
