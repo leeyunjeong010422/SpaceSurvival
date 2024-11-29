@@ -484,6 +484,11 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &127287543 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 462424, guid: 13755b5fbb6b69b4c81b942c6e32a512, type: 3}
+  m_PrefabInstance: {fileID: 127287539}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &131676602
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,6 +1186,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CheckPointNum: 0
+--- !u!4 &495343832 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 428174, guid: 37e803394624a5c48ae5f13fd212ac0b, type: 3}
+  m_PrefabInstance: {fileID: 495343828}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &499201629
 GameObject:
   m_ObjectHideFlags: 0
@@ -4601,10 +4611,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiSpawner: {fileID: 131676603}
   checkpointTransforms:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 495343832}
+  - {fileID: 2085315838}
+  - {fileID: 1965297078}
+  - {fileID: 127287543}
   checkpointRadius: 5
   maxSpawnAttempts: 10
 --- !u!114 &1771054498
@@ -5246,6 +5256,11 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1965297078 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 460788, guid: 11387396ccd933544b0567a831ce751a, type: 3}
+  m_PrefabInstance: {fileID: 1965297074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1994423161
 GameObject:
   m_ObjectHideFlags: 0
@@ -5814,6 +5829,11 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &2085315838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 455376, guid: 810eb771809ba56409dd29eab937ddb2, type: 3}
+  m_PrefabInstance: {fileID: 2085315834}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2086581167
 GameObject:
   m_ObjectHideFlags: 0
