@@ -5,7 +5,11 @@ using UnityEngine;
 public class PlayerController4 : MonoBehaviourPun
 {
     [SerializeField] float speed;
-    private Rigidbody rb;
+    [SerializeField] float gravity;
+
+    private CharacterController characterController;
+    private Vector3 velocity;
+
     [SerializeField] Animator animator;
 
     [Header("카메라 관련")]
@@ -29,7 +33,7 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
         mainCamera = Camera.main;
@@ -80,19 +84,29 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void Move()
     {
-        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        // 플레이어 이동
+        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
         if (moveDir != Vector3.zero)
         {
-            Vector3 worldMoveDir = transform.TransformDirection(moveDir).normalized;
-            rb.velocity = new Vector3(worldMoveDir.x * speed, rb.velocity.y, worldMoveDir.z * speed);
+            Vector3 worldMoveDir = transform.TransformDirection(moveDir);
+            characterController.Move(worldMoveDir * speed * Time.deltaTime);
             animator.SetFloat("Speed", 3);
+            photonView.RPC(nameof(SyncPosition), RpcTarget.Others, transform.position, transform.rotation);
         }
         else
         {
-            rb.velocity = new Vector3(0, rb.velocity.y, 0);
             animator.SetFloat("Speed", 0);
         }
+
+        // 중력 적용
+        if (characterController.isGrounded && velocity.y < 0)
+        {
+            velocity.y = 0f;
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+        characterController.Move(velocity * Time.deltaTime);
 
         photonView.RPC(nameof(SyncAnimation), RpcTarget.Others, animator.GetFloat("Speed"));
     }
@@ -111,8 +125,6 @@ public class PlayerController4 : MonoBehaviourPun
         cameraPitch = Mathf.Clamp(cameraPitch, -10f, 20f); // 카메라 위아래 각도 제한
 
         UpdateCameraPosition();
-
-        photonView.RPC(nameof(SyncRotation), RpcTarget.Others, transform.rotation);
     }
 
     private void UpdateCameraPosition()
@@ -126,22 +138,8 @@ public class PlayerController4 : MonoBehaviourPun
 
     private void SetPlayerColor()
     {
-        //최종적으로 사용할 코드
         playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
         photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
-
-        //if (Application.isEditor)
-        //{
-        //    playerColor = (PhotonNetwork.LocalPlayer.ActorNumber == 1) ? Color.red :
-        //                  (PhotonNetwork.LocalPlayer.ActorNumber == 2) ? Color.blue :
-        //                  (PhotonNetwork.LocalPlayer.ActorNumber == 3) ? Color.green : Color.yellow;
-        //}
-        //else
-        //{
-        //    playerColor = PhotonNetwork.LocalPlayer.GetNumberColor();
-        //}
-
-        //photonView.RPC(nameof(SyncPlayerColor), RpcTarget.AllBuffered, playerColor.r, playerColor.g, playerColor.b);
     }
 
     [PunRPC]
@@ -154,11 +152,11 @@ public class PlayerController4 : MonoBehaviourPun
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (gameScene != null && gameScene.gameStarted && photonView.IsMine && collision.gameObject.CompareTag("Cube"))
+        if (gameScene != null && gameScene.gameStarted && photonView.IsMine && hit.gameObject.CompareTag("Cube"))
         {
-            Renderer cubeRenderer = collision.gameObject.GetComponent<Renderer>();
+            Renderer cubeRenderer = hit.gameObject.GetComponent<Renderer>();
             if (cubeRenderer != null)
             {
                 // 다른 플레이어가 칠한 큐브를 밟으면 점수를 차감
@@ -167,11 +165,8 @@ public class PlayerController4 : MonoBehaviourPun
                     // 큐브 색이 다른 플레이어의 색이라면 점수 차감
                     DecreaseScore(cubeRenderer.material.color);
 
-                    // 큐브 색 변경
-                    // cubeRenderer.material.color = playerColor;
-
                     // 색상 동기화만 처리 (점수는 동기화하지 않음)
-                    photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, cubeId.GetId(collision.gameObject), playerColor.r, playerColor.g, playerColor.b);
+                    photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, cubeId.GetId(hit.gameObject), playerColor.r, playerColor.g, playerColor.b);
 
                     if (!photonView.IsMine) return; // 로컬 플레이어만 점수 처리
 
@@ -184,6 +179,7 @@ public class PlayerController4 : MonoBehaviourPun
             }
         }
     }
+
 
     private void UpdateLocalUI(int actorNumber, int score)
     {
@@ -221,7 +217,6 @@ public class PlayerController4 : MonoBehaviourPun
                 {
                     controller.playerScore += scoreChanged;
 
-                    // UI 업데이트
                     UpdateLocalUI(player.ActorNumber, controller.playerScore);
                 }
             }
@@ -253,17 +248,17 @@ public class PlayerController4 : MonoBehaviourPun
                           .FirstOrDefault(cube => cube.GetInstanceID() == cubeID);
     }
 
-    // 애니메이션 동기화 (움직임)
     [PunRPC]
-    private void SyncAnimation(float speed)
+    private void SyncAnimation(float speed)  // 애니메이션 동기화 (움직임)
     {
         animator.SetFloat("Speed", speed);
     }
 
-    // 회전 동기화
     [PunRPC]
-    private void SyncRotation(Quaternion rotation)
+    private void SyncPosition(Vector3 position, Quaternion rotation) // 움직임, 회전 동기화
     {
+        transform.position = position;
         transform.rotation = rotation;
     }
+
 }
