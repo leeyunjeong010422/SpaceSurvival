@@ -83,7 +83,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
 
     public float GetMixerScale(AudioGroup group)
     {
-        return (mixerVolume[(int)group].scale * 0.05f) + 1f;
+        return mixerVolume[(int)group].scale;
     }
 
     public void SetMute(AudioGroup group, bool isMute)
