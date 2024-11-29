@@ -10,6 +10,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public static SoundManager Sound => SoundManager.Instance;
     public static BackendManager1 Backend => BackendManager1.Instance;
+    public static UserSettingData UserSetting => UserSettingData.Instance;
 
     // GameManager 싱글톤 프리팹 생성
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

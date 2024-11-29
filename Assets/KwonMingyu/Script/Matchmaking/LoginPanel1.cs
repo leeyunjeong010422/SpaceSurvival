@@ -10,6 +10,14 @@ public class LoginPanel1 : MonoBehaviour
     [SerializeField] TMP_InputField passwordInput;
     [SerializeField] VerifyPanel1 verifyPanel;
 
+    private void OnEnable()
+    {
+        // 저장된 이메일 불러오기
+        // 저장된 파일이 없다면 기본값(string.Empty)
+        GameManager.UserSetting.LoadSetting();
+        emaillInput.text = GameManager.UserSetting.Data.email;
+    }
+
     public void Login()
     {
         PopUp1.Instance.PopUpOpen(true, "로그인 중");
@@ -24,6 +32,10 @@ public class LoginPanel1 : MonoBehaviour
             }
             if (BackendManager1.Auth.CurrentUser.IsEmailVerified)
             {
+                // 로그인 성공시 이메일 저장
+                GameManager.UserSetting.Data.email = email;
+                GameManager.UserSetting.SaveSetting();
+
                 // TODO: 중복 로그인 방지 기능
                 // 게임 진행은 문제가 없지만 닉네임을 서버에서 받기 때문에
                 Debug.Log("로그인 성공 마스터 서버로 연결");
