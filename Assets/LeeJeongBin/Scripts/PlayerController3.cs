@@ -10,9 +10,9 @@ public class PlayerController3 : MonoBehaviourPun
     [SerializeField] float moveSpeed;
     [SerializeField] float sprintMultiplier;
     [SerializeField] float rotationSpeed;
-    [SerializeField] Camera playerCamera;
     [SerializeField] Vector3 velocity;
 
+    private Camera playerCamera;
     private CharacterController characterController;
     private PhotonTransformView photonTransformView;
     private Animator animator;
@@ -25,7 +25,6 @@ public class PlayerController3 : MonoBehaviourPun
 
     private bool dead;
 
-
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -34,6 +33,12 @@ public class PlayerController3 : MonoBehaviourPun
         GameOver3.Instance.OnPlayerSpawn(this);
 
         score = FindObjectOfType<LastManScore1>();
+
+        if (photonView.IsMine)
+        { 
+            playerCamera = Camera.main;
+            Camera.main.GetComponent<CameraController2>().Target = this.transform;
+        }
     }
 
     void Update()
@@ -55,10 +60,11 @@ public class PlayerController3 : MonoBehaviourPun
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
+        // 카메라 기준으로 앞과 오른쪽 방향 계산
         Vector3 forward = playerCamera.transform.forward;
         Vector3 right = playerCamera.transform.right;
 
-        forward.y = 0f;
+        forward.y = 0f; // Y축 회전 제거 (수평 방향만 고려)
         right.y = 0f;
 
         Vector3 moveDirection = (forward * vertical + right * horizontal).normalized;
@@ -66,17 +72,19 @@ public class PlayerController3 : MonoBehaviourPun
         float currentSpeed = moveSpeed;
 
         // Shift 키를 누르면 스프린트 활성화
-        if (Input.GetKey(KeyCode.LeftShift) && vertical > 0) // W 키와 함께 Shift를 누른 경우에만
+        if (Input.GetKey(KeyCode.LeftShift) && moveDirection.magnitude > 0) // 모든 방향 가속
         {
-            currentSpeed *= sprintMultiplier; // 기본 속도에 스프린트 배율 적용 (최대 3.5)
+            currentSpeed *= sprintMultiplier; // Shift로 달리기 효과
         }
 
         if (moveDirection.magnitude >= 0.1f)
         {
+            // 이동 방향으로 회전
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
             float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, rotationSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
+            // 이동 벡터 계산
             velocity.x = moveDirection.x * currentSpeed;
             velocity.z = moveDirection.z * currentSpeed;
         }
@@ -88,10 +96,10 @@ public class PlayerController3 : MonoBehaviourPun
 
         if (characterController.isGrounded)
         {
-            velocity.y += Physics.gravity.y * Time.deltaTime;
+            velocity.y += Physics.gravity.y * Time.deltaTime; // 중력 적용
         }
 
-        characterController.Move(velocity * Time.deltaTime);
+        characterController.Move(velocity * Time.deltaTime); // 캐릭터 이동
     }
 
     private void UpdateAnimator()
