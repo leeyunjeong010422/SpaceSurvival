@@ -100,7 +100,11 @@ public class Killing3 : MonoBehaviourPun
         if (targetPhotonView != null)
         {
             // AI는 소유권과 상관없이 죽일 수 있음(AI 소유권은 마스터 클라이언트에게 있음)
-            if (target.CompareTag("AI") || (targetPhotonView.IsMine == false && target.CompareTag("Player")))
+            if (target.CompareTag("AI"))
+            {
+                target.GetComponent<AIController3>().DieAICharacter();
+            }
+            else if (targetPhotonView.IsMine == false && target.CompareTag("Player"))
             {
                 photonView.RPC("DestroyTarget", RpcTarget.AllBuffered, targetPhotonView.ViewID);
             }
