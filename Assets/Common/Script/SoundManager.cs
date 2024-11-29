@@ -27,6 +27,11 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     private void Awake()
     {
         RegisterSingleton(this);
+
+        for (int i = 0; i < mixerVolume.Length; i++)
+        {
+            mixerVolume[i].scale = 1f;
+        }
     }
 
     /// <summary>
