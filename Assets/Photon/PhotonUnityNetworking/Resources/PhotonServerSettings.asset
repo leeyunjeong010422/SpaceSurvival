@@ -43,23 +43,20 @@ MonoBehaviour:
   - FailedRPC
   - Fire
   - GameWinner
+  - SetInfoUIRPC
   - SetLayerWeight
   - SyncAnimation
   - SyncCubeColor
-  - SyncRotation
+  - SyncPlayerColor
+  - SyncPlayerScore
+  - SyncPosition
   - SyncScore
+  - SyncTagObject
   - SyncTrigger
   - TakeDamage
   - TestStartRPC
-  - TryGetCoinRPC
-  - SyncPlayerColor
-  - SyncPlayerScore
-  - DecreaseScoreForPlayer
-  - SetInfoUIRPC
   - TriggerCheckPointRPC
-  - SyncTagObject
-  - DisableCollider
-  - SyncPosition
+  - TryGetCoinRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
