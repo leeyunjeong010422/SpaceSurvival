@@ -18,6 +18,9 @@ public class PlayerController4 : MonoBehaviourPun
     [SerializeField] Vector3 cameraOffset = new Vector3(0, 5, -7);
     [SerializeField] float mouseSensitivity = 2f;
 
+    [Header("사운드 관련")]
+    [SerializeField] AudioClip controllerColliderHitSound;
+
     private float cameraPitch;
     private Vector3 playerPosition;
     private Quaternion playerRotation;
@@ -169,6 +172,8 @@ public class PlayerController4 : MonoBehaviourPun
                     photonView.RPC(nameof(SyncCubeColor), RpcTarget.All, cubeId.GetId(hit.gameObject), playerColor.r, playerColor.g, playerColor.b);
 
                     if (!photonView.IsMine) return; // 로컬 플레이어만 점수 처리
+
+                    GameManager.Sound.PlaySFX(controllerColliderHitSound, 10);
 
                     // 점수 증가를 다른 클라이언트에 동기화
                     photonView.RPC(nameof(SyncPlayerScore), RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, 1);

@@ -12,6 +12,7 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
     private GameObject endGamePanel;
     [SerializeField] GameObject winningPointPanel;
     [SerializeField] private float gameDuration = 30f;
+    [SerializeField] AudioClip TtangBGM;
 
     private float gameTimer; // 게임 시간
     public bool gameStarted = false;
@@ -36,6 +37,7 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
     protected override void GameStart()
     {
         StartCoroutine(GameStartRoutine());
+        GameManager.Sound.PlayBGM(TtangBGM, 1);
     }
 
     private IEnumerator GameStartRoutine()
@@ -97,6 +99,8 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
         }
 
         DisplayRankings();
+
+        GameManager.Sound.StopBGM();
     }
 
     private void DisplayRankings()
