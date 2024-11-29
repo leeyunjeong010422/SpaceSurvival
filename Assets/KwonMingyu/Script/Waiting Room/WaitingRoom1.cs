@@ -145,6 +145,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetReady(false);
         PhotonNetwork.LocalPlayer.SetWinningPoint(0);
 
+        // 게임 시작 후 방 입장을 막기
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
 
         // 기본적으로 무작위 씬 선택으로 이동, testField 설정시 해당 씬으로 이동
@@ -218,6 +221,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         // 플레이어 카드 업데이트
         UpdatePlayerCards();
+
+        // 방 입장 가능
+        PhotonNetwork.CurrentRoom.IsOpen = true;
     }
     private bool AllLoad()
     {
