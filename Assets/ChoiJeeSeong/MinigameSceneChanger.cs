@@ -10,10 +10,13 @@ public class MinigameSceneChanger : MonoBehaviourPun
 
     private IEnumerator Start()
     {
+        // 미니게임에서 사용되는 프로퍼티 디폴트 값으로 변경
+        PhotonNetwork.LocalPlayer.SetLoad(false);
+        PhotonNetwork.LocalPlayer.SetReady(false);
+
         // RPC 호출은 마스터에서만
         if (false == PhotonNetwork.IsMasterClient)
             yield break;
-
 
         MinigameSelecter.Minigame nextGame = MinigameSelecter.Instance.PopRandom();
         Debug.Log($"다음 스테이지: {nextGame}");
