@@ -12,6 +12,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 {
+    [SerializeField] AudioClip bgmClip;
+
     protected virtual void Start()
     {
         // 이미 방에 들어가 있고
@@ -35,6 +37,16 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
 
         // 로딩 완료 통지
         PhotonNetwork.LocalPlayer.SetLoad(true);
+
+        if (bgmClip != null)
+        {
+            GameManager.Sound.PlayBGM(bgmClip);
+        }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        GameManager.Sound.StopBGM();
     }
 
     /// <summary>

@@ -2513,6 +2513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd0031b5a8bc62428069e47ce834762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 5b1ed8fbe89154eaf96723b6e5f0aad3, type: 3}
   scoreManager: {fileID: 1765081568}
   playerInfoUI: {fileID: 166523276}
   countdownText: {fileID: 439100145}

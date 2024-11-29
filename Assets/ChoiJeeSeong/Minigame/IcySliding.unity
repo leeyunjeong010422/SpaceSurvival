@@ -329,6 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 258598421823a1c40915ad80c607def7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: bea93a38b71b64b598109b3a3b1a0048, type: 3}
   playerInfoUI: {fileID: 1466573944}
   countdownText: {fileID: 118338953}
   icePlatform: {fileID: 120185941}
