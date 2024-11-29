@@ -140,31 +140,11 @@ public class Killing3 : MonoBehaviourPun
                 }
                 else if (target.CompareTag("Player"))
                 {
-                    // 플레이어 사망 처리
-                    if (playerDeadCoroutine != null) return;
-                    playerDeadCoroutine = StartCoroutine(HandlePlayerDeath(target.GetComponent<PlayerController3>()));
+                    target.GetComponent<PlayerController3>().score.PlayerDead(targetPhotonView.Owner);
+                    target.GetComponent<PlayerController3>().DeadPlayer();
                 }
-                   if (target.CompareTag("Player"))
-                       target.GetComponent<PlayerController3>().score.PlayerDead(targetPhotonView.Owner);
             }
         }
-    }
-
-    // 플레이어 사망시 5초뒤 Destroy 및 사망 애니메이션
-    private IEnumerator HandlePlayerDeath(PlayerController3 playerController)
-    {
-        playerController.enabled = false;
-
-        Animator animator = playerController.GetComponent<Animator>();
-        animator.SetTrigger("Die4");
-
-        yield return new WaitForSeconds(5f);
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.Destroy(playerController.gameObject);
-        }
-        playerDeadCoroutine = null;
     }
 
     // AI 사망시 5초뒤 Destroy 및 사망 애니메이션

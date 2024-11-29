@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.InputSystem.Processors;
 
 public class PlayerController3 : MonoBehaviourPun
 {
@@ -22,6 +23,8 @@ public class PlayerController3 : MonoBehaviourPun
 
     public LastManScore1 score;
 
+    private bool dead;
+
 
     void Start()
     {
@@ -40,7 +43,7 @@ public class PlayerController3 : MonoBehaviourPun
 
     void Update()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && !dead)
         {
             HandleMovement();
             UpdateAnimator();
@@ -141,5 +144,19 @@ public class PlayerController3 : MonoBehaviourPun
     {
         get { return checkPointsReached; }
         set { checkPointsReached = value; }
+    }
+
+    public void DeadPlayer()
+    {
+        transform.GetComponent<Animator>().SetTrigger("Die4");
+        if (dead || !photonView.IsMine) return;
+        dead = true;
+        StartCoroutine(PlayerDestroy());
+
+    }
+    private IEnumerator PlayerDestroy()
+    {
+        yield return new WaitForSeconds(5f);
+        PhotonNetwork.Destroy(gameObject);
     }
 }
