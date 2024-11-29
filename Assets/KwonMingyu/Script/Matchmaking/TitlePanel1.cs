@@ -27,6 +27,9 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
         }
         // 로비씬으로 이동시 상태에 따라서 이동
         SetActivePanel(PhotonNetwork.IsConnected ? Panel.Menu : Panel.Login);
+
+        // TPS 게임에서 visible이 꺼질 수 있어서 ture로
+        Cursor.visible = true;
     }
 
     // 서버에 접속 했을때 호출
