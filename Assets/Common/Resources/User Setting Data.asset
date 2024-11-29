@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da29b2152b171d42a3213960875c351, type: 3}
   m_Name: User Setting Data
   m_EditorClassIdentifier: 
-  data:
+  defaultData:
     email: 
-    bgmScale: 1
-    sfxScale: 1
+    soundScale:
+    - 1
+    - 1
+    - 1

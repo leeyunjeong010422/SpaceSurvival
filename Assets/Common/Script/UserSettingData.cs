@@ -7,16 +7,16 @@ using UnityEngine;
 public class UserSettingData : SingletonScriptable<UserSettingData>
 {
     public SettingData Data => data;
-    [SerializeField] SettingData data;
+    private SettingData data;
+
+    [SerializeField] SettingData defaultData; // 기본값은 SO 애셋으로 입력
 
     [System.Serializable]
     public class SettingData
     {
         public string email = string.Empty;
-        public float bgmScale = 1f;
-        public float sfxScale = 1f;
+        public float[] soundScale = new float[SoundManager.AudioGroupCount];
     }
-
 
 #if UNITY_EDITOR
     // 에디터 모드에서는 (프로젝트 폴더)/Temp 에 생성
@@ -39,6 +39,11 @@ public class UserSettingData : SingletonScriptable<UserSettingData>
             string jData = File.ReadAllText(path);
             data = JsonUtility.FromJson<SettingData>(jData);
             Debug.Log(path);
+        }
+        else
+        {
+            // 기본값 직렬화 복사
+            data = JsonUtility.FromJson<SettingData>(JsonUtility.ToJson(defaultData, true));
         }
     }
 }

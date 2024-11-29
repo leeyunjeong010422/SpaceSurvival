@@ -5,11 +5,14 @@ using System.Data.Common;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using static UserSettingData;
 
 public enum AudioGroup { MASTER, BGM, SFX }
 
 public class SoundManager : SingletonBehaviour<SoundManager>
 {
+    public const int AudioGroupCount = 3;
+
     [SerializeField] AudioMixer mixer;
     [SerializeField] AudioSource bgmSource;
     [SerializeField] AudioSource sfxSource;
@@ -22,7 +25,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
         public float scale;
     }
 
-    private Volume[] mixerVolume = new Volume[3];
+    private Volume[] mixerVolume = new Volume[AudioGroupCount];
 
     private void Awake()
     {
@@ -34,9 +37,13 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     {
         // 음량 기본값 설정
         // 플레이어 로컬 설정 파일을 만든다면 여기서 입력
-        for (int i = 0; i < mixerVolume.Length; i++)
+        GameManager.UserSetting.LoadSetting();
+        var settingData = GameManager.UserSetting.Data;
+
+        for (int i = 0; i < AudioGroupCount; i++)
         {
-            mixerVolume[i].scale = 1f;
+            mixerVolume[i].scale = settingData.soundScale[i];
+
         }
 
         UpdateMixer(AudioGroup.MASTER);
@@ -78,6 +85,8 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     public void SetMixerScale(AudioGroup group, float scale)
     {
         mixerVolume[(int)group].scale = scale;
+        GameManager.UserSetting.Data.soundScale[(int)group] = scale;
+        GameManager.UserSetting.SaveSetting();
         UpdateMixer(group);
     }
 
