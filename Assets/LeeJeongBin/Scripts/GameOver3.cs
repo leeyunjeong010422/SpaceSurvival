@@ -8,7 +8,7 @@ public class GameOver3 : MonoBehaviourPun
 {
     public static GameOver3 Instance;
     [SerializeField] RectTransform winningPointUI;
-    private List<PlayerController3> alivePlayers = new List<PlayerController3>(4);
+    private List<Player> alivePlayers = new List<Player>(4);
     private bool gameIsOver = false;
 
     private void Awake()
@@ -33,18 +33,27 @@ public class GameOver3 : MonoBehaviourPun
 
     public void OnPlayerSpawn(PlayerController3 spawnedPlayerCharacter)
     {
-        alivePlayers.Add(spawnedPlayerCharacter);
+        alivePlayers.Add(spawnedPlayerCharacter.photonView.Owner);
     }
 
     // 플레이어 사망 시 호출
     public void OnPlayerDeath(PlayerController3 deadPlayerCharacter)
     {
-        alivePlayers.Remove(deadPlayerCharacter);
+        photonView.RPC(nameof(PlayerDeathRPC), RpcTarget.AllViaServer, deadPlayerCharacter.photonView.Owner);
+    }
+
+    [PunRPC]
+    private void PlayerDeathRPC(Player deadPlayer)
+    {
+        if (false == alivePlayers.Remove(deadPlayer))
+        {
+            Debug.LogWarning($"이미 탈락한 플레이어 {deadPlayer.NickName}가 다시 탈락함");
+        }
 
         // 생존한 플레이어 캐릭터가 유일하다면 그 플레이어 승리
         if (alivePlayers.Count == 1)
         {
-            PlayerWin(alivePlayers[0].photonView.Owner);
+            PlayerWin(alivePlayers[0]);
         }
     }
 

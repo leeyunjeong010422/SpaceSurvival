@@ -36,11 +36,6 @@ public class PlayerController3 : MonoBehaviourPun
         score = FindObjectOfType<LastManScore1>();
     }
 
-    private void OnDestroy()
-    {
-        GameOver3.Instance?.OnPlayerDeath(this);
-    }
-
     void Update()
     {
         if (photonView.IsMine && !dead)
@@ -152,6 +147,7 @@ public class PlayerController3 : MonoBehaviourPun
         if (dead || !photonView.IsMine) return;
         transform.GetComponent<Killing3>().enabled = false;
         dead = true;
+        GameOver3.Instance?.OnPlayerDeath(this);
         StartCoroutine(PlayerDestroy());
 
     }
