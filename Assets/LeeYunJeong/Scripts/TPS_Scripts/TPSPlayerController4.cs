@@ -31,6 +31,10 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
     private GameObject takeDamagePanel;
 
+    [Header("사운드 관련")]
+    [SerializeField] AudioClip fireSound;
+    [SerializeField] AudioClip takeDamageSound;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -175,6 +179,9 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
             }
         }
 
+        // 총알 발사음 동기화
+        photonView.RPC("PlayFireSound", RpcTarget.All);
+
         // 1초 후에 레이어를 비활성화하는 메서드 호출
         Invoke("DisableFireLayer", 1f);
     }
@@ -214,6 +221,8 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
         // 맞고 있는 자신만 처리
         if (!photonView.IsMine || IsGameEnded())
             return;
+
+        GameManager.Sound.PlaySFX(takeDamageSound, 5);
 
         if (isDead) return;
 
@@ -392,5 +401,11 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
     {
         TPSGameSceneTest4 gameScene = FindObjectOfType<TPSGameSceneTest4>();
         return gameScene != null && gameScene.isGameEnded;
+    }
+
+    [PunRPC]
+    private void PlayFireSound()
+    {
+        GameManager.Sound.PlaySFX(fireSound, 0.8f);
     }
 }

@@ -72,7 +72,7 @@ public class TPSPlayerProfileManager4 : MonoBehaviourPunCallbacks
 
             if (profileCardsHead[i] != null)
             {
-                if (PhotonNetwork.LocalPlayer.ActorNumber == player.ActorNumber)
+                if (PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.PlayerList[i].ActorNumber)
                 {
                     // 로컬 플레이어의 프로필 색상 변경
                     profileCardsHead[i].color = PhotonNetwork.LocalPlayer.GetNumberColor();
