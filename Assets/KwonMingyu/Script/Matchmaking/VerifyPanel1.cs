@@ -9,6 +9,7 @@ public class VerifyPanel1 : MonoBehaviour
 {
     private void OnEnable()
     {
+        PopUp1.Instance.PopUpClose();
         SendVerifyMail();
     }
     private void SendVerifyMail()
