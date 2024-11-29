@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.HID;
 
 public class CoinCollecterGameScene : MiniGameSceneBase
 {
@@ -13,6 +12,8 @@ public class CoinCollecterGameScene : MiniGameSceneBase
     [SerializeField] PlayerInfoPanel2 playerInfoUI;
     [SerializeField] CountdownText countdownText;
     [SerializeField] Light mainLight; // 타임아웃 요소: 조명이 점점 어두워져서 Emission을 갖는 코인이 강조됨
+    [SerializeField] Renderer skyDomeUpper;
+    [SerializeField] Renderer skyDomeLower;
 
     // 승점 UI
     [SerializeField] RectTransform winningScoreUI;
@@ -29,6 +30,7 @@ public class CoinCollecterGameScene : MiniGameSceneBase
 
     private PlayerCharacterControl2 localPlayerCharacter;
     private Coroutine gamePlayRoutine;
+    private Material skyDomeMaterial;
 
     protected override void ReadyNetworkScene()
     {
@@ -60,6 +62,10 @@ public class CoinCollecterGameScene : MiniGameSceneBase
             coins[i].Id = i;
             coins[i].OnLocalPlayerTriggered.AddListener(TryGetCoin);
         }
+
+        // 하늘 색상 설정 준비
+        skyDomeUpper.material.mainTextureOffset = new Vector2(0f, 0f);
+        skyDomeMaterial = skyDomeLower.material = skyDomeUpper.material;
     }
 
     protected override void GameStart()
@@ -86,7 +92,8 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         while (mainLight.intensity > 0f)
         {
             yield return lightReducePeriod;
-            mainLight.intensity -= lightReducePerPeriod;
+            mainLight.intensity -= lightReducePerPeriod; // 메인 방향 조명 어둡게
+            skyDomeMaterial.mainTextureOffset = new Vector2(0.5f * (1f - mainLight.intensity), 0); // 스카이돔 밝기 설정
         }
 
         mainLight.intensity = 0f;
