@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public class CameraController3 : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class CameraController3 : MonoBehaviour
 
     private float rotationX = 0f;
     private PhotonView photonView;
+    private CameraController3 killerCamera;
+    private bool isDead = false;
 
     void Start()
     {
@@ -61,5 +64,30 @@ public class CameraController3 : MonoBehaviour
 
         // Y축 회전 (플레이어 회전 처리)
         player.Rotate(Vector3.up * mouseX * sensitivityX);  // X축은 카메라 회전, Y축은 플레이어 회전
+    }
+
+    public void DeadPlayer(PhotonView killerPhotonView)
+    {
+        if (photonView.IsMine)
+        {
+            isDead = true;
+
+            if (killerPhotonView != null)
+            {
+                GameObject cameraObject = killerPhotonView.gameObject.transform.Find("Camera").gameObject;
+                CameraController3 killerCamera = cameraObject.GetComponent<CameraController3>();
+                if (killerCamera != null)
+                {
+                    SetCameraKiller(killerCamera);
+                }
+            }
+        }
+    }
+
+    private void SetCameraKiller(CameraController3 killerCamera)
+    {
+        playerCamera.gameObject.SetActive(false);
+
+        killerCamera.playerCamera.gameObject.SetActive(true);
     }
 }
