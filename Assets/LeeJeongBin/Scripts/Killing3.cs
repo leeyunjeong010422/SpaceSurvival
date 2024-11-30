@@ -11,6 +11,7 @@ public class Killing3 : MonoBehaviourPun
     private HashSet<GameObject> targetInRange = new HashSet<GameObject>();
 
     private Animator animator;
+    private LastManAudio lastManAudio;
     private bool IsAttack = false;
 
     private Coroutine playerDeadCoroutine;
@@ -18,6 +19,7 @@ public class Killing3 : MonoBehaviourPun
     private void Start()
     {
         animator = GetComponent<Animator>();
+        lastManAudio = FindObjectOfType<LastManAudio>();
     }
 
     private void Update()
@@ -34,6 +36,11 @@ public class Killing3 : MonoBehaviourPun
             // 레이어2 활성화
             animator.SetLayerWeight(2, 1f);
             photonView.RPC("SetLayerWeight", RpcTarget.All, 2, 1f);
+
+            if (lastManAudio != null)
+            {
+                lastManAudio.OnAttack();
+            }
 
             StartCoroutine(AttackDelay());
         }
