@@ -14,6 +14,7 @@ public class PlayerController3 : MonoBehaviourPun
 
     private Camera playerCamera;
     private DeathCamera3 deathCamera;
+    private LastManAudio lastManAudio;
     private CharacterController characterController;
     private PhotonTransformView photonTransformView;
     private Animator animator;
@@ -31,6 +32,7 @@ public class PlayerController3 : MonoBehaviourPun
         characterController = GetComponent<CharacterController>();
         photonTransformView = GetComponent<PhotonTransformView>();
         animator = GetComponent<Animator>();
+        lastManAudio = FindObjectOfType<LastManAudio>();
         GameOver3.Instance.OnPlayerSpawn(this);
 
         score = FindObjectOfType<LastManScore1>();
@@ -133,7 +135,7 @@ public class PlayerController3 : MonoBehaviourPun
     [PunRPC]
     private void TriggerCheckPointRPC(int checkPointNum)
     {
-        // 사운드 재생 필요
+        lastManAudio.TriggerCheckPointRPC();
         Debug.Log($"플레이어 {photonView.Owner.NickName} 체크포인트 통과");
         score.UpdateScore(photonView.Owner, checkPointNum);
 
