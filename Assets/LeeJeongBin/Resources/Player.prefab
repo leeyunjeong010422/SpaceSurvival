@@ -259,7 +259,7 @@ MonoBehaviour:
   sprintMultiplier: 2
   rotationSpeed: 300
   velocity: {x: 0, y: 0, z: 0}
-  checkPointsReached: 5
+  checkPointsReached: 0
   visitedCheckPoint: []
   score: {fileID: 0}
 --- !u!114 &8075774712913738872
