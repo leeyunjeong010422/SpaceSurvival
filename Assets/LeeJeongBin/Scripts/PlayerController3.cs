@@ -13,6 +13,7 @@ public class PlayerController3 : MonoBehaviourPun
     [SerializeField] Vector3 velocity;
 
     private Camera playerCamera;
+    private DeathCamera3 deathCamera;
     private CharacterController characterController;
     private PhotonTransformView photonTransformView;
     private Animator animator;
@@ -163,5 +164,11 @@ public class PlayerController3 : MonoBehaviourPun
     {
         yield return new WaitForSeconds(5f);
         PhotonNetwork.Destroy(gameObject);
+
+      // DeathCamera3 호출용
+      //  if (deathCamera != null)
+      //  {
+      //      deathCamera.OnPlayerDead();
+      //  }
     }
 }
