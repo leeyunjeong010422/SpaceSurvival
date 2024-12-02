@@ -15725,6 +15725,7 @@ MonoBehaviour:
   power: 30
   winnerText: {fileID: 397405507}
   testField: -1
+  roomBgm: {fileID: 8300000, guid: 3fc26869a512b4e5187c9be6310ad8c2, type: 3}
 --- !u!224 &731851027
 RectTransform:
   m_ObjectHideFlags: 0

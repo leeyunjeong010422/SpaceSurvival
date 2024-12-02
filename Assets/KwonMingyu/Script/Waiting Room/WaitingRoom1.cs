@@ -22,7 +22,14 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     [SerializeField] int testField = -1;
 
+    [SerializeField] AudioClip roomBgm;
+
     private bool winnerEvent;
+
+    private void Start()
+    {
+        GameManager.Sound.PlayBGM(roomBgm);
+    }
 
     private void Update()
     {
