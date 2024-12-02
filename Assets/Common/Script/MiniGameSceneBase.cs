@@ -15,6 +15,8 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     [SerializeField] AudioClip bgmClip;
     [SerializeField, Range(0f, 1f)] float bgmVolumeScale = 1f;
 
+    private int clearCompleteCount = 0;
+
     protected virtual void Start()
     {
         // 이미 방에 들어가 있고
@@ -113,20 +115,50 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             roomPlayer.SetReady(false);
         }
 
-        int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
-        foreach (Player roomPlayer in PhotonNetwork.PlayerList)
-        {
-            if (goal <= roomPlayer.GetWinningPoint())
-            {
-                Debug.LogWarning($"세트 승리 씬 진입 필요");
+        photonView.RPC(nameof(ClearPhotonViewRPC), RpcTarget.All);
+    }
 
-                // 임시 코드: 바로 로비씬으로 보내기
-                PhotonNetwork.LoadLevel(0);
-                return;
+    [PunRPC]
+    private void ClearPhotonViewRPC()
+    {
+        foreach (PhotonView view in PhotonNetwork.PhotonViewCollection)
+        {
+            if (view == photonView)
+                continue;
+
+            if (view.IsMine)
+            {
+                Debug.Log($"{view.name}제거");
+                PhotonNetwork.Destroy(view);
             }
         }
 
-        // 미니게임 선택 중간다리 씬으로 이동
-        PhotonNetwork.LoadLevel(1);
+        // 씬 정리가 완료되었음을 통지
+        photonView.RPC(nameof(ClearCompleteRPC), RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    private void ClearCompleteRPC(PhotonMessageInfo info)
+    {
+        clearCompleteCount++;
+
+        // 모든 플레이어가 정리 완료시 씬 이동
+        if (clearCompleteCount >= PhotonNetwork.PlayerList.Length)
+        {
+            // 승자 판정
+            int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
+            foreach (Player roomPlayer in PhotonNetwork.PlayerList)
+            {
+                if (goal <= roomPlayer.GetWinningPoint())
+                {
+                    // 로비씬에서 승리 이벤트 수행
+                    PhotonNetwork.LoadLevel(0);
+                    return;
+                }
+            }
+
+            // 승자가 없으면 다음 미니게임으로
+            PhotonNetwork.LoadLevel(1);
+        }
     }
 }
