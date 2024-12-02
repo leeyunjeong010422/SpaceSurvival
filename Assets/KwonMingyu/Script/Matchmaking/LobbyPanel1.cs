@@ -18,7 +18,7 @@ public class LobbyPanel1 : MonoBehaviour
         }
     }
 
-    private void LeaveLobby()
+    public void LeaveLobby()
     {
         PhotonNetwork.LeaveLobby();
     }
