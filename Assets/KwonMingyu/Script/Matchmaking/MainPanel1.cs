@@ -46,6 +46,7 @@ public class MainPanel1 : MonoBehaviour
         RoomOptions roomOptions = new();
         roomOptions.MaxPlayers = maxPlayer;
         roomOptions.IsVisible = !visibleToggle.isOn;
+        roomOptions.CleanupCacheOnLeave = true;
 
         createRoomPanel.SetActive(false);
         PhotonNetwork.CreateRoom(roomName, roomOptions);
