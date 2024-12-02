@@ -44,6 +44,10 @@ public class LastManAudio : MonoBehaviourPunCallbacks
     // PlayerController3에서 호출될 메서드
     public void TriggerCheckPointRPC()
     {
-        photonView.RPC("CheckpointSound", RpcTarget.All);
+        // 마스터 클라이언트만 소리를 재생
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("CheckpointSound", RpcTarget.All);
+        }
     }
 }
