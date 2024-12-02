@@ -18,14 +18,19 @@ public class UserSettingData : SingletonScriptable<UserSettingData>
         public float[] soundScale = new float[SoundManager.AudioGroupCount];
     }
 
-#if UNITY_EDITOR
-    // 에디터 모드에서는 (프로젝트 폴더)/Temp 에 생성
-    private readonly string path = $"./Temp/UserSetting.json";
-#else
-    private readonly string path = $"{Application.persistentDataPath}/UserSetting.json";
-#endif
+    private string path;
 
-    [ContextMenu("Test")]
+    private void OnEnable()
+    {
+#if UNITY_EDITOR
+        // 에디터 모드에서는 (프로젝트 폴더)/Temp 에 생성
+    path = $"./Temp/UserSetting.json";
+#else
+    path = $"{Application.persistentDataPath}/UserSetting.json";
+#endif
+    }
+
+[ContextMenu("Test")]
     public void SaveSetting()
     {
         string jData = JsonUtility.ToJson(data, true);
