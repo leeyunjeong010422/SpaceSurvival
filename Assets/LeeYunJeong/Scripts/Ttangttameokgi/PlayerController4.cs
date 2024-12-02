@@ -191,7 +191,7 @@ public class PlayerController4 : MonoBehaviourPun
         PlayerProfileManager4 profileManager = FindObjectOfType<PlayerProfileManager4>();
         if (profileManager != null)
         {
-            profileManager.UpdateProfileInfo(actorNumber - 1, score); // UI 동기화
+            profileManager.UpdateProfileInfo(actorNumber, score); // UI 동기화
         }
     }
 
