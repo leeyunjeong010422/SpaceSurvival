@@ -145,6 +145,9 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         // 모든 플레이어가 정리 완료시 씬 이동
         if (clearCompleteCount >= PhotonNetwork.PlayerList.Length)
         {
+            // 씬의 마지막 PhotonView(씬) 제거
+            PhotonNetwork.Destroy(this.photonView);
+
             // 승자 판정
             int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
             foreach (Player roomPlayer in PhotonNetwork.PlayerList)
