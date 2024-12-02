@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class HideAndSeekGameScene : MiniGameSceneBase
 {
@@ -52,6 +53,8 @@ public class HideAndSeekGameScene : MiniGameSceneBase
             // 체크포인트 범위 내에 있는지 확인
             validPosition = IsSpawnPositionValid(spawnPosition);
 
+            validPosition = IsNavMeshPositionValid(spawnPosition) && IsSpawnPositionValid(spawnPosition);
+
             attempts++;
         }
 
@@ -81,6 +84,14 @@ public class HideAndSeekGameScene : MiniGameSceneBase
 
         // 모든 체크포인트 주변에 없다면 유효한 위치
         return true;
+    }
+
+    // 네브매쉬에서의 유효한 위치 확인
+    private bool IsNavMeshPositionValid(Vector3 position)
+    {
+        NavMeshHit hit;
+        // 네브매쉬 샘플포지션으로 네브매쉬 상의 유효한 위치
+        return NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
     }
 
 }
