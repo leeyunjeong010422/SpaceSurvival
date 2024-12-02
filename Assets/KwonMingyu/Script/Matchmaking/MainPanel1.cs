@@ -87,12 +87,10 @@ public class MainPanel1 : MonoBehaviour
         }
         PopUp1.Instance.PopUpOpen(false, "닉네임 변경에 실패했어요");
     }
-    public void Quit()
+
+    public void LogOut()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit(); // 어플리케이션 종료
-#endif
+        PhotonNetwork.Disconnect();
+        gameObject.SetActive(false);
     }
 }
