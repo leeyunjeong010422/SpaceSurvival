@@ -1,10 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 미니게임 씬의 베이스 클래스<br/>
@@ -108,7 +104,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     {
         if (false == PhotonNetwork.IsMasterClient)
             return;
-        
+
         foreach (Player roomPlayer in PhotonNetwork.PlayerList)
         {
             roomPlayer.SetLoad(false);
@@ -123,7 +119,8 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     {
         foreach (PhotonView view in PhotonNetwork.PhotonViewCollection)
         {
-            if (view == photonView)
+            // 씬에 배치되어 있는 룸 오브젝트의 ID는 1001 미만 이므로 continue함
+            if (view == photonView || view.ViewID < 1001)
                 continue;
 
             if (view.IsMine)
@@ -132,7 +129,6 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
                 PhotonNetwork.Destroy(view);
             }
         }
-
         // 씬 정리가 완료되었음을 통지
         photonView.RPC(nameof(ClearCompleteRPC), RpcTarget.MasterClient);
     }
@@ -145,9 +141,6 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         // 모든 플레이어가 정리 완료시 씬 이동
         if (clearCompleteCount >= PhotonNetwork.PlayerList.Length)
         {
-            // 씬의 마지막 PhotonView(씬) 제거
-            PhotonNetwork.Destroy(this.photonView);
-
             // 승자 판정
             int goal = PhotonNetwork.CurrentRoom.GetGoalPoint();
             foreach (Player roomPlayer in PhotonNetwork.PlayerList)
