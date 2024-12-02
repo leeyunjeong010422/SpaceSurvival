@@ -81,7 +81,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < CustomProperty.colors.Length; i++)
         {
-            if ((i & colorFlag) == 0) // 빈 컬러라면
+            if (((1 << i) & colorFlag) == 0) // 빈 컬러라면
                 return i;
         }
 
