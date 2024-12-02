@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TestGame : MonoBehaviourPunCallbacks
 {
@@ -43,7 +44,7 @@ public class TestGame : MonoBehaviourPunCallbacks
     }
 
     // 플레이어 스폰 위치를 체크포인트 반경을 피해서 랜덤으로 생성
-    Vector3 GetRandomSpawnPosition(float spawnAreaSize)
+    private Vector3 GetRandomSpawnPosition(float spawnAreaSize)
     {
         Vector3 spawnPosition = Vector3.zero;
         bool validPosition = false;
@@ -55,10 +56,12 @@ public class TestGame : MonoBehaviourPunCallbacks
             // 스폰 범위 내에서 랜덤으로 생성
             float randomX = Random.Range(-spawnAreaSize, spawnAreaSize);
             float randomZ = Random.Range(-spawnAreaSize, spawnAreaSize);
-            spawnPosition = new Vector3(randomX, 0f, randomZ);
+            spawnPosition = new Vector3(randomX, 0f, randomZ); // y 값은 0로 고정
 
             // 체크포인트 범위 내에 있는지 확인
             validPosition = IsSpawnPositionValid(spawnPosition);
+
+            validPosition = IsNavMeshPositionValid(spawnPosition) && IsSpawnPositionValid(spawnPosition);
 
             attempts++;
         }
@@ -67,26 +70,36 @@ public class TestGame : MonoBehaviourPunCallbacks
         if (!validPosition)
         {
             // 기본 위치로 스폰
-            spawnPosition = new Vector3(0f, 0f, 0f);
+            spawnPosition = new Vector3(0f, 1f, 0f);
         }
 
         return spawnPosition;
     }
 
-    bool IsSpawnPositionValid(Vector3 position)
+    private bool IsSpawnPositionValid(Vector3 position)
     {
         foreach (Transform checkpoint in checkpointTransforms)
         {
             // 체크포인트로부터의 거리 계산
             float distance = Vector3.Distance(position, checkpoint.position);
 
-            // 체크포인트 반경 내에 있다면 옳지 안흔 위치
+            // 체크포인트 반경 내에 있다면 옳지 않은 위치
             if (distance < checkpointRadius)
             {
                 return false;
             }
         }
+
         // 모든 체크포인트 주변에 없다면 유효한 위치
         return true;
     }
+
+    // 네브매쉬에서의 유효한 위치 확인
+    private bool IsNavMeshPositionValid(Vector3 position)
+    {
+        NavMeshHit hit;
+        // 네브매쉬 샘플포지션으로 네브매쉬 상의 유효한 위치
+        return NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
+    }
+
 }
