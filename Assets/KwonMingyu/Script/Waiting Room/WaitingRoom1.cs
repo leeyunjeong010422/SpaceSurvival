@@ -22,7 +22,16 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     [SerializeField] int testField = -1;
 
+    [SerializeField] AudioClip roomBgm;
+
+    [SerializeField] Transform winnerEventCameraPosition;
+
     private bool winnerEvent;
+
+    private void Start()
+    {
+        GameManager.Sound.PlayBGM(roomBgm);
+    }
 
     private void Update()
     {
@@ -183,6 +192,9 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         GameObject winner = null;
         Color winnerColor = Color.white;
         winnerEvent = true;
+
+        Camera.main.transform.position = winnerEventCameraPosition.position;
+        Camera.main.transform.rotation = winnerEventCameraPosition.rotation;
 
         // 플레이어를 생성하고 Load 완료
         GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(PhotonNetwork.LocalPlayer.GetPlayerNumber(), 1, 0), Quaternion.identity);
