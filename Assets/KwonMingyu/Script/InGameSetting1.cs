@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InGameSetting1 : MonoBehaviour
@@ -12,6 +10,7 @@ public class InGameSetting1 : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             settingPanel.SetActive(!settingPanel.activeSelf);
+            Cursor.lockState = settingPanel.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
     public void LeftRoom()
