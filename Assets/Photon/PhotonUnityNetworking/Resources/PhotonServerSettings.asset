@@ -37,13 +37,19 @@ MonoBehaviour:
   - AddKillLog
   - AddScore
   - AddScoreRPC
+  - CheckpointSound
+  - ClearCompleteRPC
+  - ClearPhotonViewsRPC
   - ClickRpc
   - DestroyRpc
   - DestroyTarget
+  - DieAICharacterRPC
   - FailedRPC
   - Fire
   - GameWinner
-  - SetInfoUIRPC
+  - PlayerDeathRPC
+  - PlayFireSound
+  - ReadyNextScene
   - SetLayerWeight
   - SyncAnimation
   - SyncCubeColor
@@ -57,11 +63,6 @@ MonoBehaviour:
   - TestStartRPC
   - TriggerCheckPointRPC
   - TryGetCoinRPC
-  - PlayerDeathRPC
-  - PlayFireSound
-  - DieAICharacter
-  - DieAICharacterRPC
-  - CheckpointSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

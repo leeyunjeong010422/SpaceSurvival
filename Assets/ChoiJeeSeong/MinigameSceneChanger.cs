@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class MinigameSceneChanger : MonoBehaviourPun
 {
     private MiniGameInfoUI1 infoUI;
+    private int clearCompleteCount;
 
     private IEnumerator Start()
     {
@@ -20,13 +21,13 @@ public class MinigameSceneChanger : MonoBehaviourPun
 
         MinigameSelecter.Minigame nextGame = MinigameSelecter.Instance.PopRandom();
         Debug.Log($"다음 스테이지: {nextGame}");
-        photonView.RPC(nameof(SetInfoUIRPC), RpcTarget.All, nextGame);
+        photonView.RPC(nameof(ReadyNextScene), RpcTarget.All, nextGame);
     }
 
     [PunRPC]
-    private void SetInfoUIRPC(MinigameSelecter.Minigame nextGame) => StartCoroutine(SetInfoUIRoutine(nextGame));
+    private void ReadyNextScene(MinigameSelecter.Minigame nextGame) => StartCoroutine(ReadyNextSceneRoutine(nextGame));
     
-    private IEnumerator SetInfoUIRoutine(MinigameSelecter.Minigame nextGame)
+    private IEnumerator ReadyNextSceneRoutine(MinigameSelecter.Minigame nextGame)
     {
         MinigameSelecter.MinigameData nextGameData = MinigameSelecter.Instance.GetData(nextGame);
 

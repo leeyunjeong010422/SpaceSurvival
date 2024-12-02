@@ -197,7 +197,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
         GameObject createdBulletHole = PhotonNetwork.Instantiate(bulletHole.name, bulletHolePosition, bulletHoleRotation);
 
-        Destroy(createdBulletHole, 0.5f);
+        // Destroy(createdBulletHole, 0.5f);
     }
 
     // 1초 후에 애니메이션 레이어를 비활성화하는 메서드

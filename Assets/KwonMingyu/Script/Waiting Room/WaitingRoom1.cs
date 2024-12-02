@@ -148,7 +148,28 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 게임 시작 후 방 입장을 막기
         PhotonNetwork.CurrentRoom.IsOpen = false;
 
+        foreach (PhotonView view in PhotonNetwork.PhotonViewCollection)
+        {
+            if (view.IsMine)
+            {
+                Debug.Log($"{view.name}제거");
+                PhotonNetwork.Destroy(view);
+            }
+        }
+
         if (!PhotonNetwork.LocalPlayer.IsMasterClient) return;
+
+        // 모든 포톤 뷰 삭제 확인 코루틴 실행
+        StartCoroutine(WaitDestroy());
+    }
+    IEnumerator WaitDestroy()
+    {
+        WaitForSeconds d = new WaitForSeconds(0.2f);
+
+        while (FindObjectsOfType<PhotonView>().Count() != 0)
+        {
+            yield return d;
+        }
 
         // 기본적으로 무작위 씬 선택으로 이동, testField 설정시 해당 씬으로 이동
         if (testField < 0)
