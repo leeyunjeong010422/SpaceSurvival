@@ -37,6 +37,8 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
     AudioSource fireSoundSource;
 
+    private TPSGameScene gameScene;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,6 +48,8 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
         cameraController = FindObjectOfType<PlayerCameraController4>();
         mainCamera = Camera.main;
+
+        gameScene = FindObjectOfType<TPSGameScene>();
 
         animator = GetComponent<Animator>();
         fireSoundSource = GetComponent<AudioSource>();
@@ -84,7 +88,7 @@ public class TPSPlayerController4 : MonoBehaviourPun, IPunObservable
 
         Move();
 
-        if (Input.GetButtonDown("Fire1") && !Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetButtonDown("Fire1") && !Input.GetKey(KeyCode.LeftControl) && gameScene.gameStarted)
         {
             Fire();
         }

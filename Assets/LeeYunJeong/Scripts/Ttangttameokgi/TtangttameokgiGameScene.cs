@@ -13,6 +13,7 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
     [SerializeField] GameObject winningPointPanel;
     [SerializeField] private float gameDuration = 30f;
     [SerializeField] AudioClip TtangBGM;
+    [SerializeField] CountdownText countdownText;
 
     private float gameTimer; // 게임 시간
     public bool gameStarted = false;
@@ -36,37 +37,15 @@ public class TtangttameokgiGameScene : MiniGameSceneBase
 
     protected override void GameStart()
     {
-        StartCoroutine(GameStartRoutine());
+        countdownText.CountdownStart(5);
+        countdownText.OnCountdownComplete.AddListener(StartGameTimer);
         GameManager.Sound.PlayBGM(TtangBGM, 1);
-    }
-
-    private IEnumerator GameStartRoutine()
-    {
-        // 3초 카운트다운
-        for (int i = 3; i > 0; i--)
-        {
-            if (timerText != null)
-            {
-                timerText.text = i.ToString();
-            }
-            yield return new WaitForSeconds(1f);
-        }
-
-        if (timerText != null)
-        {
-            timerText.text = "START!";
-        }
-
-        yield return new WaitForSeconds(1f);
-
-        // 게임 시작
-        gameStarted = true;
-        StartGameTimer();
     }
 
     private void StartGameTimer()
     {
         Debug.Log("게임 타이머 시작");
+        gameStarted = true;
         gameTimer = gameDuration;
     }
 

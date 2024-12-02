@@ -11,9 +11,10 @@ public class TPSGameScene : MiniGameSceneBase
     [SerializeField] private GameObject endGamePanel;
     [SerializeField] private GameObject winninPointPanel;
     [SerializeField] private float gameDuration = 30f;
+    [SerializeField] CountdownText countdownText;
 
     private float gameTimer;
-    private bool gameStarted = false;
+    public bool gameStarted = false;
     private List<(string playerName, int score, bool isLocalPlayer)> playerScores;
 
     protected override void ReadyNetworkScene()
@@ -36,37 +37,14 @@ public class TPSGameScene : MiniGameSceneBase
 
     protected override void GameStart()
     {
-        // 모든 플레이어 로딩 완료 후 게임 시작
-        StartCoroutine(GameStartRoutine());
-    }
-
-    private IEnumerator GameStartRoutine()
-    {
-        // 3초 카운트다운
-        for (int i = 3; i > 0; i--)
-        {
-            if (timerText != null)
-            {
-                timerText.text = i.ToString();
-            }
-            yield return new WaitForSeconds(1f);
-        }
-
-        if (timerText != null)
-        {
-            timerText.text = "START!";
-        }
-
-        yield return new WaitForSeconds(1f);
-
-        // 게임 시작
-        gameStarted = true;
-        StartGameTimer();
+        countdownText.CountdownStart(5);
+        countdownText.OnCountdownComplete.AddListener(StartGameTimer);
     }
 
     private void StartGameTimer()
     {
         Debug.Log("게임 타이머 시작");
+        gameStarted = true;
         gameTimer = gameDuration;
     }
 
