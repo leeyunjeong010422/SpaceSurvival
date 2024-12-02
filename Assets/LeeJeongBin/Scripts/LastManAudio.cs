@@ -15,35 +15,27 @@ public class LastManAudio : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             SoundManager.Instance.PlayBGM(backgroundMusic.clip);
-
             backgroundMusic.volume = SoundManager.Instance.GetMixerScale(AudioGroup.BGM);
 
-            if (SoundManager.Instance.GetMute(AudioGroup.BGM))
-            {
-                backgroundMusic.mute = true;
-            }
-            else
-            {
-                backgroundMusic.mute = false;
-            }
+            backgroundMusic.mute = SoundManager.Instance.GetMute(AudioGroup.BGM);
         }
     }
 
     [PunRPC]
     private void CheckpointSound()
     {
-        if (backgroundMusic != null && checkpointSound != null)
+        if (checkpointSound != null && attackSoundSource != null)
         {
-            backgroundMusic.PlayOneShot(checkpointSound);
+            attackSoundSource.PlayOneShot(checkpointSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
         }
     }
 
     // Killing3에서 호출될 메서드
     public void OnAttack()
     {
-        if (photonView.IsMine && attackSound != null)
+        if (attackSound != null && attackSoundSource != null)
         {
-            attackSoundSource.PlayOneShot(attackSound);
+            attackSoundSource.PlayOneShot(attackSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
         }
     }
 
