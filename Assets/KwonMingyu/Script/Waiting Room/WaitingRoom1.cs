@@ -48,10 +48,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         // 룸 넘버가 할당되지 않았다면 리턴
         if (targetPlayer.GetPlayerNumber() == -1) return;
 
-        // 플레이어의 컬러가 기본값이라면 PlayerNuber를 부여
+        // 플레이어의 컬러가 기본값이라면 앞에서부터 비어있는 색상을 부여
         if (targetPlayer.GetColorNumber() == -1)
         {
-            targetPlayer.SetColorNumber(targetPlayer.GetPlayerNumber());
+            targetPlayer.SetColorNumber(GetEmptyColorIndex());
             return;
         }
 
@@ -69,6 +69,24 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             if (GameStartCounterCoroutine != null) return;
             GameStartCounterCoroutine = StartCoroutine(StartCountDownCoroutine());
         }
+    }
+
+    private int GetEmptyColorIndex()
+    {
+        int colorFlag = 0;
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            colorFlag |= (1 << player.GetColorNumber());
+        }
+
+        for (int i = 0; i < CustomProperty.colors.Length; i++)
+        {
+            if ((i & colorFlag) == 0) // 빈 컬러라면
+                return i;
+        }
+
+        Debug.LogError("모든 ColorNumber가 사용중임?");
+        return -1;
     }
 
     // 플레이어가 나가면 카드 업데이트
