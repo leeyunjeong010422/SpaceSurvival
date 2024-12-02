@@ -15,6 +15,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     [SerializeField] Color myProfileColor = default; // 내 프로필 카드 색상
 
     private Dictionary<int, int> playerScores = new Dictionary<int, int>(); // ActorNumber별 점수 저장
+    private Dictionary<int, int> actorNumToIndex = new Dictionary<int, int>(); // ActorNumber별 배열 번호 저장
 
     private void Awake()
     {
@@ -77,6 +78,7 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
         for (int i = 0; i < playerCount; i++)
         {
             Player player = PhotonNetwork.PlayerList[i];
+            actorNumToIndex.Add(player.ActorNumber, i);
 
             if (profileCardsHead[i] != null)
             {
@@ -128,10 +130,10 @@ public class PlayerProfileManager4 : MonoBehaviourPunCallbacks
     }
 
     // 프로필 정보 업데이트
-    public void UpdateProfileInfo(int playerIndex, int score)
+    public void UpdateProfileInfo(int actorNumber, int score)
     {
         // 점수 저장
-        int actorNumber = PhotonNetwork.PlayerList[playerIndex].ActorNumber;
+        int playerIndex = actorNumToIndex[actorNumber];
         playerScores[actorNumber] = score;
 
         // UI 업데이트
