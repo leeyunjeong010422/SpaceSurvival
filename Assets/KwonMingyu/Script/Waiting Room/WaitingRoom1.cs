@@ -23,6 +23,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     [SerializeField] int testField = -1;
 
     [SerializeField] AudioClip roomBgm;
+    [SerializeField] AudioClip readySfx;
+    [SerializeField] AudioClip throwSfx;
 
     [SerializeField] Transform winnerEventCameraPosition;
 
@@ -39,6 +41,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         {
             Player localPlayer = PhotonNetwork.LocalPlayer;
             localPlayer.SetReady(!localPlayer.GetReady());
+            GameManager.Sound.PlaySFX(readySfx);
         }
     }
 
@@ -237,7 +240,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             if (photonView.Owner.GetWinningPoint() != PhotonNetwork.CurrentRoom.GetGoalPoint())
             {
                 photonView.GetComponent<Rigidbody>().velocity = (porce.position - photonView.transform.position).normalized * power;
-                yield return new WaitForSeconds(0.3f);
+                GameManager.Sound.PlaySFX(throwSfx);
+                yield return new WaitForSeconds(0.5f);
                 continue;
             }
             // 우승자 정보를 저장

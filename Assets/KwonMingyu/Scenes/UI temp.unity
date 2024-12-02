@@ -15860,6 +15860,8 @@ MonoBehaviour:
   winnerText: {fileID: 397405507}
   testField: -1
   roomBgm: {fileID: 8300000, guid: 3fc26869a512b4e5187c9be6310ad8c2, type: 3}
+  readySfx: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+  throwSfx: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
   winnerEventCameraPosition: {fileID: 1171458758}
 --- !u!224 &731851027
 RectTransform:
