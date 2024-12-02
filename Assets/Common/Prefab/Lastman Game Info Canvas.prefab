@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1452659790063442693, guid: b127642c600c02449b2c463a78647184, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 06f4e9ee0650d4e4c9a8bd7bcfe0e010, type: 3}
+    - target: {fileID: 4429009821556327997, guid: b127642c600c02449b2c463a78647184, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4429009822361198098, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -98,12 +106,12 @@ PrefabInstance:
     - target: {fileID: 4429009823189527431, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_text
       value: "AI\uC778\uCC99 \uB2E4\uB978 \uD50C\uB808\uC774\uC5B4\uB97C \uC18D\uC5EC\n4\uAC1C\uC758
-        \uCCB4\uD06C \uD3EC\uC778\uD2B8 \uB2EC\uC131 \uB610\uB294\n\uBAA8\uB4E0 \uD50C\uB808\uC774\uC5B4
-        \uCC98\uCE58"
+        \uCCB4\uD06C \uD3EC\uC778\uD2B8 \uB2EC\uC131 \uB610\uB294\n\uBAA8\uB4E0 \uD50C\uB808\uC774\uC5B4\uB97C
+        \uCC98\uCE58\uD558\uB77C!"
       objectReference: {fileID: 0}
     - target: {fileID: 4429009823286436347, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_text
-      value: "\uAC8C\uC784\uC774\uB984\uD14D\uC2A4\uD2B8"
+      value: "\uB77C\uC2A4\uD2B8\uB9E8 \uC2A4\uD0E0\uB529"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b127642c600c02449b2c463a78647184, type: 3}
