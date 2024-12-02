@@ -24,18 +24,20 @@ public class LastManAudio : MonoBehaviourPunCallbacks
     [PunRPC]
     private void CheckpointSound()
     {
-        if (checkpointSound != null && attackSoundSource != null)
+        if (checkpointSound != null)
         {
-            attackSoundSource.PlayOneShot(checkpointSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
+            SoundManager.Instance.PlaySFX(checkpointSound);
+            //attackSoundSource.PlayOneShot(checkpointSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
         }
     }
 
     // Killing3에서 호출될 메서드
     public void OnAttack()
     {
-        if (attackSound != null && attackSoundSource != null)
+        if (attackSound != null)
         {
-            attackSoundSource.PlayOneShot(attackSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
+            SoundManager.Instance.PlaySFX(attackSound);
+            //attackSoundSource.PlayOneShot(attackSound, SoundManager.Instance.GetMixerScale(AudioGroup.SFX));
         }
     }
 
