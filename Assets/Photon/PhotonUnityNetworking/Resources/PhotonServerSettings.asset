@@ -39,7 +39,7 @@ MonoBehaviour:
   - AddScoreRPC
   - CheckpointSound
   - ClearCompleteRPC
-  - ClearPhotonViewRPC
+  - ClearPhotonViewsRPC
   - ClickRpc
   - DestroyRpc
   - DestroyTarget

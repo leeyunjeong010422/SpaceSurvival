@@ -115,11 +115,11 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
             roomPlayer.SetReady(false);
         }
 
-        photonView.RPC(nameof(ClearPhotonViewRPC), RpcTarget.All);
+        photonView.RPC(nameof(ClearPhotonViewsRPC), RpcTarget.All);
     }
 
     [PunRPC]
-    private void ClearPhotonViewRPC()
+    protected void ClearPhotonViewsRPC()
     {
         foreach (PhotonView view in PhotonNetwork.PhotonViewCollection)
         {
@@ -138,7 +138,7 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void ClearCompleteRPC(PhotonMessageInfo info)
+    protected void ClearCompleteRPC(PhotonMessageInfo info)
     {
         clearCompleteCount++;
 
