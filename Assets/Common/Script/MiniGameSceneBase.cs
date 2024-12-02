@@ -41,6 +41,9 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
         {
             GameManager.Sound.PlayBGM(bgmClip, bgmVolumeScale);
         }
+
+        // 게임 시작 시 커서 잠금
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     protected virtual void OnDestroy()
