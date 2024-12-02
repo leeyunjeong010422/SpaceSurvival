@@ -16,12 +16,12 @@ public class PlayerCard1 : MonoBehaviour
         playerName.text = player.NickName + (player.IsMasterClient ? "Host" : "");
         if (player.GetReady())
         {
-            readyText.text = "준비됨";
+            readyText.text = "준비완료";
             readyText.color = Color.red;
         }
         else
         {
-            readyText.text = "준비안됨";
+            readyText.text = "준비중";
             readyText.color = Color.black;
         }
     }
