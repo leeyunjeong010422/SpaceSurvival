@@ -106,12 +106,6 @@ public abstract class MiniGameSceneBase : MonoBehaviourPunCallbacks
     {
         if (false == PhotonNetwork.IsMasterClient)
             return;
-
-        // 룸에서 더이상 사용하지 않는 PhotonView 제거
-        foreach (PhotonView view in PhotonNetwork.PhotonViewCollection)
-        {
-            PhotonNetwork.Destroy(view);
-        }
         
         foreach (Player roomPlayer in PhotonNetwork.PlayerList)
         {
