@@ -111,7 +111,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4429009823286436347, guid: b127642c600c02449b2c463a78647184, type: 3}
       propertyPath: m_text
-      value: "\uB77C\uC2A4\uD2B8\uB9E8 \uC2A4\uD0E0\uB529"
+      value: "\uB77C\uC2A4\uD2B8 \uC2A4\uD398\uC774\uC2A4\uB9E8"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429009823286436348, guid: b127642c600c02449b2c463a78647184, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 306.58
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b127642c600c02449b2c463a78647184, type: 3}
