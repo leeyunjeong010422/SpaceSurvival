@@ -30,7 +30,7 @@ public class BackendManager1 : MonoBehaviour
     private FirebaseDatabase database;
     public static FirebaseDatabase Database => Instance.database;
 
-    private DatabaseReference userUidDataRef;
+    public DatabaseReference userUidDataRef;
 
     private void Awake()
     {
@@ -54,7 +54,6 @@ public class BackendManager1 : MonoBehaviour
                 auth = FirebaseAuth.DefaultInstance;
                 database = FirebaseDatabase.DefaultInstance;
                 Debug.Log("파이어베이스 연결 성공");
-                userUidDataRef = Database.RootReference.Child("UserData").Child(Auth.CurrentUser.UserId);
             }
             else
             {
