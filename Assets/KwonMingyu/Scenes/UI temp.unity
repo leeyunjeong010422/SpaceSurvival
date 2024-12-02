@@ -15860,6 +15860,7 @@ MonoBehaviour:
   winnerText: {fileID: 397405507}
   testField: -1
   roomBgm: {fileID: 8300000, guid: 3fc26869a512b4e5187c9be6310ad8c2, type: 3}
+  winnerEventCameraPosition: {fileID: 1171458758}
 --- !u!224 &731851027
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20948,6 +20949,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148426138}
   m_CullTransparentMesh: 1
+--- !u!1 &1171458757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1171458758}
+  m_Layer: 0
+  m_Name: WinnerEventCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1171458758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171458757}
+  m_LocalRotation: {x: -0.045864593, y: -0.6309291, z: 0.036761798, w: -0.77361065}
+  m_LocalPosition: {x: -18.997753, y: 4.9533997, z: -24.477188}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1178823357 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2815850522822926725, guid: 15e45ab81816ac744af2009bf27b1fd6, type: 3}
