@@ -34403,11 +34403,12 @@ MonoBehaviour:
   createRoomPanel: {fileID: 79}
   roomNameInputField: {fileID: 448296432}
   maxPlayerText: {fileID: 1515789621}
+  visibleToggle: {fileID: 1565837234}
   nickNameText: {fileID: 2264}
   levelText: {fileID: 2276}
   nickChangeField: {fileID: 1824710452}
-  visibleToggle: {fileID: 1565837234}
   joinToRoomNameInputField: {fileID: 87757741}
+  mainBgm: {fileID: 0}
 --- !u!1 &1860887562
 GameObject:
   m_ObjectHideFlags: 0

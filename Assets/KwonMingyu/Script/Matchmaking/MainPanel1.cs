@@ -9,17 +9,23 @@ public class MainPanel1 : MonoBehaviour
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text maxPlayerText;
+    [SerializeField] Toggle visibleToggle;
+    private int maxPlayer;
+
     [SerializeField] TMP_Text nickNameText;
     [SerializeField] TMP_Text levelText;
+
     [SerializeField] TMP_InputField nickChangeField;
-    [SerializeField] Toggle visibleToggle;
+
     [SerializeField] TMP_InputField joinToRoomNameInputField;
-    private int maxPlayer;
+
+    [SerializeField] AudioClip mainBgm;
     
     // 메인 화면으로 이동할 때 우상단의 플레이어 정보를 입력
     private void OnEnable()
     {
         PlayerInfoSetting();
+        GameManager.Sound.PlayBGM(mainBgm);
     }
     // 메인 화면에서 방 생성 버튼을 눌렀을 때
     public void CreateRoomMenu()

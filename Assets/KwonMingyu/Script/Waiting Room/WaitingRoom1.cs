@@ -30,11 +30,6 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     private bool winnerEvent;
 
-    private void Start()
-    {
-        GameManager.Sound.PlayBGM(roomBgm);
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
