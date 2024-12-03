@@ -98,6 +98,12 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     public void UpdatePlayerCards()
     {
+        // 다른 대기실에서 켜진 플레이어 카드를 비활성화
+        foreach (var item in playerCards)
+        {
+            item.gameObject.SetActive(false);
+        }
+
         // 방 최대 인원수 만큼 카드를 활성화 후 리셋
         for (int i = 0; i < PhotonNetwork.CurrentRoom.MaxPlayers; i++)
         {
