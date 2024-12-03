@@ -1877,6 +1877,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47f23fa715c728b4bbaed1664794a0a7, type: 3}
+--- !u!114 &1169903813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3829362952570786898, guid: 47f23fa715c728b4bbaed1664794a0a7, type: 3}
+  m_PrefabInstance: {fileID: 1169903812}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c4d7d9c0449fc24aa637da6cb8b1fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1181084137
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,11 +3067,11 @@ MonoBehaviour:
   winningScoreUI: {fileID: 28989566}
   maxPlayTime: 40
   coins:
-  - {fileID: 691385151}
-  - {fileID: 634501896}
-  - {fileID: 1604556881}
-  - {fileID: 388270658}
   - {fileID: 1989106920}
+  - {fileID: 388270658}
+  - {fileID: 1604556881}
+  - {fileID: 634501896}
+  - {fileID: 691385151}
   - {fileID: 213394954}
   - {fileID: 858361650}
   - {fileID: 1908274978}
@@ -3068,6 +3079,7 @@ MonoBehaviour:
   - {fileID: 2044541132}
   - {fileID: 1444059272}
   - {fileID: 1219024567}
+  - {fileID: 1169903813}
 --- !u!4 &1765081567
 Transform:
   m_ObjectHideFlags: 0
