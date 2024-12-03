@@ -36,7 +36,6 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PopUp1.Instance.PopUpClose();
-        BackendManager1.Instance.userUidDataRef = BackendManager1.Database.RootReference.Child("UserData").Child(BackendManager1.Auth.CurrentUser.UserId);
         SetActivePanel(Panel.Menu);
     }
 
