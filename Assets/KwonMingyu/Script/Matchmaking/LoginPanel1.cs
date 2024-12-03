@@ -1,3 +1,4 @@
+using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
 using Photon.Realtime;
@@ -36,7 +37,9 @@ public class LoginPanel1 : MonoBehaviour
                 GameManager.UserSetting.Data.email = email;
                 GameManager.UserSetting.SaveSetting();
 
-                // TODO: 중복 로그인 방지 기능
+                // 중복 로그인 방지 기능
+                BackendManager1.Instance.UserInitAndDeviceCheck();
+
                 // 게임 진행은 문제가 없지만 닉네임을 서버에서 받기 때문에
                 Debug.Log("로그인 성공 마스터 서버로 연결");
                 PhotonNetwork.ConnectUsingSettings();
@@ -48,6 +51,9 @@ public class LoginPanel1 : MonoBehaviour
             }
         });
     }
+
+    static 
+
     public void Quit()
     {
 #if UNITY_EDITOR
