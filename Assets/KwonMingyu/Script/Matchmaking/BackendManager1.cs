@@ -146,7 +146,10 @@ public class BackendManager1 : MonoBehaviour
         {
             Debug.Log("중복 로그인 감지");
             PhotonNetwork.Disconnect();
-            PopUp1.Instance.PopUpOpen(false, "다른 디바이스에서 중복\n로그인이 감지되었습니다.");
+            if (PopUp1.Instance != null)
+            {
+                PopUp1.Instance.PopUpOpen(false, "다른 디바이스에서 중복\n로그인이 감지되었습니다.");
+            }
         }
     }
 }
