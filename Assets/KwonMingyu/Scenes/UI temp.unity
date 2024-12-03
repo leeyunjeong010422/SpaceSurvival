@@ -34409,7 +34409,7 @@ MonoBehaviour:
   levelText: {fileID: 2276}
   nickChangeField: {fileID: 1824710452}
   joinToRoomNameInputField: {fileID: 87757741}
-  mainBgm: {fileID: 0}
+  mainBgm: {fileID: 8300000, guid: 3fc26869a512b4e5187c9be6310ad8c2, type: 3}
 --- !u!1 &1860887562
 GameObject:
   m_ObjectHideFlags: 0
