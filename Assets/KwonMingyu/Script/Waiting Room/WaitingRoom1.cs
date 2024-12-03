@@ -199,6 +199,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             yield return null;
 
         // 기본적으로 무작위 씬 선택으로 이동, testField 설정시 해당 씬으로 이동
+        MinigameSelecter.Instance.ResetRandomList();
         if (testField < 0)
             PhotonNetwork.LoadLevel(1);
         else
@@ -236,7 +237,10 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             // 플레이어의 점수가 우승 점수가 아니라면 창 밖으로 날려버림
             if (photonView.Owner.GetWinningPoint() != PhotonNetwork.CurrentRoom.GetGoalPoint())
             {
-                photonView.GetComponent<Rigidbody>().velocity = (porce.position - photonView.transform.position).normalized * power;
+                if (photonView.IsMine)
+                {
+                    photonView.GetComponent<Rigidbody>().velocity = (porce.position - photonView.transform.position).normalized * power;
+                }
                 GameManager.Sound.PlaySFX(throwSfx);
                 yield return new WaitForSeconds(0.5f);
                 continue;
