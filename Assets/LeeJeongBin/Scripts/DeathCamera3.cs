@@ -5,51 +5,32 @@ using Photon.Pun;
 
 public class DeathCamera3 : MonoBehaviour
 {
+    [SerializeField] CameraSetting2 freeCameraSetting;
     private CameraController2 cameraController;
-    public Camera playerCamera;
-    private bool isDead = false;
     public float moveSpeed = 5f;
-    public float lookSpeed = 2f;
 
     private void Start()
     {
-        // 기존 카메라 컨트롤러 참조
-        cameraController = playerCamera.GetComponent<CameraController2>();
-
-        if (cameraController != null)
-        {
-            // 기존 카메라 제어 비활성화
-            cameraController.enabled = false;
-        }
-
-        // 플레이어가 죽었을 때만 카메라 제어 활성화
-        if (isDead)
-        {
-            EnableFreeCamera();
-        }
+        this.enabled = false;
     }
 
     private void Update()
     {
-        if (isDead)
-        {
-            HandleFreeCameraMovement();
-        }
+        HandleFreeCameraMovement();
     }
 
     // 플레이어가 죽었을 때 자유 시점(PlayerController3 PlayerDestroy 메서드 호출 시)
     public void OnPlayerDead()
     {
-        isDead = true;
         EnableFreeCamera();
     }
 
     private void EnableFreeCamera()
     {
-        if (playerCamera != null)
-        {
-            playerCamera.gameObject.SetActive(true);
-        }
+        this.enabled = true;
+        CameraController2 controller = GetComponent<CameraController2>();
+        controller.Target = null; // 타겟을 해제해서 더이상 무언가를 추적하지 않게 변경
+        controller.setting = freeCameraSetting; // 카메라 회전각 등의 설정 변경
     }
 
     private void HandleFreeCameraMovement()
@@ -57,16 +38,16 @@ public class DeathCamera3 : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = new Vector3(horizontal, 0, vertical);
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+        Vector3 moveDirection = new Vector3(horizontal, 0, vertical).normalized;
+        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.Self);
 
-        // 마우스 카메라 회전
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        //// 마우스 카메라 회전
+        //float mouseX = Input.GetAxis("Mouse X");
+        //float mouseY = Input.GetAxis("Mouse Y");
 
-        transform.Rotate(0, mouseX * lookSpeed, 0);
+        //transform.Rotate(0, mouseX * lookSpeed, 0);
 
-        // 마우스 Y축 이동
-        Camera.main.transform.Rotate(-mouseY * lookSpeed, 0, 0);
+        //// 마우스 Y축 이동
+        //Camera.main.transform.Rotate(-mouseY * lookSpeed, 0, 0);
     }
 }

@@ -167,10 +167,10 @@ public class PlayerController3 : MonoBehaviourPun
         yield return new WaitForSeconds(5f);
         PhotonNetwork.Destroy(gameObject);
 
-      // DeathCamera3 호출용
-      //  if (deathCamera != null)
-      //  {
-      //      deathCamera.OnPlayerDead();
-      //  }
+        // DeathCamera3 호출용
+        if (Camera.main.TryGetComponent(out DeathCamera3 freeCamera))
+        {
+            freeCamera.OnPlayerDead();
+        }
     }
 }

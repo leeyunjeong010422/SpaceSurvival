@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CameraController2 : MonoBehaviour
 {
-    [SerializeField] CameraSetting2 setting;
+    [field: SerializeField] public CameraSetting2 setting;
     [field: SerializeField] public Transform Target { get; set; }
 
     private InputAction lookInput;
