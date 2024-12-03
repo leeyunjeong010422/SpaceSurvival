@@ -10023,6 +10023,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreBorad
       objectReference: {fileID: 0}
+    - target: {fileID: 2189727377478604877, guid: ec6a8a4ada6bb754c8f12cb6d97ade59, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec6a8a4ada6bb754c8f12cb6d97ade59, type: 3}
 --- !u!224 &1592343558 stripped
@@ -13366,13 +13370,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1867478659}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c6662549dbecba45865333948003795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freeCameraSetting: {fileID: 11400000, guid: d9b6d612ff622804f9255828b0b47148, type: 2}
   moveSpeed: 5
-  lookSpeed: 5
 --- !u!1 &2059161475
 GameObject:
   m_ObjectHideFlags: 0

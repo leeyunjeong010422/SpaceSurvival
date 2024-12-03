@@ -5,9 +5,9 @@ using Photon.Pun;
 
 public class DeathCamera3 : MonoBehaviour
 {
+    [SerializeField] CameraSetting2 freeCameraSetting;
     private CameraController2 cameraController;
     public float moveSpeed = 5f;
-    public float lookSpeed = 2f;
 
     private void Start()
     {
@@ -28,7 +28,9 @@ public class DeathCamera3 : MonoBehaviour
     private void EnableFreeCamera()
     {
         this.enabled = true;
-        GetComponent<CameraController2>().Target = null; // 타겟을 해제해서 더이상 무언가를 추적하지 않게 변경
+        CameraController2 controller = GetComponent<CameraController2>();
+        controller.Target = null; // 타겟을 해제해서 더이상 무언가를 추적하지 않게 변경
+        controller.setting = freeCameraSetting; // 카메라 회전각 등의 설정 변경
     }
 
     private void HandleFreeCameraMovement()
