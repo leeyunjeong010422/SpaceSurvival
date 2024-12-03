@@ -129,4 +129,22 @@ public class BackendManager1 : MonoBehaviour
         PhotonNetwork.LocalPlayer.SetLevel(PhotonNetwork.LocalPlayer.GetLevel() + 1);
         Debug.Log($"레벨 변경 성공");
     }
+
+    public void DeviceCheckOnLogin()
+    {
+        // 현재 로그인한 디바이스를 DB에 등록 후 값 변경시 비교
+        DatabaseReference deviceDataRef = GameManager.Backend.userUidDataRef.Child("Device");
+        deviceDataRef.SetValueAsync(SystemInfo.deviceUniqueIdentifier);
+        deviceDataRef.ValueChanged += DeviceDataValueChanged;
+    }
+
+    private void DeviceDataValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (SystemInfo.deviceUniqueIdentifier != args.Snapshot.Value.ToString())
+        {
+            Debug.Log("중복 로그인 감지");
+            PhotonNetwork.Disconnect();
+            PopUp1.Instance.PopUpOpen(false, "다른 디바이스에서 중복 로그인이 감지되었습니다.");
+        }
+    }
 }
