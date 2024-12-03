@@ -18162,6 +18162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 30
+  reverseRotate: 0
 --- !u!4 &801579210
 Transform:
   m_ObjectHideFlags: 0
@@ -27695,6 +27696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 30
+  reverseRotate: 1
 --- !u!4 &1470686933
 Transform:
   m_ObjectHideFlags: 0
@@ -30840,6 +30842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 30
+  reverseRotate: 0
 --- !u!114 &1646590371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34073,6 +34076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 30
+  reverseRotate: 1
 --- !u!4 &1846050469
 Transform:
   m_ObjectHideFlags: 0
