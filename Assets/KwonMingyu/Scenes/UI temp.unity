@@ -29422,6 +29422,7 @@ MonoBehaviour:
   menuPanel: {fileID: 1860036018}
   lobbyPanel: {fileID: 2592}
   waitingRoom: {fileID: 731851026}
+  titleBgm: {fileID: 8300000, guid: d8589132f91d1484a86e992d052d7348, type: 3}
 --- !u!1 &1569405537
 GameObject:
   m_ObjectHideFlags: 0
