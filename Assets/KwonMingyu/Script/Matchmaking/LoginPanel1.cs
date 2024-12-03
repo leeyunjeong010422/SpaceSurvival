@@ -38,7 +38,7 @@ public class LoginPanel1 : MonoBehaviour
                 GameManager.UserSetting.SaveSetting();
 
                 // 중복 로그인 방지 기능
-                BackendManager1.Instance.DeviceCheckOnLogin();
+                BackendManager1.Instance.UserInitAndDeviceCheck();
 
                 // 게임 진행은 문제가 없지만 닉네임을 서버에서 받기 때문에
                 Debug.Log("로그인 성공 마스터 서버로 연결");

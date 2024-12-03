@@ -130,8 +130,10 @@ public class BackendManager1 : MonoBehaviour
         Debug.Log($"레벨 변경 성공");
     }
 
-    public void DeviceCheckOnLogin()
+    public void UserInitAndDeviceCheck()
     {
+        userUidDataRef = Database.RootReference.Child("UserData").Child(Auth.CurrentUser.UserId);
+
         // 현재 로그인한 디바이스를 DB에 등록 후 값 변경시 비교
         DatabaseReference deviceDataRef = GameManager.Backend.userUidDataRef.Child("Device");
         deviceDataRef.SetValueAsync(SystemInfo.deviceUniqueIdentifier);
