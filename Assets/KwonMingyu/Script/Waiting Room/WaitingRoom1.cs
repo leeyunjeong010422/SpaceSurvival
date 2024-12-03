@@ -194,12 +194,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
     }
     IEnumerator WaitDestroy()
     {
-        WaitForSeconds d = new WaitForSeconds(0.2f);
-
         while (FindObjectsOfType<PhotonView>().Count() != 0)
-        {
-            yield return d;
-        }
+            yield return null;
 
         // 기본적으로 무작위 씬 선택으로 이동, testField 설정시 해당 씬으로 이동
         if (testField < 0)
