@@ -26278,6 +26278,37 @@ Transform:
   m_Father: {fileID: 1721372369}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1406164708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1406164709}
+  m_Layer: 0
+  m_Name: WaittingRoomCameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1406164709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406164708}
+  m_LocalRotation: {x: 0.00064675626, y: 0.99986076, z: 0.008680325, w: -0.014237165}
+  m_LocalPosition: {x: 0, y: 3, z: -20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: -100, z: 0}
 --- !u!1001 &1409318939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29422,7 +29453,6 @@ MonoBehaviour:
   menuPanel: {fileID: 1860036018}
   lobbyPanel: {fileID: 2592}
   waitingRoom: {fileID: 731851026}
-  titleBgm: {fileID: 8300000, guid: d8589132f91d1484a86e992d052d7348, type: 3}
 --- !u!1 &1569405537
 GameObject:
   m_ObjectHideFlags: 0
@@ -30859,6 +30889,8 @@ MonoBehaviour:
   emaillInput: {fileID: 1232773886}
   passwordInput: {fileID: 940408539}
   verifyPanel: {fileID: 1727244379}
+  titleBgm: {fileID: 8300000, guid: d8589132f91d1484a86e992d052d7348, type: 3}
+  winnerEventCameraPosition: {fileID: 1406164709}
 --- !u!1 &1647206132
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,8 +14,6 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
     [SerializeField] LobbyPanel1 lobbyPanel;
     [SerializeField] WaitingRoom1 waitingRoom;
 
-    [SerializeField] AudioClip titleBgm;
-
     private void Start()
     {
         // 호스트의 씬을 따라가기
@@ -32,8 +30,6 @@ public class TitlePanel1 : MonoBehaviourPunCallbacks
 
         // TPS 게임에서 visible이 꺼질 수 있어서 ture로
         Cursor.visible = true;
-
-        GameManager.Sound.PlayBGM(titleBgm, 0.2f);
     }
 
     // 서버에 접속 했을때 호출

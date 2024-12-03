@@ -11,12 +11,22 @@ public class LoginPanel1 : MonoBehaviour
     [SerializeField] TMP_InputField passwordInput;
     [SerializeField] VerifyPanel1 verifyPanel;
 
+    [SerializeField] AudioClip titleBgm;
+
+    [SerializeField] Transform winnerEventCameraPosition;
+
     private void OnEnable()
     {
         // 저장된 이메일 불러오기
         // 저장된 파일이 없다면 기본값(string.Empty)
         GameManager.UserSetting.LoadSetting();
         emaillInput.text = GameManager.UserSetting.Data.email;
+
+        GameManager.Sound.PlayBGM(titleBgm, 0.2f);
+
+        Camera.main.GetComponent<CameraController2>().enabled = false;
+        Camera.main.transform.position = winnerEventCameraPosition.position;
+        Camera.main.transform.rotation = winnerEventCameraPosition.rotation;
     }
 
     public void Login()
