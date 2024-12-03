@@ -5,20 +5,14 @@ using UnityEngine;
 
 public class LastManAudio : MonoBehaviourPunCallbacks
 {
-    [SerializeField] AudioSource backgroundMusic;
+    [SerializeField] AudioClip backgroundMusic;
     [SerializeField] AudioSource attackSoundSource;
     [SerializeField] AudioClip checkpointSound;
     [SerializeField] AudioClip attackSound;
 
     private void Start()
     {
-        if (photonView.IsMine)
-        {
-            SoundManager.Instance.PlayBGM(backgroundMusic.clip);
-            backgroundMusic.volume = SoundManager.Instance.GetMixerScale(AudioGroup.BGM);
-
-            backgroundMusic.mute = SoundManager.Instance.GetMute(AudioGroup.BGM);
-        }
+        SoundManager.Instance.PlayBGM(backgroundMusic);
     }
 
     [PunRPC]

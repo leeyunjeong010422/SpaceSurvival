@@ -58,6 +58,7 @@ public class SoundManager : SingletonBehaviour<SoundManager>
     /// <param name="volumeScale">음량 배율</param>
     public void PlayBGM(AudioClip clip, float volumeScale = 1f)
     {
+        StopBGM();
         bgmSource.clip = clip;
         bgmSource.volume = volumeScale;
         bgmSource.Play();
