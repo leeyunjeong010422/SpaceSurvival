@@ -30,6 +30,11 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
     private bool winnerEvent;
 
+    private void Start()
+    {
+        GameManager.Sound.PlayBGM(roomBgm);
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -216,7 +221,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
         Camera.main.transform.rotation = winnerEventCameraPosition.rotation;
 
         // 플레이어를 생성하고 Load 완료
-        GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(PhotonNetwork.LocalPlayer.GetPlayerNumber(), 1, 0), Quaternion.identity);
+        GameObject instance = PhotonNetwork.Instantiate("Character2", new Vector3(PhotonNetwork.LocalPlayer.GetPlayerNumber(), 0, 0), Quaternion.identity);
         instance.GetComponent<PlayerCharacterControl2>().enabled = false;
 
         PhotonNetwork.LocalPlayer.SetLoad(true);
@@ -239,6 +244,7 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
             {
                 if (photonView.IsMine)
                 {
+                    photonView.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                     photonView.GetComponent<Rigidbody>().velocity = (porce.position - photonView.transform.position).normalized * power;
                 }
                 GameManager.Sound.PlaySFX(throwSfx);
@@ -269,6 +275,8 @@ public class WaitingRoom1 : MonoBehaviourPunCallbacks
 
         // 날라간 플레이어 돌아와
         instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        instance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
+        instance.transform.rotation = Quaternion.identity;
         instance.transform.position = Vector3.up;
         Camera.main.GetComponent<CameraController2>().Target = instance.transform;
         instance.GetComponent<PlayerCharacterControl2>().enabled = true;
