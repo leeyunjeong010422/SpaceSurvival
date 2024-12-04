@@ -129,12 +129,14 @@ public class CoinCollecterGameScene : MiniGameSceneBase
         if (remainCoins <= 0)
         {
             StopCoroutine(gamePlayRoutine);
-            GameOver();
+            gamePlayRoutine = StartCoroutine(GameOver());
         }
     }
 
-    private void GameOver()
+    private IEnumerator GameOver()
     {
+        yield return new WaitForSeconds(1f);
+
         // 모든 게임이 수집되어 미니게임 종료
         // 승자 결정 및 승점 UI 띄우기
         // 승점 UI에서 다음 스테이지로 이동하기 위해 READY
