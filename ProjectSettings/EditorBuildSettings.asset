@@ -4,5 +4,26 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/KwonMingyu/Scenes/UI temp.unity
+    guid: 6852365a3f221254f929fa6ebc1d35b4
+  - enabled: 1
+    path: Assets/ChoiJeeSeong/SteppingScene.unity
+    guid: 895c55f06f882c248b6b1d0ba058ebb7
+  - enabled: 1
+    path: Assets/ChoiJeeSeong/Minigame/CoinCollecter.unity
+    guid: abe048e776d01854fafde84be8e0fffa
+  - enabled: 1
+    path: Assets/ChoiJeeSeong/Minigame/IcySliding.unity
+    guid: e31b0b9323e9a3542a430f53241a1dff
+  - enabled: 1
+    path: Assets/LeeJeongBin/Scenes/LastMan.unity
+    guid: be1b310c83b94c84299173a7d4b1afa9
+  - enabled: 1
+    path: Assets/LeeYunJeong/TPSGame.unity
+    guid: e5c8ee066ff4e9d4c9059b3b663ac102
+  - enabled: 1
+    path: Assets/LeeYunJeong/Ttangttameokgi.unity
+    guid: b502eab57fa573e4f8efb99f2916ea9d
   m_configObjects: {}
