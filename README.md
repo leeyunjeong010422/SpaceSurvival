@@ -8,7 +8,7 @@
   - 사용 툴: Unity Engine 2021.3.42f1, Visual Studio 2022, Github, Photon, Firebase
 - 관련 링크
   - PPT(팀): [팀 PPT 링크](https://drive.google.com/file/d/1nj1VGEblZtts36hx3D-0A5wrYorT_W9P/view?usp=drive_link)
-  - PPT(개인): [개인 PPT 링크](https://drive.google.com/file/d/1vYxj2CMo6tPNovwhgy2hiovARwHgRxXy/view?usp=drive_link)
+  - PPT(개인): [개인 PPT 링크](https://drive.google.com/file/d/1AVrSihV9zeigviZdll3LYC4PfUSWBdv6/view?usp=drive_link)
   - 시연영상 : [시연영상 링크](https://youtu.be/uaBW7fRsa2s)
   - 기술문서: [기술문서 링크](https://docs.google.com/document/d/1zLMJ5xfbTK7r3byEhG4UPAGLEgPmlpgqa-azGCo2F48/edit?usp=drive_link)
  
